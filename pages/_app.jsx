@@ -1,29 +1,30 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import '../styles/globals.css'
 import Cursor from '../components/ui/Cursor'
 import Nav from '../components/layout/Nav'
 import { pageView } from '../lib/gtm'
-// Note: initScrollDepth supprimé volontairement
-
+ 
 export default function App({ Component, pageProps }) {
   const router = useRouter()
-
-  // ── Fire page.display à chaque changement de route ──
+  const isFirstRender = useRef(true)
+ 
   useEffect(() => {
-    // Premier chargement
-    pageView(router.pathname, document.title)
-
-    // Navigations suivantes
+    // On ignore le premier rendu — GTM s'en charge via son initialisation
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+ 
+    // On fire page.display uniquement sur les navigations suivantes
     const handleRouteChange = (url) => {
-      // Petit délai pour que document.title soit à jour
       setTimeout(() => pageView(url, document.title), 100)
     }
-
+ 
     router.events.on('routeChangeComplete', handleRouteChange)
     return () => router.events.off('routeChangeComplete', handleRouteChange)
   }, [router])
-
+ 
   return (
     <>
       <Cursor />
@@ -32,3 +33,4 @@ export default function App({ Component, pageProps }) {
     </>
   )
 }
+ 
