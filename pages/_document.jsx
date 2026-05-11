@@ -21,6 +21,7 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
       <body>
         {/* GTM noscript */}
