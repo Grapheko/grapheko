@@ -1,86 +1,15 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
 
 export default function About() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-
-  useEffect(() => {
-    const dot = dotRef.current
-    const ring = ringRef.current
-    if (!dot || !ring) return
-
-    let mx = 0, my = 0, rx = 0, ry = 0
-    let raf
-
-    const onMove = (e) => {
-      mx = e.clientX
-      my = e.clientY
-      dot.style.opacity = '1'
-      ring.style.opacity = '1'
-    }
-
-    const animate = () => {
-      dot.style.left = mx - 4 + 'px'
-      dot.style.top = my - 4 + 'px'
-      rx += (mx - rx) * 0.12
-      ry += (my - ry) * 0.12
-      ring.style.left = rx - 16 + 'px'
-      ring.style.top = ry - 16 + 'px'
-      raf = requestAnimationFrame(animate)
-    }
-
-    document.addEventListener('mousemove', onMove)
-    raf = requestAnimationFrame(animate)
-
-    // Hover effect
-    const addHover = () => {
-      document.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          ring.style.width = '48px'
-          ring.style.height = '48px'
-          ring.style.borderColor = 'rgba(0,255,136,.8)'
-        })
-        el.addEventListener('mouseleave', () => {
-          ring.style.width = '32px'
-          ring.style.height = '32px'
-          ring.style.borderColor = 'rgba(0,255,136,.4)'
-        })
-      })
-    }
-    addHover()
-
-    return () => {
-      document.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
-
   return (
     <>
       <Head>
         <title>About — Grapheko | Le projet, la mission, les valeurs</title>
-        <meta name="description" content="Grapheko — le média data qui décrypte la finance, l'économie et la crypto pour tous. Découvrez notre mission et nos valeurs." />
+        <meta name="description" content="Grapheko — le média data qui décrypte la finance, l'économie et la crypto pour tous." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://grapheko.fr/about" />
       </Head>
-
-      {/* Cursor */}
-      <div ref={dotRef} style={{
-        position: 'fixed', width: '8px', height: '8px',
-        background: '#00FF88', borderRadius: '50%',
-        pointerEvents: 'none', zIndex: 9999,
-        boxShadow: '0 0 10px #00FF88',
-        opacity: 0, transition: 'opacity .3s',
-        transform: 'translate(0,0)',
-      }} />
-      <div ref={ringRef} style={{
-        position: 'fixed', width: '32px', height: '32px',
-        border: '1px solid rgba(0,255,136,.4)', borderRadius: '50%',
-        pointerEvents: 'none', zIndex: 9998,
-        opacity: 0, transition: 'width .2s, height .2s, border-color .2s, opacity .3s',
-      }} />
 
       {/* NAV */}
       <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:50,padding:'0 24px',height:'60px',display:'flex',alignItems:'center',justifyContent:'space-between',background:'rgba(8,8,8,.95)',backdropFilter:'blur(12px)',borderBottom:'0.5px solid var(--border)'}}>
@@ -135,14 +64,14 @@ export default function About() {
       <section style={{padding:'60px 24px',position:'relative',zIndex:1,borderBottom:'0.5px solid var(--border)'}}>
         <div style={{maxWidth:'800px',margin:'0 auto'}}>
           <div style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--neon)',letterSpacing:'.15em',marginBottom:'40px'}}>//  02 · VALEURS</div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'20px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'16px'}}>
             {[
               {num:'[01]',title:'Data avant tout',desc:'Chaque affirmation est étayée par des données. Pas d\'opinion sans chiffre, pas de conclusion sans source.'},
-              {num:'[02]',title:'Accessibilité radicale',desc:'Le jargon financier est une barrière artificielle. Grapheko traduit la complexité en clarté — sans jamais sacrifier la rigueur.'},
+              {num:'[02]',title:'Accessibilité radicale',desc:'Le jargon financier est une barrière artificielle. Grapheko traduit la complexité en clarté — sans sacrifier la rigueur.'},
               {num:'[03]',title:'Indépendance éditoriale',desc:'Aucun contenu n\'est influencé par des intérêts commerciaux. Quand un lien est affilié, c\'est clairement indiqué.'},
-              {num:'[04]',title:'Transparence totale',desc:'Les sources sont citées, les limites sont reconnues, les erreurs sont corrigées publiquement. On assume ce qu\'on écrit.'},
+              {num:'[04]',title:'Transparence totale',desc:'Les sources sont citées, les limites reconnues, les erreurs corrigées publiquement. On assume ce qu\'on écrit.'},
               {num:'[05]',title:'Éducation long terme',desc:'L\'objectif n\'est pas de te donner du poisson. C\'est de t\'apprendre à pêcher — financièrement parlant.'},
-              {num:'[06]',title:'Communauté d\'abord',desc:'Grapheko grandit avec ses lecteurs. Chaque retour, chaque question, chaque suggestion compte et façonne le média.'},
+              {num:'[06]',title:'Communauté d\'abord',desc:'Grapheko grandit avec ses lecteurs. Chaque retour, question et suggestion façonne le média.'},
             ].map(v=>(
               <div key={v.num} style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'24px'}}>
                 <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--neon)',marginBottom:'12px'}}>{v.num}</div>
@@ -176,13 +105,10 @@ export default function About() {
         </div>
       </section>
 
-      {/* STACK TECH */}
+      {/* STACK */}
       <section style={{padding:'60px 24px',position:'relative',zIndex:1,borderBottom:'0.5px solid var(--border)'}}>
         <div style={{maxWidth:'800px',margin:'0 auto'}}>
           <div style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--neon)',letterSpacing:'.15em',marginBottom:'24px'}}>//  04 · STACK TECHNIQUE</div>
-          <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.8,marginBottom:'24px'}}>
-            Grapheko est construit avec des outils modernes, open-source et performants. La transparence s'applique aussi à notre code.
-          </p>
           <div style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',overflow:'hidden'}}>
             {[
               {key:'Framework',val:'Next.js 15 — React SSR',color:'var(--neon)'},
@@ -193,7 +119,7 @@ export default function About() {
               {key:'CMS',val:'Notion API — à venir',color:'var(--text-secondary)'},
             ].map((item,i)=>(
               <div key={item.key} style={{display:'flex',gap:'16px',padding:'14px 20px',borderBottom:i<5?'0.5px solid var(--border)':'none',alignItems:'center',flexWrap:'wrap'}}>
-                <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--text-secondary)',minWidth:'140px',letterSpacing:'.05em'}}>{item.key}</span>
+                <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--text-secondary)',minWidth:'140px'}}>{item.key}</span>
                 <span style={{fontFamily:'var(--mono)',fontSize:'12px',color:item.color}}>{item.val}</span>
               </div>
             ))}
@@ -208,16 +134,12 @@ export default function About() {
           <h2 style={{fontSize:'clamp(20px,3vw,32px)',fontWeight:600,color:'var(--text-primary)',marginBottom:'16px',lineHeight:1.3}}>
             Grapheko grandit chaque jour.<br/>Sois parmi les premiers.
           </h2>
-          <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.7,marginBottom:'32px',maxWidth:'500px',margin:'0 auto 32px'}}>
+          <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.7,marginBottom:'32px'}}>
             Rejoins la newsletter hebdo, suis les analyses sur les réseaux, ou contacte-nous pour une collaboration.
           </p>
           <div style={{display:'flex',gap:'12px',justifyContent:'center',flexWrap:'wrap'}}>
-            <Link href="/newsletter" style={{fontFamily:'var(--mono)',fontSize:'13px',fontWeight:500,color:'var(--void)',background:'var(--neon)',border:'none',padding:'12px 28px',borderRadius:'4px',textDecoration:'none'}}>
-              ./s_abonner →
-            </Link>
-            <Link href="/contact" style={{fontFamily:'var(--mono)',fontSize:'13px',color:'var(--neon)',background:'transparent',border:'0.5px solid var(--neon)',padding:'12px 28px',borderRadius:'4px',textDecoration:'none'}}>
-              ./nous_contacter
-            </Link>
+            <Link href="/newsletter" className="btn-primary">./s_abonner →</Link>
+            <Link href="/contact" className="btn-secondary">./nous_contacter</Link>
           </div>
         </div>
       </section>
@@ -238,14 +160,8 @@ export default function About() {
       </footer>
 
       <style jsx global>{`
-        * { cursor: none !important; }
-        @media (max-width: 768px) {
-          * { cursor: auto !important; }
-          .desktop-nav { display: none !important; }
-        }
-        @media (min-width: 768px) {
-          nav { padding: 0 48px !important; }
-        }
+        @media (max-width: 768px) { .desktop-nav { display: none !important; } }
+        @media (min-width: 768px) { nav { padding: 0 48px !important; } section { padding-left: 48px !important; padding-right: 48px !important; } footer { padding: 32px 48px !important; } }
       `}</style>
     </>
   )
