@@ -93,7 +93,6 @@ function NewsletterForm() {
 // ── Page principale ──
 export default function Home() {
   useEffect(() => {
-    const cleanScroll = initScrollDepth('homepage')
     const cleanTime = initTimeOnPage('homepage')
     return () => { cleanScroll?.(); cleanTime?.() }
   }, [])
