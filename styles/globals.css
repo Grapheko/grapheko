@@ -33,33 +33,48 @@ body {
   font-size: 16px;
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: none;
 }
 
+/* ── CURSEUR CUSTOM — fix Chrome ── */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ── SCANLINE ── */
 body::before {
   content: '';
   position: fixed;
   top: -100%;
   left: 0; right: 0;
   height: 120px;
-  background: linear-gradient(transparent, rgba(0,255,136,.05), transparent);
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 255, 136, 0.03) 40%,
+    rgba(0, 255, 136, 0.06) 50%,
+    rgba(0, 255, 136, 0.03) 60%,
+    transparent 100%
+  );
   animation: scanline 6s linear infinite;
   pointer-events: none;
   z-index: 100;
 }
 
+/* ── GRID BG ── */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0,255,136,.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,.018) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 136, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.018) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
 }
 
+/* ── ANIMATIONS ── */
 @keyframes scanline {
   0% { top: -120px; }
   100% { top: 100vh; }
@@ -90,26 +105,33 @@ body::after {
   to { stroke-dashoffset: 0; }
 }
 
+/* ── CURSEUR ── */
 .cursor-dot {
   position: fixed;
-  width: 8px; height: 8px;
+  width: 8px;
+  height: 8px;
   background: var(--neon);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  box-shadow: 0 0 10px var(--neon);
+  box-shadow: 0 0 12px var(--neon), 0 0 24px rgba(0,255,136,.3);
+  transform: translate(-50%, -50%);
+  transition: transform .1s;
 }
 
 .cursor-ring {
   position: fixed;
-  width: 32px; height: 32px;
-  border: 1px solid rgba(0,255,136,.4);
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(0, 255, 136, 0.5);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
+  transform: translate(-50%, -50%);
   transition: width .2s, height .2s, border-color .2s;
 }
 
+/* ── BUTTONS ── */
 .btn-primary {
   font-family: var(--mono);
   font-size: 13px;
@@ -119,7 +141,6 @@ body::after {
   border: none;
   padding: 12px 28px;
   border-radius: 4px;
-  cursor: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -136,7 +157,6 @@ body::after {
   border: 0.5px solid var(--neon);
   padding: 12px 28px;
   border-radius: 4px;
-  cursor: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -145,6 +165,7 @@ body::after {
 }
 .btn-secondary:hover { background: var(--neon-ghost); transform: translateY(-1px); color: var(--neon); }
 
+/* ── SECTION LABEL ── */
 .section-label {
   font-family: var(--mono);
   font-size: 11px;
@@ -162,6 +183,7 @@ body::after {
   background: var(--neon);
   border-radius: 50%;
   animation: pulse-neon 2s infinite;
+  flex-shrink: 0;
 }
 .section-label::after {
   content: '';
@@ -170,6 +192,7 @@ body::after {
   background: var(--border);
 }
 
+/* ── INPUT ── */
 .input-field {
   width: 100%;
   background: var(--void);
@@ -185,6 +208,7 @@ body::after {
 .input-field:focus { border-color: var(--neon); }
 .input-field::placeholder { color: #2A2A2A; }
 
+/* ── TICKER ── */
 .ticker-wrap {
   overflow: hidden;
   height: 32px;
@@ -206,6 +230,7 @@ body::after {
   align-items: center;
   gap: 8px;
   border-right: 0.5px solid var(--border);
+  white-space: nowrap;
 }
 .ticker-name { color: var(--text-secondary); }
 .ticker-val { color: var(--text-primary); font-weight: 500; }
@@ -213,6 +238,7 @@ body::after {
 .down { color: var(--red); }
 .flat { color: var(--yellow); }
 
+/* ── TERMINAL ── */
 .terminal-window {
   background: var(--surface);
   border: 0.5px solid var(--border);
@@ -243,14 +269,19 @@ body::after {
 .t-val-down { color: var(--red); }
 .t-val-blue { color: var(--blue); }
 
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--void); }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--neon); }
 
+/* ── SELECTION ── */
 ::selection { background: var(--neon); color: var(--void); }
 
+/* ── MOBILE ── */
 @media (max-width: 768px) {
-  body { cursor: auto; }
-  .cursor-dot, .cursor-ring { display: none; }
+  @media (pointer: coarse) {
+    *, *::before, *::after { cursor: auto !important; }
+    .cursor-dot, .cursor-ring { display: none !important; }
+  }
 }
