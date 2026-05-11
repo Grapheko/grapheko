@@ -4,6 +4,7 @@ import '../styles/globals.css'
 import Cursor from '../components/ui/Cursor'
 import Nav from '../components/layout/Nav'
 import { pageView } from '../lib/gtm'
+// Note: initScrollDepth supprimé volontairement
 
 export default function App({ Component, pageProps }) {
   const router = useRouter()
