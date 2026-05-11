@@ -55,20 +55,6 @@ export default function Home() {
         <meta property="og:url" content="https://grapheko.fr" />
       </Head>
 
-      {/* NAV */}
-      <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:50, padding:'0 24px', height:'60px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(8,8,8,.95)', backdropFilter:'blur(12px)', borderBottom:'0.5px solid var(--border)' }}>
-        <Link href="/" style={{ fontFamily:'var(--mono)', fontSize:'16px', fontWeight:500, color:'var(--text-primary)', textDecoration:'none', letterSpacing:'-0.5px' }}>
-          <span style={{color:'var(--neon)'}}>{'>'}</span>graph<span style={{color:'var(--neon)'}}>eko</span>
-          <span style={{display:'inline-block',width:'2px',height:'14px',background:'var(--neon)',verticalAlign:'middle',marginLeft:'1px',animation:'blink 1s step-end infinite'}}/>
-        </Link>
-        <div className="desktop-nav" style={{display:'flex',alignItems:'center',gap:'24px'}}>
-          {[['./blog','/blog'],['./ressources','/ressources'],['./newsletter','/newsletter'],['./about','/about']].map(([label,href])=>(
-            <Link key={href} href={href} style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',textDecoration:'none'}}>{label}</Link>
-          ))}
-          <Link href="/contact" style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--neon)',border:'0.5px solid var(--neon)',padding:'6px 14px',borderRadius:'4px',textDecoration:'none'}}>./contact</Link>
-        </div>
-      </nav>
-
       {/* TICKER */}
       <div style={{position:'fixed',top:'60px',left:0,right:0,zIndex:49}} className="ticker-wrap">
         <div className="ticker-track">
