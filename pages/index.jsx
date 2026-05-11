@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { initScrollDepth, initTimeOnPage, trackCTAClick, trackArticleClick, trackNewsletterSignup } from '../lib/gtm'
+import { initTimeOnPage, trackCTAClick, trackArticleClick, trackNewsletterSignup } from '../lib/gtm'
 
 const TICKER = [
   { name: 'CAC 40', val: '7 842', change: '+2.41%', dir: 'up' },
@@ -35,7 +35,6 @@ const METRICS = [
   { key: 'GOLD', val: '2 340$', change: '+0.82%', dir: 'up', bar: 60, color: 'var(--blue)' },
 ]
 
-// ── Composant NewsletterForm — DOIT être en dehors de Home() ──
 function NewsletterForm() {
   const [prenom, setPrenom] = useState('')
   const [email, setEmail] = useState('')
@@ -90,11 +89,10 @@ function NewsletterForm() {
   )
 }
 
-// ── Page principale ──
 export default function Home() {
   useEffect(() => {
     const cleanTime = initTimeOnPage('homepage')
-    return () => { cleanScroll?.(); cleanTime?.() }
+    return () => { cleanTime?.() }
   }, [])
 
   return (
@@ -130,36 +128,23 @@ export default function Home() {
           <div>[ ✓ ] Loading market data...</div>
           <div style={{color:'var(--neon)'}}>[ ✓ ] System ready. Welcome.</div>
         </div>
-
         <h1 style={{fontFamily:'var(--mono)',fontSize:'clamp(40px,8vw,96px)',fontWeight:500,letterSpacing:'-2px',lineHeight:.95,marginBottom:'20px'}}>
           <span style={{color:'var(--neon)'}}>{'>'}</span>
           <span style={{color:'var(--text-primary)'}}>graph</span>
           <span style={{color:'var(--neon)'}}>eko</span>
           <span style={{display:'inline-block',width:'clamp(5px,1vw,12px)',height:'clamp(36px,7.5vw,88px)',background:'var(--neon)',verticalAlign:'middle',marginLeft:'4px',animation:'blink 1s step-end infinite',borderRadius:'2px'}}/>
         </h1>
-
         <p style={{fontFamily:'var(--mono)',fontSize:'clamp(11px,1.5vw,14px)',color:'var(--text-secondary)',marginBottom:'40px',maxWidth:'600px'}}>
           <span style={{color:'#1A3A2A',marginRight:'8px'}}>//</span>
           La finance décryptée par la data — analyses, guides, crypto & marchés
         </p>
-
         <div style={{display:'flex',gap:'12px',flexWrap:'wrap'}}>
-          <Link href="/blog" className="btn-primary" onClick={()=>trackCTAClick('./explorer_articles','hero')}>
-            ./explorer_articles
-          </Link>
-          <Link href="/newsletter" className="btn-secondary" onClick={()=>trackCTAClick('./s_abonner','hero')}>
-            ./s_abonner
-          </Link>
+          <Link href="/blog" className="btn-primary" onClick={()=>trackCTAClick('./explorer_articles','hero')}>./explorer_articles</Link>
+          <Link href="/newsletter" className="btn-secondary" onClick={()=>trackCTAClick('./s_abonner','hero')}>./s_abonner</Link>
         </div>
-
         <div style={{position:'absolute',right:'48px',top:'50%',transform:'translateY(-50%)',width:'400px',opacity:.18,pointerEvents:'none'}}>
           <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#00FF88" stopOpacity=".2"/>
-                <stop offset="100%" stopColor="#00FF88" stopOpacity="0"/>
-              </linearGradient>
-            </defs>
+            <defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#00FF88" stopOpacity=".2"/><stop offset="100%" stopColor="#00FF88" stopOpacity="0"/></linearGradient></defs>
             <path d="M0,160 L40,140 L80,150 L120,110 L160,120 L200,80 L240,90 L280,50 L320,60 L360,20 L400,30 L400,200 L0,200Z" fill="url(#hg)"/>
             <path d="M0,160 L40,140 L80,150 L120,110 L160,120 L200,80 L240,90 L280,50 L320,60 L360,20 L400,30" stroke="#00FF88" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1000" style={{animation:'chart-draw 2s ease forwards'}}/>
             <circle cx="360" cy="20" r="4" fill="#00FF88"/>
@@ -204,9 +189,7 @@ export default function Home() {
           ))}
         </div>
         <div style={{marginTop:'32px',textAlign:'center'}}>
-          <Link href="/blog" className="btn-secondary" onClick={()=>trackCTAClick('./voir_tous_les_articles','articles')}>
-            ./voir_tous_les_articles
-          </Link>
+          <Link href="/blog" className="btn-secondary" onClick={()=>trackCTAClick('./voir_tous_les_articles','articles')}>./voir_tous_les_articles</Link>
         </div>
       </section>
 
@@ -273,9 +256,7 @@ export default function Home() {
       <footer style={{borderTop:'0.5px solid var(--border)',padding:'40px 24px',position:'relative',zIndex:1}}>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:'32px',marginBottom:'32px'}}>
           <div>
-            <div style={{fontFamily:'var(--mono)',fontSize:'18px',fontWeight:500,marginBottom:'12px'}}>
-              {'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_
-            </div>
+            <div style={{fontFamily:'var(--mono)',fontSize:'18px',fontWeight:500,marginBottom:'12px'}}>{'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_</div>
             <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.7,marginBottom:'16px'}}>La finance décryptée par la data.</p>
             <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
               {['Twitter','LinkedIn','TikTok','Instagram'].map(s=>(
