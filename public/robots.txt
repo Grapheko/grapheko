@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Bloquer les pages légales pour les moteurs de recherche
+Disallow: /mentions-legales
+Disallow: /cgu
+Disallow: /confidentialite
+Disallow: /cookies
+
+# Sitemap
+Sitemap: https://grapheko.fr/sitemap.xml
