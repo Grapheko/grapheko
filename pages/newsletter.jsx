@@ -1,22 +1,43 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { initScrollDepth, trackNewsletterSignup } from '../lib/gtm'
+import { useState } from 'react'
+import { trackNewsletterSignup } from '../lib/gtm'
 
 export default function Newsletter() {
-  const [submitted, setSubmitted] = useState(false)
+  const [prenom, setPrenom] = useState('')
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle') // idle | loading | success | error
+  const [message, setMessage] = useState('')
 
-  useEffect(() => {
-    const clean = initScrollDepth('newsletter')
-    return () => clean?.()
-  }, [])
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const email = e.target.email.value
-    if (!email) return
-    trackNewsletterSignup('newsletter_page')
-    setSubmitted(true)
+    if (!email || !email.includes('@')) {
+      setStatus('error')
+      setMessage('Adresse email invalide.')
+      return
+    }
+
+    setStatus('loading')
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, prenom }),
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        setStatus('success')
+        trackNewsletterSignup('newsletter_page')
+      } else {
+        setStatus('error')
+        setMessage(data.error || 'Une erreur est survenue.')
+      }
+    } catch (err) {
+      setStatus('error')
+      setMessage('Erreur réseau — réessaie dans un instant.')
+    }
   }
 
   return (
@@ -30,6 +51,8 @@ export default function Newsletter() {
 
       <section style={{minHeight:'100vh',padding:'100px 24px 80px',display:'flex',alignItems:'center',position:'relative',zIndex:1}}>
         <div style={{width:'100%',maxWidth:'1100px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:'60px',alignItems:'center'}}>
+
+          {/* LEFT — Pitch */}
           <div>
             <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#1A3A2A',marginBottom:'20px'}}>
               <span style={{color:'var(--neon)'}}>[ ✓ ]</span> newsletter.sh --subscribe grapheko-weekly
@@ -50,49 +73,154 @@ export default function Newsletter() {
             </div>
           </div>
 
+          {/* RIGHT — Formulaire */}
           <div style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'12px',padding:'clamp(24px,5vw,40px)',position:'relative',overflow:'hidden'}}>
             <div style={{position:'absolute',top:0,left:0,right:0,height:'1px',background:'linear-gradient(90deg,transparent,var(--neon),transparent)'}}/>
-            {!submitted ? (
+
+            {status === 'success' ? (
+              /* ── SUCCÈS ── */
+              <div style={{textAlign:'center',padding:'20px 0'}}>
+                <div style={{fontFamily:'var(--mono)',fontSize:'48px',color:'var(--neon)',marginBottom:'20px'}}>[ ✓ ]</div>
+                <div style={{fontFamily:'var(--mono)',fontSize:'18px',color:'var(--text-primary)',marginBottom:'12px'}}>
+                  Bienvenue dans Grapheko !
+                </div>
+                <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.7,marginBottom:'20px'}}>
+                  Vérifie ta boîte mail pour confirmer ton inscription. Ta première édition arrive dimanche.
+                </p>
+                <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#333'}}>
+                  // check spam si tu ne vois rien
+                </div>
+              </div>
+            ) : (
+              /* ── FORMULAIRE ── */
               <>
-                <div style={{fontFamily:'var(--mono)',fontSize:'14px',fontWeight:500,color:'var(--text-primary)',marginBottom:'6px'}}>{'>'} ./subscribe_</div>
-                <p style={{fontSize:'13px',color:'var(--text-secondary)',marginBottom:'24px',lineHeight:1.6}}>Rejoins la communauté Grapheko — l'analyse data que tu ne trouveras pas ailleurs.</p>
-                <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+                <div style={{fontFamily:'var(--mono)',fontSize:'14px',fontWeight:500,color:'var(--text-primary)',marginBottom:'6px'}}>
+                  {'>'} ./subscribe_
+                </div>
+                <p style={{fontSize:'13px',color:'var(--text-secondary)',marginBottom:'24px',lineHeight:1.6}}>
+                  Rejoins la communauté Grapheko — l'analyse data que tu ne trouveras pas ailleurs.
+                </p>
+
+                <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'14px'}}>
                   <div>
-                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>PRÉNOM</label>
-                    <input name="prenom" type="text" placeholder="ton_prénom" className="input-field"/>
+                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>
+                      PRÉNOM
+                    </label>
+                    <input
+                      type="text"
+                      value={prenom}
+                      onChange={e => setPrenom(e.target.value)}
+                      placeholder="ton_prénom"
+                      className="input-field"
+                    />
                   </div>
+
                   <div>
-                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>EMAIL *</label>
-                    <input name="email" type="email" placeholder="toi@example.com" className="input-field" required/>
+                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>
+                      EMAIL *
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => {
+                        setEmail(e.target.value)
+                        if (status === 'error') setStatus('idle')
+                      }}
+                      placeholder="toi@example.com"
+                      className="input-field"
+                      required
+                      style={{borderColor: status === 'error' ? 'var(--red)' : undefined}}
+                    />
                   </div>
-                  <button type="submit" className="btn-primary" style={{justifyContent:'center',marginTop:'4px'}}>./s_abonner_gratuitement →</button>
-                  <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>// 0 spam · résiliation en 1 clic · données protégées</p>
+
+                  {/* Message d'erreur */}
+                  {status === 'error' && (
+                    <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--red)',padding:'8px 12px',background:'rgba(255,77,77,.08)',borderRadius:'4px',border:'0.5px solid rgba(255,77,77,.2)'}}>
+                      ⚠ {message}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === 'loading'}
+                    className="btn-primary"
+                    style={{
+                      justifyContent: 'center',
+                      marginTop: '4px',
+                      opacity: status === 'loading' ? .7 : 1,
+                    }}
+                  >
+                    {status === 'loading' ? '// Inscription en cours...' : './s_abonner_gratuitement →'}
+                  </button>
+
+                  <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>
+                    // 0 spam · résiliation en 1 clic · données protégées RGPD
+                  </p>
                 </form>
               </>
-            ) : (
-              <div style={{textAlign:'center',padding:'20px 0'}}>
-                <div style={{fontFamily:'var(--mono)',fontSize:'40px',color:'var(--neon)',marginBottom:'16px'}}>[ ✓ ]</div>
-                <div style={{fontFamily:'var(--mono)',fontSize:'18px',color:'var(--text-primary)',marginBottom:'8px'}}>Bienvenue dans Grapheko !</div>
-                <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.6}}>Vérifie ta boîte mail pour confirmer. Ta première édition arrive dimanche.</p>
-              </div>
             )}
           </div>
         </div>
       </section>
 
-      <footer style={{borderTop:'0.5px solid var(--border)',padding:'24px',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'8px',position:'relative',zIndex:1}}>
-        <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'14px',color:'var(--text-primary)',textDecoration:'none'}}>{'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_</Link>
-        <div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}>
-          {[['./blog','/blog'],['./ressources','/ressources'],['./newsletter','/newsletter'],['./contact','/contact']].map(([l,h])=>(
-            <Link key={h} href={h} style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#333',textDecoration:'none'}}>{l}</Link>
-          ))}
+      {/* APERÇU NEWSLETTER */}
+      <section style={{padding:'0 24px 80px',position:'relative',zIndex:1}}>
+        <div style={{maxWidth:'680px',margin:'0 auto'}}>
+          <div className="section-label">APERÇU — DERNIÈRE ÉDITION</div>
+          <div style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'12px',overflow:'hidden'}}>
+            <div style={{background:'var(--surface2)',padding:'20px 28px',borderBottom:'0.5px solid var(--border)'}}>
+              <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--text-secondary)',marginBottom:'4px'}}>
+                De : <span style={{color:'var(--neon)'}}>contact@grapheko.fr</span> · Grapheko Weekly
+              </div>
+              <div style={{fontFamily:'var(--mono)',fontSize:'14px',fontWeight:500,color:'var(--text-primary)',marginBottom:'4px'}}>
+                #047 — CAC40 au plus haut, Bitcoin consolide, inflation en recul
+              </div>
+              <div style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#333'}}>
+                Dimanche 10 mai 2026 · 08:00
+              </div>
+            </div>
+            <div style={{padding:'28px',fontFamily:'var(--mono)',fontSize:'12px',lineHeight:2}}>
+              <div style={{color:'var(--text-primary)',marginBottom:'16px'}}>Bonjour [prénom],</div>
+              {[
+                {title:'// MARCHÉS CETTE SEMAINE',items:['CAC 40 : +2.41% — porté par LVMH et TotalEnergies','S&P 500 : +1.18% — tech en hausse, bancaires stables','Bitcoin : 61 240€ · consolidation après ATH']},
+                {title:'// LE CHIFFRE DE LA SEMAINE',items:['2.1% — inflation France en mai. En baisse pour le 3e mois consécutif.']},
+                {title:'// ARTICLE DE LA SEMAINE',items:['→ Bourse pour débutant 2026 — grapheko.fr/blog']},
+              ].map(section=>(
+                <div key={section.title} style={{marginBottom:'20px'}}>
+                  <div style={{color:'var(--neon)',fontSize:'10px',letterSpacing:'.15em',marginBottom:'8px',borderBottom:'0.5px solid var(--border)',paddingBottom:'6px'}}>
+                    {section.title}
+                  </div>
+                  {section.items.map(item=>(
+                    <div key={item} style={{color:'var(--text-secondary)',paddingLeft:'16px',borderLeft:'1px solid var(--border2)',marginBottom:'4px'}}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div style={{borderTop:'0.5px solid var(--border)',padding:'16px 28px',fontFamily:'var(--mono)',fontSize:'10px',color:'#333',display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:'8px'}}>
+              <span>grapheko.fr · contact@grapheko.fr</span>
+              <span>Se désabonner</span>
+            </div>
+          </div>
         </div>
-        <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#222'}}>© 2026 <span style={{color:'var(--neon)'}}>grapheko</span></span>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{borderTop:'0.5px solid var(--border)',padding:'24px',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'8px',position:'relative',zIndex:1}}>
+        <a href="/" style={{fontFamily:'var(--mono)',fontSize:'14px',color:'var(--text-primary)',textDecoration:'none'}}>
+          {'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_
+        </a>
+        <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#222'}}>
+          © 2026 <span style={{color:'var(--neon)'}}>grapheko</span>
+        </span>
       </footer>
 
       <style jsx global>{`
-        @media (max-width: 768px) { .desktop-nav { display: none !important; } }
-        @media (min-width: 768px) { nav { padding: 0 48px !important; } }
+        @media (min-width: 768px) {
+          section { padding-left: 48px !important; padding-right: 48px !important; }
+          footer { padding: 32px 48px !important; }
+        }
       `}</style>
     </>
   )
