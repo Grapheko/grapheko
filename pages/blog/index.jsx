@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect } from 'react'
-import { initScrollDepth, gEvent } from '../../lib/gtm'
+import { initTimeOnPage, trackArticleClick, trackCTAClick } from '../../lib/gtm'
 
 const ARTICLES = [
   { slug: 'bourse-debutant-2026', title: 'Bourse pour débutant : par où commencer en 2026', cat: 'finance', time: '13 min', date: '10 mai 2026', excerpt: 'Tout ce qu\'il faut savoir pour commencer à investir intelligemment — sans jargon, avec les données.' },
@@ -20,8 +20,8 @@ const CAT = {
 
 export default function Blog() {
   useEffect(() => {
-    const clean = initScrollDepth('blog')
-    return () => clean?.()
+    const cleanTime = initTimeOnPage('blog')
+    return () => cleanTime?.()
   }, [])
 
   return (
@@ -51,22 +51,22 @@ export default function Blog() {
       <section style={{padding:'40px 24px 80px',position:'relative',zIndex:1}}>
         {/* Featured */}
         <Link href={`/blog/${ARTICLES[0].slug}`}
-          onClick={()=>gEvent('article_click',{article_title:ARTICLES[0].title,article_category:ARTICLES[0].cat})}
+          onClick={()=>trackArticleClick(ARTICLES[0].title, ARTICLES[0].cat)}
           style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'28px',textDecoration:'none',display:'block',marginBottom:'12px'}}>
-          <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'14px'}}>
+          <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'14px',flexWrap:'wrap'}}>
             <span style={{...CAT[ARTICLES[0].cat],fontFamily:'var(--mono)',fontSize:'10px',letterSpacing:'.1em',padding:'4px 10px',borderRadius:'3px'}}>[{ARTICLES[0].cat}]</span>
             <span style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#333'}}>{ARTICLES[0].time} · {ARTICLES[0].date}</span>
           </div>
           <h2 style={{fontSize:'clamp(16px,2.5vw,22px)',fontWeight:600,color:'var(--text-primary)',lineHeight:1.3,marginBottom:'10px'}}>{ARTICLES[0].title}</h2>
-          <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.7}}>{ARTICLES[0].excerpt}</p>
-          <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--neon)',marginTop:'16px'}}>./lire l'article →</div>
+          <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.7,marginBottom:'16px'}}>{ARTICLES[0].excerpt}</p>
+          <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--neon)'}}>./lire l'article →</div>
         </Link>
 
         {/* Grid */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:'12px'}}>
           {ARTICLES.slice(1).map(a=>(
             <Link key={a.slug} href={`/blog/${a.slug}`}
-              onClick={()=>gEvent('article_click',{article_title:a.title,article_category:a.cat})}
+              onClick={()=>trackArticleClick(a.title, a.cat)}
               style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'24px',textDecoration:'none',display:'flex',flexDirection:'column'}}>
               <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'12px'}}>
                 <span style={{...CAT[a.cat],fontFamily:'var(--mono)',fontSize:'10px',letterSpacing:'.1em',padding:'3px 8px',borderRadius:'3px'}}>[{a.cat}]</span>
@@ -78,9 +78,15 @@ export default function Blog() {
             </Link>
           ))}
         </div>
+
+        <div style={{marginTop:'32px',textAlign:'center'}}>
+          <Link href="/newsletter" className="btn-secondary" onClick={()=>trackCTAClick('./s_abonner','blog_footer')}>
+            ./s_abonner à la newsletter →
+          </Link>
+        </div>
       </section>
 
-      {/* FOOTER MINI */}
+      {/* FOOTER */}
       <footer style={{borderTop:'0.5px solid var(--border)',padding:'24px',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'8px',position:'relative',zIndex:1}}>
         <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'14px',color:'var(--text-primary)',textDecoration:'none'}}>{'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_</Link>
         <div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}>
@@ -92,8 +98,11 @@ export default function Blog() {
       </footer>
 
       <style jsx global>{`
-        @media (max-width: 768px) { .desktop-nav { display: none !important; } }
-        @media (min-width: 768px) { nav { padding: 0 48px !important; } }
+        @media (min-width: 768px) {
+          nav { padding: 0 48px !important; }
+          section { padding-left: 48px !important; padding-right: 48px !important; }
+          footer { padding: 32px 48px !important; }
+        }
       `}</style>
     </>
   )
