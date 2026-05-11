@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { initScrollDepth, initTimeOnPage, trackCTAClick, trackArticleClick } from '../lib/gtm'
+import { initScrollDepth, initTimeOnPage, trackCTAClick, trackArticleClick, trackNewsletterSignup } from '../lib/gtm'
 
 const TICKER = [
   { name: 'CAC 40', val: '7 842', change: '+2.41%', dir: 'up' },
@@ -35,6 +35,62 @@ const METRICS = [
   { key: 'GOLD', val: '2 340$', change: '+0.82%', dir: 'up', bar: 60, color: 'var(--blue)' },
 ]
 
+// ── Composant NewsletterForm — DOIT être en dehors de Home() ──
+function NewsletterForm() {
+  const [prenom, setPrenom] = useState('')
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!email || !email.includes('@')) return
+    setStatus('loading')
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, prenom }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setStatus('success')
+        trackNewsletterSignup('homepage_newsletter')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  if (status === 'success') return (
+    <div style={{textAlign:'center',padding:'20px 0'}}>
+      <div style={{fontFamily:'var(--mono)',fontSize:'32px',color:'var(--neon)',marginBottom:'12px'}}>[ ✓ ]</div>
+      <div style={{fontFamily:'var(--mono)',fontSize:'14px',color:'var(--text-primary)',marginBottom:'8px'}}>Bienvenue dans Grapheko !</div>
+      <p style={{fontSize:'13px',color:'var(--text-secondary)'}}>Vérifie ta boîte mail. Ta première édition arrive dimanche.</p>
+    </div>
+  )
+
+  return (
+    <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+      <div>
+        <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>PRÉNOM</label>
+        <input value={prenom} onChange={e=>setPrenom(e.target.value)} type="text" placeholder="ton_prénom" className="input-field"/>
+      </div>
+      <div>
+        <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>EMAIL</label>
+        <input value={email} onChange={e=>setEmail(e.target.value)} type="email" placeholder="toi@example.com" className="input-field" required/>
+      </div>
+      <button type="submit" disabled={status==='loading'} className="btn-primary" style={{justifyContent:'center',opacity:status==='loading'?.7:1}}>
+        {status==='loading' ? '// Inscription...' : './s_abonner_gratuitement'}
+      </button>
+      {status==='error' && <p style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--red)',textAlign:'center'}}>⚠ Erreur — réessaie</p>}
+      <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>// 0 spam · résiliation en 1 clic</p>
+    </form>
+  )
+}
+
+// ── Page principale ──
 export default function Home() {
   useEffect(() => {
     const cleanScroll = initScrollDepth('homepage')
@@ -97,7 +153,6 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Chart décoratif */}
         <div style={{position:'absolute',right:'48px',top:'50%',transform:'translateY(-50%)',width:'400px',opacity:.18,pointerEvents:'none'}}>
           <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -191,19 +246,27 @@ export default function Home() {
               </div>
               <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.6}}>Chaque dimanche, les chiffres qui comptent en 5 minutes. Finance, crypto, économie.</p>
             </div>
-            <form onSubmit={e=>e.preventDefault()} style={{display:'flex',flexDirection:'column',gap:'12px'}}>
-              <div>
-                <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>PRÉNOM</label>
-                <input type="text" placeholder="ton_prénom" className="input-field"/>
-              </div>
-              <div>
-                <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>EMAIL</label>
-                <input type="email" placeholder="toi@example.com" className="input-field" required/>
-              </div>
-              <button type="submit" className="btn-primary" style={{justifyContent:'center'}}>./s_abonner_gratuitement</button>
-              <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>// 0 spam · résiliation en 1 clic</p>
-            </form>
+            <NewsletterForm />
           </div>
+        </div>
+      </section>
+
+      {/* RESSOURCES */}
+      <section style={{padding:'0 24px 60px',position:'relative',zIndex:1}}>
+        <div className="section-label">RESSOURCES</div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))',gap:'16px'}}>
+          {[
+            {num:'[01]',title:'Guide débutant investissement',desc:'Du compte épargne aux ETF — tout pour commencer intelligemment.',href:'/ressources'},
+            {num:'[02]',title:'Lexique finance & crypto',desc:'200+ termes expliqués simplement. DeFi, PER, ETF — plus jamais perdu.',href:'/ressources'},
+            {num:'[03]',title:'Outils & calculateurs',desc:'Simulateur d\'épargne, intérêts composés, comparateur de frais.',href:'/ressources'},
+          ].map(r=>(
+            <Link key={r.num} href={r.href} style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'24px',textDecoration:'none',display:'block'}}>
+              <div style={{fontFamily:'var(--mono)',fontSize:'20px',color:'var(--neon)',marginBottom:'14px'}}>{r.num}</div>
+              <div style={{fontSize:'15px',fontWeight:600,color:'var(--text-primary)',marginBottom:'8px'}}>{r.title}</div>
+              <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.6,marginBottom:'16px'}}>{r.desc}</p>
+              <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--neon)'}}>./accéder →</span>
+            </Link>
+          ))}
         </div>
       </section>
 
