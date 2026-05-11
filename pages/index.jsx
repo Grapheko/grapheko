@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { initScrollDepth, initTimeOnPage, trackCTAClick, trackArticleClick } from '../lib/gtm'
@@ -36,32 +36,10 @@ const METRICS = [
 ]
 
 export default function Home() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-
   useEffect(() => {
     const cleanScroll = initScrollDepth('homepage')
     const cleanTime = initTimeOnPage('homepage')
     return () => { cleanScroll?.(); cleanTime?.() }
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || window.innerWidth < 768) return
-    let mx = 0, my = 0, rx = 0, ry = 0
-    const dot = dotRef.current
-    const ring = ringRef.current
-    if (!dot || !ring) return
-    const onMove = (e) => { mx = e.clientX; my = e.clientY }
-    document.addEventListener('mousemove', onMove)
-    let raf
-    const animate = () => {
-      dot.style.left = mx - 4 + 'px'; dot.style.top = my - 4 + 'px'
-      rx += (mx - rx) * .12; ry += (my - ry) * .12
-      ring.style.left = rx - 16 + 'px'; ring.style.top = ry - 16 + 'px'
-      raf = requestAnimationFrame(animate)
-    }
-    raf = requestAnimationFrame(animate)
-    return () => { document.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf) }
   }, [])
 
   return (
@@ -77,22 +55,18 @@ export default function Home() {
         <meta property="og:url" content="https://grapheko.fr" />
       </Head>
 
-      <div ref={dotRef} className="cursor-dot" />
-      <div ref={ringRef} className="cursor-ring" />
-
       {/* NAV */}
       <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:50, padding:'0 24px', height:'60px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(8,8,8,.95)', backdropFilter:'blur(12px)', borderBottom:'0.5px solid var(--border)' }}>
         <Link href="/" style={{ fontFamily:'var(--mono)', fontSize:'16px', fontWeight:500, color:'var(--text-primary)', textDecoration:'none', letterSpacing:'-0.5px' }}>
           <span style={{color:'var(--neon)'}}>{'>'}</span>graph<span style={{color:'var(--neon)'}}>eko</span>
           <span style={{display:'inline-block',width:'2px',height:'14px',background:'var(--neon)',verticalAlign:'middle',marginLeft:'1px',animation:'blink 1s step-end infinite'}}/>
         </Link>
-        {/* Desktop nav */}
-        <nav className="desktop-nav" style={{display:'flex',alignItems:'center',gap:'24px'}}>
+        <div className="desktop-nav" style={{display:'flex',alignItems:'center',gap:'24px'}}>
           {[['./blog','/blog'],['./ressources','/ressources'],['./newsletter','/newsletter'],['./about','/about']].map(([label,href])=>(
             <Link key={href} href={href} style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',textDecoration:'none'}}>{label}</Link>
           ))}
           <Link href="/contact" style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--neon)',border:'0.5px solid var(--neon)',padding:'6px 14px',borderRadius:'4px',textDecoration:'none'}}>./contact</Link>
-        </nav>
+        </div>
       </nav>
 
       {/* TICKER */}
@@ -136,10 +110,25 @@ export default function Home() {
             ./s_abonner
           </Link>
         </div>
+
+        {/* Chart décoratif */}
+        <div style={{position:'absolute',right:'48px',top:'50%',transform:'translateY(-50%)',width:'400px',opacity:.18,pointerEvents:'none'}}>
+          <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#00FF88" stopOpacity=".2"/>
+                <stop offset="100%" stopColor="#00FF88" stopOpacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,160 L40,140 L80,150 L120,110 L160,120 L200,80 L240,90 L280,50 L320,60 L360,20 L400,30 L400,200 L0,200Z" fill="url(#hg)"/>
+            <path d="M0,160 L40,140 L80,150 L120,110 L160,120 L200,80 L240,90 L280,50 L320,60 L360,20 L400,30" stroke="#00FF88" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1000" style={{animation:'chart-draw 2s ease forwards'}}/>
+            <circle cx="360" cy="20" r="4" fill="#00FF88"/>
+          </svg>
+        </div>
       </section>
 
-      {/* METRICS — responsive grid */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',borderTop:'0.5px solid var(--border)',borderBottom:'0.5px solid var(--border)',background:'var(--surface)',position:'relative',zIndex:1}} className="metrics-grid">
+      {/* METRICS */}
+      <div className="metrics-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',borderTop:'0.5px solid var(--border)',borderBottom:'0.5px solid var(--border)',background:'var(--surface)',position:'relative',zIndex:1}}>
         {METRICS.map((m,i)=>(
           <div key={m.key} style={{padding:'20px',borderRight:(i%2===0)?'0.5px solid var(--border)':'none',borderBottom:i<2?'0.5px solid var(--border)':'none'}}>
             <div style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',marginBottom:'6px'}}>{m.key}</div>
@@ -155,7 +144,6 @@ export default function Home() {
       {/* ARTICLES */}
       <section style={{padding:'60px 24px',position:'relative',zIndex:1}}>
         <div className="section-label">DERNIÈRES ANALYSES</div>
-        {/* Featured */}
         <Link href={`/blog/${ARTICLES[0].slug}`} onClick={()=>trackArticleClick(ARTICLES[0].title,ARTICLES[0].cat)}
           style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'28px',textDecoration:'none',display:'block',marginBottom:'12px'}}>
           <span style={{...CAT[ARTICLES[0].cat],fontFamily:'var(--mono)',fontSize:'10px',letterSpacing:'.1em',padding:'4px 10px',borderRadius:'3px',display:'inline-block',marginBottom:'14px'}}>[{ARTICLES[0].cat}]</span>
@@ -165,7 +153,6 @@ export default function Home() {
             <span>grapheko</span><span>·</span><span>{ARTICLES[0].time}</span><span>·</span><span>{ARTICLES[0].date}</span>
           </div>
         </Link>
-        {/* Article list */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:'12px'}}>
           {ARTICLES.slice(1).map(a=>(
             <Link key={a.slug} href={`/blog/${a.slug}`} onClick={()=>trackArticleClick(a.title,a.cat)}
@@ -196,10 +183,10 @@ export default function Home() {
           <div className="terminal-content" style={{fontSize:'clamp(11px,1.5vw,13px)'}}>
             <div><span className="t-prompt">$ </span><span className="t-cmd">fetch --markets --today</span></div>
             <div className="t-output t-comment">// Données en cours...</div>
-            <div className="t-output"><span style={{color:'#333'}}>CAC40 &nbsp;&nbsp;</span> <span className="t-val-up">+2.41%</span> ▲ BULL</div>
+            <div className="t-output"><span style={{color:'#333'}}>CAC40 &nbsp;</span> <span className="t-val-up">+2.41%</span> ▲ BULL</div>
             <div className="t-output"><span style={{color:'#333'}}>BTC/EUR</span> <span className="t-val-warn">+3.12%</span> ◆ HOLD</div>
-            <div className="t-output"><span style={{color:'#333'}}>INFL_FR</span> <span className="t-val-down">2.10%</span> &nbsp; ▼ WATCH</div>
-            <div className="t-output"><span style={{color:'#333'}}>GOLD &nbsp;&nbsp;</span> <span className="t-val-blue">+0.82%</span> ▲ UP</div>
+            <div className="t-output"><span style={{color:'#333'}}>INFL_FR</span> <span className="t-val-down">2.10%</span> &nbsp;▼ WATCH</div>
+            <div className="t-output"><span style={{color:'#333'}}>GOLD &nbsp;</span> <span className="t-val-blue">+0.82%</span> ▲ UP</div>
             <br/>
             <div><span className="t-prompt">grapheko@finance:~$ </span><span style={{animation:'blink 1s step-end infinite',color:'var(--neon)'}}>_</span></div>
           </div>
@@ -218,38 +205,19 @@ export default function Home() {
               </div>
               <p style={{fontSize:'14px',color:'var(--text-secondary)',lineHeight:1.6}}>Chaque dimanche, les chiffres qui comptent en 5 minutes. Finance, crypto, économie.</p>
             </div>
-            <form onSubmit={e=>{e.preventDefault()}} style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+            <form onSubmit={e=>e.preventDefault()} style={{display:'flex',flexDirection:'column',gap:'12px'}}>
               <div>
                 <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>PRÉNOM</label>
-                <input name="prenom" type="text" placeholder="ton_prénom" className="input-field"/>
+                <input type="text" placeholder="ton_prénom" className="input-field"/>
               </div>
               <div>
                 <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>EMAIL</label>
-                <input name="email" type="email" placeholder="toi@example.com" className="input-field" required/>
+                <input type="email" placeholder="toi@example.com" className="input-field" required/>
               </div>
               <button type="submit" className="btn-primary" style={{justifyContent:'center'}}>./s_abonner_gratuitement</button>
               <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>// 0 spam · résiliation en 1 clic</p>
             </form>
           </div>
-        </div>
-      </section>
-
-      {/* RESSOURCES */}
-      <section style={{padding:'0 24px 60px',position:'relative',zIndex:1}}>
-        <div className="section-label">RESSOURCES</div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))',gap:'16px'}}>
-          {[
-            {num:'[01]',title:'Guide débutant investissement',desc:'Du compte épargne aux ETF — tout pour commencer intelligemment.',href:'/ressources'},
-            {num:'[02]',title:'Lexique finance & crypto',desc:'200+ termes expliqués simplement. DeFi, PER, ETF — plus jamais perdu.',href:'/ressources'},
-            {num:'[03]',title:'Outils & calculateurs',desc:'Simulateur d\'épargne, intérêts composés, comparateur de frais.',href:'/ressources'},
-          ].map(r=>(
-            <Link key={r.num} href={r.href} style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'24px',textDecoration:'none',display:'block',transition:'border-color .2s'}}>
-              <div style={{fontFamily:'var(--mono)',fontSize:'20px',color:'var(--neon)',marginBottom:'14px'}}>{r.num}</div>
-              <div style={{fontSize:'15px',fontWeight:600,color:'var(--text-primary)',marginBottom:'8px'}}>{r.title}</div>
-              <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.6,marginBottom:'16px'}}>{r.desc}</p>
-              <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--neon)'}}>./accéder →</span>
-            </Link>
-          ))}
         </div>
       </section>
 
