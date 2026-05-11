@@ -185,23 +185,6 @@ export default function ArticlePage({ slug, article }) {
         <meta property="og:url" content={`https://grapheko.fr/blog/${slug}`} />
       </Head>
 
-      {/* NAV */}
-      <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:50,padding:'0 24px',height:'60px',display:'flex',alignItems:'center',justifyContent:'space-between',background:'rgba(8,8,8,.95)',backdropFilter:'blur(12px)',borderBottom:'0.5px solid var(--border)'}}>
-        <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'16px',fontWeight:500,color:'var(--text-primary)',textDecoration:'none'}}>
-          <span style={{color:'var(--neon)'}}>{'>'}</span>graph<span style={{color:'var(--neon)'}}>eko</span>
-          <span style={{display:'inline-block',width:'2px',height:'14px',background:'var(--neon)',verticalAlign:'middle',marginLeft:'1px',animation:'blink 1s step-end infinite'}}/>
-        </Link>
-        <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
-          <Link href="/blog" style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',textDecoration:'none'}}>← ./blog</Link>
-          <div className="desktop-nav" style={{display:'flex',alignItems:'center',gap:'20px'}}>
-            {[['./ressources','/ressources'],['./newsletter','/newsletter']].map(([l,h])=>(
-              <Link key={h} href={h} style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',textDecoration:'none'}}>{l}</Link>
-            ))}
-            <Link href="/contact" style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--neon)',border:'0.5px solid var(--neon)',padding:'6px 14px',borderRadius:'4px',textDecoration:'none'}}>./contact</Link>
-          </div>
-        </div>
-      </nav>
-
       {/* BREADCRUMB */}
       <div style={{padding:'80px 24px 0',position:'relative',zIndex:1}}>
         <div style={{maxWidth:'760px',margin:'0 auto'}}>
