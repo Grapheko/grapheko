@@ -30,14 +30,6 @@ export default function MentionsLegales() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:50,padding:'0 24px',height:'60px',display:'flex',alignItems:'center',justifyContent:'space-between',background:'rgba(8,8,8,.95)',backdropFilter:'blur(12px)',borderBottom:'0.5px solid var(--border)'}}>
-        <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'16px',fontWeight:500,color:'var(--text-primary)',textDecoration:'none'}}>
-          <span style={{color:'var(--neon)'}}>{'>'}</span>graph<span style={{color:'var(--neon)'}}>eko</span>
-          <span style={{display:'inline-block',width:'2px',height:'14px',background:'var(--neon)',verticalAlign:'middle',marginLeft:'1px',animation:'blink 1s step-end infinite'}}/>
-        </Link>
-        <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',textDecoration:'none'}}>← retour</Link>
-      </nav>
-
       <div style={{maxWidth:'800px',margin:'0 auto',padding:'100px 24px 80px',position:'relative',zIndex:1}}>
 
         <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#1A3A2A',marginBottom:'16px'}}><span style={{color:'var(--neon)'}}>[ ✓ ]</span> mentions-legales.sh --load juridique</div>
