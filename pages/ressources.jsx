@@ -245,6 +245,15 @@ export default function Ressources() {
             <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#FFBD2E' }} />
             <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28CA41' }} />
             <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: '#333', margin: '0 auto' }}>investment_simulator.sh</span>
+            <button
+              onClick={() => {
+                gEvent('calculator_use', { calculator_type: 'export_pdf', capital, monthly, rate, years })
+                window.print()
+              }}
+              style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--neon)', background: 'transparent', border: '0.5px solid var(--neon)', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
+            >
+              ↓ PDF
+            </button>
           </div>
 
           {/* Paramètres */}
@@ -455,6 +464,25 @@ export default function Ressources() {
           background: var(--neon);
           cursor: pointer;
           box-shadow: 0 0 6px rgba(0,255,136,.5);
+        }
+        @media print {
+          * { cursor: auto !important; }
+          nav, footer, button { display: none !important; }
+          body { background: white !important; color: #000 !important; }
+          body::before, body::after { display: none !important; }
+          section { padding: 0 16px !important; }
+          [style*="var(--surface)"] { background: #f8f8f8 !important; border-color: #ddd !important; }
+          [style*="var(--void)"] { background: white !important; }
+          [style*="var(--neon)"] { color: #007A40 !important; }
+          [style*="var(--text-primary)"] { color: #000 !important; }
+          [style*="var(--text-secondary)"] { color: #555 !important; }
+          [style*="var(--blue)"] { color: #0066CC !important; }
+          [style*="var(--yellow)"] { color: #886600 !important; }
+          table { width: 100% !important; border-collapse: collapse !important; }
+          td, th { border: 1px solid #ddd !important; padding: 6px 10px !important; color: #000 !important; font-size: 11px !important; }
+          svg line { stroke: #ccc !important; }
+          .section-label { color: #555 !important; }
+          @page { size: A4; margin: 15mm; }
         }
       `}</style>
     </>
