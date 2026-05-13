@@ -40,7 +40,7 @@ function calcFiscal({ balance, invested, years }) {
   const peaRate = years >= 5 ? 0.172 : 0.30
   const peaTax = Math.round(gains * peaRate)
 
-  // CTO : flat tax 30%
+  // CTO : flat tax 31,4%
   const ctoTax = Math.round(gains * 0.30)
 
   return {
@@ -69,8 +69,15 @@ function Chart({ data, showPea }) {
   const balancePath = data.map((d, i) => `${i === 0 ? 'M' : 'L'}${xScale(i).toFixed(1)},${yScale(d.balance).toFixed(1)}`).join(' ')
   const investedPath = data.map((d, i) => `${i === 0 ? 'M' : 'L'}${xScale(i).toFixed(1)},${yScale(d.invested).toFixed(1)}`).join(' ')
 
-  // Area fill
-  const areaPath = `${balancePath} L${xScale(data.length - 1).toFixed(1)},${yScale(0).toFixed(1)} L${xScale(0).toFixed(1)},${yScale(0).toFixed(1)} Z`
+  // Zone intérêts (entre balance et invested) — vert
+  const interestAreaPath = [
+    ...data.map((d, i) => (i === 0 ? 'M' : 'L') + xScale(i).toFixed(1) + ',' + yScale(d.balance).toFixed(1)),
+    ...data.slice().reverse().map((d, i) => 'L' + xScale(data.length - 1 - i).toFixed(1) + ',' + yScale(d.invested).toFixed(1)),
+    'Z'
+  ].join(' ')
+
+  // Zone versements (du bas jusqu'à invested) — bleu
+  const investedAreaPath = investedPath + ' L' + xScale(data.length - 1).toFixed(1) + ',' + yScale(0).toFixed(1) + ' L' + xScale(0).toFixed(1) + ',' + yScale(0).toFixed(1) + ' Z'
 
   // Y ticks
   const yTicks = 5
@@ -124,8 +131,10 @@ function Chart({ data, showPea }) {
           ) : null
         ))}
 
-        {/* Area balance */}
-        <path d={areaPath} fill="url(#areaGrad)" />
+        {/* Zone versements — bleu */}
+        <path d={investedAreaPath} fill="rgba(0,194,255,0.07)" />
+        {/* Zone intérêts — vert */}
+        <path d={interestAreaPath} fill="rgba(0,255,136,0.1)" />
 
         {/* Ligne investissements */}
         <path d={investedPath} fill="none" stroke="#00C2FF" strokeWidth="1.5" strokeDasharray="4,3" opacity="0.6" />
@@ -147,8 +156,9 @@ function Chart({ data, showPea }) {
         <g transform={`translate(${PAD.left + 10}, ${PAD.top + 10})`}>
           <line x1="0" y1="6" x2="20" y2="6" stroke="#00FF88" strokeWidth="2" />
           <text x="26" y="10" style={{ fontFamily: 'var(--mono)', fontSize: '10px', fill: '#666' }}>Capital total</text>
-          <line x1="100" y1="6" x2="120" y2="6" stroke="#00C2FF" strokeWidth="1.5" strokeDasharray="4,3" />
-          <text x="126" y="10" style={{ fontFamily: 'var(--mono)', fontSize: '10px', fill: '#666' }}>Versements</text>
+          <rect x="100" y="2" width="16" height="8" fill="rgba(0,194,255,0.2)" rx="1"/>
+          <line x1="100" y1="6" x2="116" y2="6" stroke="#00C2FF" strokeWidth="1.5" strokeDasharray="4,3" />
+          <text x="122" y="10" style={{ fontFamily: 'var(--mono)', fontSize: '10px', fill: '#666' }}>Versements cumulés</text>
         </g>
       </svg>
     </div>
@@ -358,7 +368,7 @@ export default function Ressources() {
                 {/* CTO */}
                 <div style={{ background: 'rgba(0,194,255,.04)', border: '0.5px solid var(--blue)', borderRadius: '8px', padding: '24px', position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'var(--blue)' }} />
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--blue)', letterSpacing: '.1em', marginBottom: '16px' }}>// CTO (flat tax 30%)</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--blue)', letterSpacing: '.1em', marginBottom: '16px' }}>// CTO (flat tax 31,4%)</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '32px', fontWeight: 600, color: 'var(--blue)', marginBottom: '8px' }}>{fiscal.cto?.toLocaleString('fr-FR')} €</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Impôts : {fiscal.ctoTax?.toLocaleString('fr-FR')} €</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>Taux effectif : 30% (flat tax)</div>
@@ -378,7 +388,7 @@ export default function Ressources() {
               )}
 
               <div style={{ marginTop: '16px', fontFamily: 'var(--mono)', fontSize: '10px', color: '#333', lineHeight: 1.8 }}>
-                // Hypothèses : PEA après 5 ans = exonération IR, uniquement PS 17.2% · CTO = flat tax 30% · Calcul simplifié, hors CSG déductible et abattements éventuels · Ne constitue pas un conseil fiscal.
+                // Hypothèses : PEA après 5 ans = exonération IR, uniquement PS 17.2% · CTO = flat tax 31,4% · Calcul simplifié, hors CSG déductible et abattements éventuels · Ne constitue pas un conseil fiscal.
               </div>
             </div>
           )}
