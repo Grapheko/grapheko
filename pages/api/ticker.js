@@ -105,14 +105,12 @@ export default async function handler(req, res) {
       const idx = tickerData.findIndex(t => t.name === 'BTC/EUR')
       if (idx !== -1) {
         const rate = btcEur.value.rate
-        const prev = parseFloat(tickerData[idx].val.replace(/\s/g, '')) || rate
-        const changePct = prev ? ((rate - prev) / prev) * 100 : 0
         tickerData[idx] = {
           name: 'BTC/EUR',
           val: formatVal(rate, 'crypto'),
-          change: `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`,
-          changeRaw: changePct,
-          dir: getDir(changePct),
+          change: '—',
+          changeRaw: 0,
+          dir: 'flat',
           live: true,
         }
       }
@@ -123,14 +121,12 @@ export default async function handler(req, res) {
       const idx = tickerData.findIndex(t => t.name === 'ETH/EUR')
       if (idx !== -1) {
         const rate = ethEur.value.rate
-        const prev = parseFloat(tickerData[idx].val.replace(/\s/g, '')) || rate
-        const changePct = prev ? ((rate - prev) / prev) * 100 : 0
         tickerData[idx] = {
           name: 'ETH/EUR',
           val: formatVal(rate, 'crypto'),
-          change: `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`,
-          changeRaw: changePct,
-          dir: getDir(changePct),
+          change: '—',
+          changeRaw: 0,
+          dir: 'flat',
           live: true,
         }
       }
