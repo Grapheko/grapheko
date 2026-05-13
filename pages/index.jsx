@@ -3,16 +3,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { initTimeOnPage, trackCTAClick, trackArticleClick, trackNewsletterSignup } from '../lib/gtm'
 
-const TICKER = [
-  { name: 'CAC 40', val: '7 842', change: '+2.41%', dir: 'up' },
-  { name: 'BTC/EUR', val: '61 240', change: '+3.12%', dir: 'up' },
-  { name: 'ETH/EUR', val: '3 180', change: '+0.44%', dir: 'flat' },
-  { name: 'GOLD', val: '2 340$', change: '+0.82%', dir: 'up' },
-  { name: 'EUR/USD', val: '1.0842', change: '-0.31%', dir: 'down' },
-  { name: 'OAT 10Y', val: '3.12%', change: '-0.08%', dir: 'down' },
-  { name: 'INFL FR', val: '2.10%', change: '-0.10%', dir: 'flat' },
-  { name: 'S&P 500', val: '5 204', change: '+1.18%', dir: 'up' },
-]
 
 const ARTICLES = [
   { slug: 'bourse-debutant-2026', title: 'Bourse pour débutant : par où commencer en 2026', cat: 'finance', time: '13 min', date: '10 mai 2026' },
@@ -107,19 +97,6 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://grapheko.fr" />
       </Head>
-
-      {/* TICKER */}
-      <div style={{position:'fixed',top:'60px',left:0,right:0,zIndex:49}} className="ticker-wrap">
-        <div className="ticker-track">
-          {[...TICKER,...TICKER].map((t,i)=>(
-            <div className="ticker-item" key={i}>
-              <span className="ticker-name">{t.name}</span>
-              <span className="ticker-val">{t.val}</span>
-              <span className={t.dir}>{t.dir==='up'?'▲':t.dir==='down'?'▼':'◆'} {t.change}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* HERO */}
       <section style={{minHeight:'100vh',padding:'140px 24px 80px',display:'flex',flexDirection:'column',justifyContent:'center',position:'relative',zIndex:1}}>
