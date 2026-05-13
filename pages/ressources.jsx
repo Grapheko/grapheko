@@ -362,7 +362,7 @@ export default function Ressources() {
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--neon)', letterSpacing: '.1em', marginBottom: '16px' }}>// PEA {years >= 5 ? '(>5 ans ✓)' : '(<5 ans ⚠)'}</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '32px', fontWeight: 600, color: 'var(--neon)', marginBottom: '8px' }}>{fiscal.pea?.toLocaleString('fr-FR')} €</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Impôts : {fiscal.peaTax?.toLocaleString('fr-FR')} €</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>Taux effectif : {years >= 5 ? '17.2%' : '30%'} (PS{years >= 5 ? ' seulement' : ' + IR'})</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>Taux effectif : {years >= 5 ? '18.6%' : '31,4%'} ({years >= 5 ? 'PS uniquement, IR exonéré' : 'IR 12,8% + PS 18,6%'})</div>
                 </div>
 
                 {/* CTO */}
@@ -371,7 +371,7 @@ export default function Ressources() {
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--blue)', letterSpacing: '.1em', marginBottom: '16px' }}>// CTO (flat tax 31,4%)</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '32px', fontWeight: 600, color: 'var(--blue)', marginBottom: '8px' }}>{fiscal.cto?.toLocaleString('fr-FR')} €</div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Impôts : {fiscal.ctoTax?.toLocaleString('fr-FR')} €</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>Taux effectif : 30% (flat tax)</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>Taux effectif : 31,4% (flat tax)</div>
                 </div>
               </div>
 
@@ -388,7 +388,7 @@ export default function Ressources() {
               )}
 
               <div style={{ marginTop: '16px', fontFamily: 'var(--mono)', fontSize: '10px', color: '#333', lineHeight: 1.8 }}>
-                // Hypothèses : PEA après 5 ans = exonération IR, uniquement PS 17.2% · CTO = flat tax 31,4% · Calcul simplifié, hors CSG déductible et abattements éventuels · Ne constitue pas un conseil fiscal.
+                // Hypothèses : PEA après 5 ans = exonération IR, uniquement PS 18.6% · CTO = flat tax 31,4% · Calcul simplifié, hors CSG déductible et abattements éventuels · Ne constitue pas un conseil fiscal.
               </div>
             </div>
           )}
