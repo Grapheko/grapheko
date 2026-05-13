@@ -152,13 +152,14 @@ function Chart({ data, showPea }) {
           />
         )}
 
-        {/* Légende */}
-        <g transform={`translate(${PAD.left + 10}, ${PAD.top + 10})`}>
-          <line x1="0" y1="6" x2="20" y2="6" stroke="#00FF88" strokeWidth="2" />
-          <text x="26" y="10" style={{ fontFamily: 'var(--mono)', fontSize: '10px', fill: '#666' }}>Capital total</text>
-          <rect x="100" y="2" width="16" height="8" fill="rgba(0,194,255,0.2)" rx="1"/>
-          <line x1="100" y1="6" x2="116" y2="6" stroke="#00C2FF" strokeWidth="1.5" strokeDasharray="4,3" />
-          <text x="122" y="10" style={{ fontFamily: 'var(--mono)', fontSize: '10px', fill: '#666' }}>Versements cumulés</text>
+        {/* Légende — placée sous le graphique bien séparée */}
+        <g transform={`translate(${PAD.left}, ${H - 4})`}>
+          <rect x="0" y="-10" width="14" height="6" fill="rgba(0,255,136,0.2)" rx="1"/>
+          <line x1="0" y1="-7" x2="14" y2="-7" stroke="#00FF88" strokeWidth="2"/>
+          <text x="18" y="-3" style={{ fontFamily: 'var(--mono)', fontSize: '9px', fill: '#555' }}>Capital total (intérêts inclus)</text>
+          <rect x="200" y="-10" width="14" height="6" fill="rgba(0,194,255,0.15)" rx="1"/>
+          <line x1="200" y1="-7" x2="214" y2="-7" stroke="#00C2FF" strokeWidth="1.5" strokeDasharray="4,3"/>
+          <text x="218" y="-3" style={{ fontFamily: 'var(--mono)', fontSize: '9px', fill: '#555' }}>Versements cumulés</text>
         </g>
       </svg>
     </div>
@@ -249,26 +250,33 @@ export default function Ressources() {
           {/* Paramètres */}
           <div style={{ padding: '28px', borderBottom: '0.5px solid var(--border)' }}>
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: '#1A3A2A', marginBottom: '20px' }}>// Renseigne tes paramètres :</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '20px' }}>
               {[
-                { label: 'Capital initial (€)', val: capital, set: setCapital, min: 0, max: 1000000, step: 100 },
-                { label: 'Versement mensuel (€)', val: monthly, set: setMonthly, min: 0, max: 10000, step: 50 },
-                { label: 'Taux annuel (%)', val: rate, set: setRate, min: 0, max: 30, step: 0.5 },
-                { label: 'Durée (années)', val: years, set: setYears, min: 1, max: 50, step: 1 },
-              ].map(({ label, val, set, min, max, step }) => (
+                { label: 'Capital initial', unit: '€', val: capital, set: setCapital, min: 0, max: 1000000, step: 100 },
+                { label: 'Versement mensuel', unit: '€', val: monthly, set: setMonthly, min: 0, max: 10000, step: 50 },
+                { label: 'Taux de rendement', unit: '%', val: rate, set: setRate, min: 0, max: 30, step: 0.5 },
+                { label: 'Durée', unit: 'ans', val: years, set: setYears, min: 1, max: 50, step: 1 },
+              ].map(({ label, unit, val, set, min, max, step }) => (
                 <div key={label}>
-                  <label style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-secondary)', letterSpacing: '.08em', display: 'block', marginBottom: '6px' }}>{label}</label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <input
-                      type="range" min={min} max={max} step={step} value={val}
-                      onChange={e => { set(parseFloat(e.target.value)); trackCalc() }}
-                      style={{ flex: 1, accentColor: 'var(--neon)', height: '4px' }}
-                    />
-                    <input
-                      type="number" value={val} min={min} max={max} step={step}
-                      onChange={e => { set(parseFloat(e.target.value) || 0); trackCalc() }}
-                      style={{ width: '80px', background: 'var(--void)', border: '0.5px solid var(--border2)', borderRadius: '4px', padding: '4px 8px', fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-primary)', outline: 'none' }}
-                    />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                    <label style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-secondary)', letterSpacing: '.08em' }}>{label}</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <input
+                        type="number" value={val} min={min} max={max} step={step}
+                        onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= min && v <= max) { set(v); trackCalc() } }}
+                        style={{ width: '80px', background: 'var(--void)', border: '0.5px solid var(--neon)', borderRadius: '4px', padding: '4px 8px', fontFamily: 'var(--mono)', fontSize: '13px', fontWeight: 500, color: 'var(--neon)', outline: 'none', textAlign: 'right' }}
+                      />
+                      <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-secondary)' }}>{unit}</span>
+                    </div>
+                  </div>
+                  <input
+                    type="range" min={min} max={max} step={step} value={val}
+                    onChange={e => { set(parseFloat(e.target.value)); trackCalc() }}
+                    style={{ width: '100%', accentColor: 'var(--neon)', height: '4px' }}
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: '9px', color: '#333', marginTop: '4px' }}>
+                    <span>{min}{unit}</span>
+                    <span>{max.toLocaleString('fr-FR')}{unit}</span>
                   </div>
                 </div>
               ))}
