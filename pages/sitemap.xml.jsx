@@ -15,6 +15,7 @@ const PAGES = [
   { url: '/newsletter', priority: '0.7', changefreq: 'monthly', lastmod: '2026-05-10' },
   { url: '/about', priority: '0.6', changefreq: 'monthly', lastmod: '2026-05-10' },
   { url: '/contact', priority: '0.5', changefreq: 'monthly', lastmod: '2026-05-10' },
+  { url: '/calculateur-interets-composes', priority: '0.9', changefreq: 'monthly', lastmod: '2026-05-13' },
 ]
 
 function generateSitemap(pages) {
