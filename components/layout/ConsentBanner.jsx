@@ -46,10 +46,10 @@ export default function ConsentBanner() {
       )}
 
       <div className={s.actions}>
-        <button className="btn" onClick={() => close({ analytics: false, marketing: false })}>Tout refuser</button>
-        <button className="btn" onClick={() => close({ analytics: true, marketing: true })}>Tout accepter</button>
+        <button className="btn" onClick={() => close({ analytics: false, marketing: false, method: 'tout_refuser' })}>Tout refuser</button>
+        <button className="btn" onClick={() => close({ analytics: true, marketing: true, method: 'tout_accepter' })}>Tout accepter</button>
         {details
-          ? <button className={s.more} onClick={() => close({ analytics, marketing })}>Enregistrer mes choix</button>
+          ? <button className={s.more} onClick={() => close({ analytics, marketing, method: 'personnalise' })}>Enregistrer mes choix</button>
           : <button className={s.more} onClick={() => setDetails(true)}>Personnaliser</button>}
       </div>
     </div>
