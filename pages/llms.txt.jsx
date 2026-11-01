@@ -26,6 +26,9 @@ ${ASSETS.map((a) => `- [${a.name}](${SITE}/marches/${a.slug}): ${a.intro.split('
 ## Glossaire
 ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).join('\n')}
 
+## Comparatifs
+- [Courtiers PEA : frais de courtage comparés](${SITE}/comparatifs/courtiers-pea): Bourse Direct, BoursoBank, Fortuneo, Trade Republic, grilles officielles vérifiées, calculateur du coût annuel
+
 ## Quiz
 ${QUIZZES.map((q) => `- [${q.title}](${SITE}/quiz/${q.slug}): ${q.teaser}`).join('\n')}
 

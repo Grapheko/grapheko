@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro from '../../components/ui/PageIntro'
 import NewsletterForm from '../../components/ui/NewsletterForm'
@@ -8,7 +9,8 @@ import s from '../../styles/Comparatifs.module.css'
 // qu'elle n'a pas été vérifiée, et aucun lien affilié n'est actif.
 const CATEGORIES = [
   {
-    title: 'Courtiers pour PEA et compte-titres',
+    title: 'Courtiers pour PEA',
+    href: '/comparatifs/courtiers-pea',
     criteria: ['Frais de courtage réels pour 100 €, 500 € et 2 000 € investis', 'Frais de tenue de compte et de change', 'Disponibilité du PEA et des ETF éligibles', 'Investissement programmé possible', 'Pays d’enregistrement et démarches fiscales'],
   },
   {
@@ -26,21 +28,22 @@ export default function Comparatifs() {
     <>
       <Seo
         title="Comparatifs : méthode et critères"
-        description="Courtiers, plateformes crypto, assurances-vie : les critères que Grapheko utilisera pour comparer les offres, sans classement sponsorisé."
+        description="Courtiers PEA, plateformes crypto, assurances-vie : des comparatifs sur critères, avec sources et date de vérification, sans classement sponsorisé."
       />
       <PageIntro
         crumbs={[{ label: 'Comparatifs' }]}
         title="Comparer sur des critères, pas sur des promesses."
-        lede="Les comparatifs Grapheko sont en préparation. Avant de publier le moindre classement, voici les critères que nous vérifierons pour chaque offre."
+        lede="Chaque comparatif publie ses critères, ses sources et la date de vérification des tarifs. Le premier, consacré aux courtiers PEA, est en ligne."
         wide
       />
       <div className="wrap" style={{ paddingBottom: 'var(--section)' }}>
         <div className={s.grid}>
           {CATEGORIES.map((c) => (
-            <section key={c.title} className={s.card}>
-              <p className={s.status}>En préparation</p>
-              <h2 className={s.title}>{c.title}</h2>
+            <section key={c.title} className={`${s.card} ${c.href ? s.live : ''}`}>
+              <p className={`${s.status} ${c.href ? s.statusLive : ''}`}>{c.href ? 'Disponible' : 'En préparation'}</p>
+              <h2 className={s.title}>{c.href ? <Link href={c.href}>{c.title}</Link> : c.title}</h2>
               <ul className={s.criteria}>{c.criteria.map((k) => <li key={k}>{k}</li>)}</ul>
+              {c.href && <Link href={c.href} className="btn btn--plein" style={{ justifySelf: 'start' }}>Voir le comparatif</Link>}
             </section>
           ))}
         </div>
