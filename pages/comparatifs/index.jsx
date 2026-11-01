@@ -9,6 +9,11 @@ import s from '../../styles/Comparatifs.module.css'
 // qu'elle n'a pas été vérifiée, et aucun lien affilié n'est actif.
 const CATEGORIES = [
   {
+    title: 'Banques en ligne et néobanques',
+    href: '/comparatifs/banques-en-ligne',
+    criteria: ['Coût réel et conditions d’utilisation de la carte', 'Revenus exigés', 'Paiements et retraits hors zone euro', 'Découvert', 'Sources officielles datées'],
+  },
+  {
     title: 'Courtiers pour PEA',
     href: '/comparatifs/courtiers-pea',
     criteria: ['Frais de courtage réels pour 100 €, 500 € et 2 000 € investis', 'Frais de tenue de compte et de change', 'Disponibilité du PEA et des ETF éligibles', 'Investissement programmé possible', 'Pays d’enregistrement et démarches fiscales'],
@@ -33,7 +38,7 @@ export default function Comparatifs() {
       <PageIntro
         crumbs={[{ label: 'Comparatifs' }]}
         title="Comparer sur des critères, pas sur des promesses."
-        lede="Chaque comparatif publie ses critères, ses sources et la date de vérification des tarifs. Le premier, consacré aux courtiers PEA, est en ligne."
+        lede="Chaque comparatif publie ses critères, ses sources et la date de vérification des tarifs. Courtiers PEA et banques en ligne sont déjà disponibles."
         wide
       />
       <div className="wrap" style={{ paddingBottom: 'var(--section)' }}>

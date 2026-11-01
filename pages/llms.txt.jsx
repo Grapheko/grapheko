@@ -28,6 +28,7 @@ ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).joi
 
 ## Comparatifs
 - [Courtiers PEA : frais de courtage comparés](${SITE}/comparatifs/courtiers-pea): Bourse Direct, BoursoBank, Fortuneo, Trade Republic, grilles officielles vérifiées, calculateur du coût annuel
+- [Banques en ligne et néobanques](${SITE}/comparatifs/banques-en-ligne): BoursoBank, Fortuneo, Hello bank!, Monabanq, N26, Revolut, Nickel, Trade Republic, frais et conditions vérifiés
 
 ## Quiz
 ${QUIZZES.map((q) => `- [${q.title}](${SITE}/quiz/${q.slug}): ${q.teaser}`).join('\n')}
