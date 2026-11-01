@@ -15,7 +15,7 @@ export default function Glossaire({ terms }) {
 
   const filtered = useMemo(() => {
     const nq = norm(q.trim())
-    return terms.filter((t) => (cat === 'tout' || t.cat === cat) && (!nq || norm(t.term).includes(nq) || norm(t.short).includes(nq)))
+    return terms.filter((t) => (cat === 'tout' || t.cat === cat) && (!nq || norm(t.term).includes(nq) || norm(t.short).includes(nq) || norm(t.aliases || '').includes(nq)))
   }, [terms, q, cat])
 
   // Mesure des recherches, une fois la saisie terminée
@@ -91,6 +91,6 @@ export default function Glossaire({ terms }) {
 }
 
 export async function getStaticProps() {
-  const terms = termsSorted().map(({ slug, term, short, cat }) => ({ slug, term, short, cat }))
+  const terms = termsSorted().map(({ slug, term, short, cat, aliases }) => ({ slug, term, short, cat, aliases: aliases || null }))
   return { props: { terms } }
 }
