@@ -47,7 +47,6 @@ Pas d’outil de volume ici : la liste est construite sur l’intention de reche
 
 ## 5. Idées d’articles suivants
 
-- « PEA : combien investir chaque mois pour avoir 100 000 € ? » (lien simulateur intérêts composés)
 - « Bitcoin : combien aurait rapporté un DCA depuis chaque halving ? » (données réelles)
 - « ETF MSCI World : comprendre les frais réels » (lien simulateur frais)
 - « LEP 2026 : qui y a droit et combien il rapporte » (vérifier taux et plafond avant d’écrire)
