@@ -31,8 +31,9 @@ export default function Marches({ rows }) {
           </p>
           <h2 id="sources">D’où viennent les cours en direct</h2>
           <p>
-            Les cryptos (Bitcoin, Ethereum, Solana) sont affichées en temps réel, en euros, à partir des flux publics de Binance,
-            avec Coinbase en secours. La variation indiquée porte sur les dernières 24 heures.
+            Le bandeau affiche les 10 premières cryptos par capitalisation, d’après le classement de CoinGecko, hors stablecoins
+            (USDT, USDC…) et jetons qui dupliquent un autre actif (WBTC, stETH…). Leurs cours sont en temps réel, à partir des flux
+            publics de Binance, convertis en euros avec le cours EUR/USDT. La variation indiquée porte sur les dernières 24 heures.
           </p>
           <p>
             Les indices (CAC 40, S&amp;P 500, Nasdaq) et l’or sont affichés en différé d’au moins 15 minutes, avec l’heure du cours.

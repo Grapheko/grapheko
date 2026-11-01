@@ -19,11 +19,11 @@ function Ticker() {
   const { items, loaded } = useMarketQuotes()
   const anyLive = items.some((i) => i.mode === 'live' && i.price != null)
   const anyDelayed = items.some((i) => i.mode === 'delayed' && i.price != null)
-  const status = anyLive && anyDelayed ? 'Crypto en direct, indices différés' : anyLive ? 'Crypto en direct' : anyDelayed ? 'Cours différés' : loaded ? 'Cours indisponibles' : 'Chargement des cours'
+  const status = anyLive && anyDelayed ? 'Top 10 crypto en direct, indices différés' : anyLive ? 'Crypto en direct' : anyDelayed ? 'Cours différés' : loaded ? 'Cours indisponibles' : 'Chargement des cours'
 
   return (
     <div className={s.ticker} aria-label="Cours des marchés">
-      <Link href="/marches#sources" className={s.status} title="Cryptos en temps réel. Indices et or différés d’au moins 15 minutes.">
+      <Link href="/marches#sources" className={s.status} title="Top 10 crypto par capitalisation (classement CoinGecko), cours en temps réel. Indices et or différés d’au moins 15 minutes.">
         <span className={anyLive ? s.dotLive : s.dot} aria-hidden="true" />
         {status}
       </Link>
@@ -31,16 +31,23 @@ function Ticker() {
         <div className={s.marquee}>
           {[0, 1].map((k) => (
             <ul key={k} aria-hidden={k === 1} className={s.list}>
-              {items.map((t) => (
-                <li key={t.slug}>
-                  <Link href={`/marches/${t.slug}`} tabIndex={k === 1 ? -1 : 0} className={s.item}>
-                    {t.mode === 'live' && t.price != null && <span className={s.liveMark} aria-label="temps réel" />}
+              {items.map((t) => {
+                const inner = (
+                  <>
+                    {t.mode === 'live' && t.price != null && <span className={s.liveMark} />}
                     <span className={s.name}>{t.name}</span>
                     <span className="num">{t.price != null ? `${priceFmt(t.price)}${t.unit === '€' ? '\u00a0€' : ''}` : '—'}</span>
                     <span className={`num ${dirClass(t.changePct)}`}>{t.changePct != null ? pct(t.changePct, 2) : ''}</span>
-                  </Link>
-                </li>
-              ))}
+                  </>
+                )
+                return (
+                  <li key={t.key}>
+                    {t.slug
+                      ? <Link href={`/marches/${t.slug}`} tabIndex={k === 1 ? -1 : 0} className={s.item}>{inner}</Link>
+                      : <span className={s.item} title={t.fullName}>{inner}</span>}
+                  </li>
+                )
+              })}
             </ul>
           ))}
         </div>

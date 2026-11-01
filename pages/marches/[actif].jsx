@@ -21,11 +21,11 @@ const RANGES = [
 ]
 
 function LiveQuote({ slug }) {
-  const { items } = useMarketQuotes()
-  const q = items.find((x) => x.slug === slug)
+  const { bySlug } = useMarketQuotes()
+  const q = bySlug(slug)
   if (!q || q.price == null) return null
   const label = q.mode === 'live'
-    ? `En temps réel (${q.source || 'flux public'})`
+    ? `En temps réel (${q.source || 'Binance'})`
     : q.time ? `Différé, cours de ${timeFr(q.time)}` : 'Dernière clôture'
   return (
     <p className={m.live}>

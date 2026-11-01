@@ -36,7 +36,7 @@ Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les 
 
 ## Données de marché
 
-- Ticker : cryptos en temps réel dans le navigateur (flux publics Binance, secours Coinbase, aucune clé) ; indices et or différés d’au moins 15 minutes via `/api/ticker` (affichés avec l’heure du cours). Le temps réel des indices demande des licences payantes auprès des bourses.
+- Ticker : cryptos en temps réel dans le navigateur (top 10 par capitalisation d’après CoinGecko, flux publics Binance convertis en euros, aucune clé) ; indices et or différés d’au moins 15 minutes via `/api/ticker` (affichés avec l’heure du cours). Le temps réel des indices demande des licences payantes auprès des bourses.
 
 - Historique : clôtures mensuelles, converties en euros au taux EUR/USD de fin de mois. Pages régénérées toutes les 12 h (ISR), ou toutes les 5 minutes si la source était indisponible.
 - Aucune valeur inventée : si une source ne répond pas, l’interface affiche un message d’erreur.
