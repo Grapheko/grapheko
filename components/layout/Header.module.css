@@ -20,10 +20,18 @@
   border-right: 1px solid rgba(231, 234, 227, .16);
 }
 .dot, .dotLive { width: 7px; height: 7px; border-radius: 50%; background: #8A968E; }
-.dotLive { background: #5FD39A; animation: pulse 2s infinite; }
+.dotLive { background: #5FD39A; animation: livePulse 2s infinite; }
 .track { flex: 1; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
-.marquee { display: flex; width: max-content; animation: marquee 50s linear infinite; }
-.ticker:hover .marquee { animation-play-state: paused; }
+.marquee { display: flex; width: max-content; animation: tickerScroll 60s linear infinite; will-change: transform; }
+@keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (hover: hover) and (pointer: fine) { .ticker:hover .marquee { animation-play-state: paused; } }
+@media (max-width: 640px) { .marquee { animation-duration: 45s; } }
+/* Animations réduites : pas de défilement automatique, la liste se fait glisser au doigt */
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+  .track { overflow-x: auto; scrollbar-width: none; mask-image: none; }
+  .track::-webkit-scrollbar { display: none; }
+}
 .list { display: flex; list-style: none; }
 .item { display: inline-flex; gap: 8px; padding: 0 22px; text-decoration: none; white-space: nowrap; }
 .item:hover .name { text-decoration: underline; }
@@ -84,3 +92,5 @@
   .nav, .cta { display: none; }
   .burger { display: block; }
 }
+
+@keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }

@@ -1,6 +1,6 @@
 .kind { margin-top: 20px; font-size: var(--fs-sm); font-weight: 600; color: var(--fg-muted); }
 .live { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: var(--fs-sm); }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hausse); animation: pulse 2s infinite; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hausse); animation: livePulse 2s infinite; }
 .dotDelayed { width: 8px; height: 8px; border-radius: 50%; background: var(--encre-3); }
 .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin-bottom: 24px; border-top: 2px solid var(--encre); }
 .stats > div { padding: 16px 16px 0 0; }
@@ -17,3 +17,5 @@
   .stats > div:first-child { grid-column: 1 / -1; }
   .split { grid-template-columns: 1fr; }
 }
+
+@keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
