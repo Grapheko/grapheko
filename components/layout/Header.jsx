@@ -12,7 +12,7 @@ export const NAV = [
   { href: '/marches', label: 'Marchés' },
   { href: '/glossaire', label: 'Glossaire' },
   { href: '/blog', label: 'Articles' },
-  { href: '/quiz/profil-investisseur', label: 'Quiz' },
+  { href: '/quiz', label: 'Quiz' },
 ]
 
 function Ticker() {

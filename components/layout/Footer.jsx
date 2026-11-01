@@ -19,7 +19,7 @@ const COLS = [
     links: [
       { href: '/glossaire', label: 'Glossaire' },
       { href: '/blog', label: 'Articles' },
-      { href: '/quiz/profil-investisseur', label: 'Quiz profil investisseur' },
+      { href: '/quiz', label: 'Quiz' },
       { href: '/comparatifs', label: 'Comparatifs' },
     ],
   },

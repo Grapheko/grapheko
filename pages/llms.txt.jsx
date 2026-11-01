@@ -3,6 +3,7 @@
 import { ASSETS } from '../lib/assets'
 import { TERMS } from '../lib/content/glossary'
 import { ARTICLES } from '../lib/content/articles'
+import { QUIZZES } from '../lib/content/quizzes'
 
 const SITE = 'https://grapheko.fr'
 
@@ -24,6 +25,9 @@ ${ASSETS.map((a) => `- [${a.name}](${SITE}/marches/${a.slug}): ${a.intro.split('
 
 ## Glossaire
 ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).join('\n')}
+
+## Quiz
+${QUIZZES.map((q) => `- [${q.title}](${SITE}/quiz/${q.slug}): ${q.teaser}`).join('\n')}
 
 ## Articles
 ${ARTICLES.map((a) => `- [${a.title}](${SITE}/blog/${a.slug}): ${a.description}`).join('\n')}
