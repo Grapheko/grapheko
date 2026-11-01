@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Logo from '../ui/Logo'
-import { trackClick, trackTickerRefresh } from '../../lib/gtm'
+import { trackClick } from '../../lib/gtm'
+import { useMarketQuotes } from '../../lib/useMarketQuotes'
 import { priceFmt, pct, dirClass } from '../../lib/format'
 import s from './Header.module.css'
 
@@ -15,53 +16,34 @@ export const NAV = [
 ]
 
 function Ticker() {
-  const [items, setItems] = useState(null)
-
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch('/api/ticker')
-      const json = await res.json()
-      setItems(json.data || [])
-      const live = (json.data || []).filter((d) => d.live).map((d) => d.name)
-      if (live.length && !json.cached) trackTickerRefresh(live.join(','))
-    } catch {
-      setItems([])
-    }
-  }, [])
-
-  useEffect(() => {
-    load()
-    const id = setInterval(load, 60_000)
-    return () => clearInterval(id)
-  }, [load])
-
-  const list = items?.length ? items : null
-  const anyLive = list?.some((i) => i.live)
+  const { items, loaded } = useMarketQuotes()
+  const anyLive = items.some((i) => i.mode === 'live' && i.price != null)
+  const anyDelayed = items.some((i) => i.mode === 'delayed' && i.price != null)
+  const status = anyLive && anyDelayed ? 'Crypto en direct, indices différés' : anyLive ? 'Crypto en direct' : anyDelayed ? 'Cours différés' : loaded ? 'Cours indisponibles' : 'Chargement des cours'
 
   return (
     <div className={s.ticker} aria-label="Cours des marchés">
-      <span className={s.status}>
+      <Link href="/marches#sources" className={s.status} title="Cryptos en temps réel. Indices et or différés d’au moins 15 minutes.">
         <span className={anyLive ? s.dotLive : s.dot} aria-hidden="true" />
-        {anyLive ? 'En direct' : 'Cours indisponibles'}
-      </span>
+        {status}
+      </Link>
       <div className={s.track}>
-        {list && (
-          <div className={s.marquee}>
-            {[0, 1].map((k) => (
-              <ul key={k} aria-hidden={k === 1} className={s.list}>
-                {list.map((t) => (
-                  <li key={t.slug}>
-                    <Link href={`/marches/${t.slug}`} tabIndex={k === 1 ? -1 : 0} className={s.item}>
-                      <span className={s.name}>{t.name}</span>
-                      <span className="num">{t.price ? `${priceFmt(t.price)} ${t.unit === '€' ? '€' : ''}` : '—'}</span>
-                      <span className={`num ${dirClass(t.changePct)}`}>{t.changePct != null ? pct(t.changePct, 2) : ''}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        )}
+        <div className={s.marquee}>
+          {[0, 1].map((k) => (
+            <ul key={k} aria-hidden={k === 1} className={s.list}>
+              {items.map((t) => (
+                <li key={t.slug}>
+                  <Link href={`/marches/${t.slug}`} tabIndex={k === 1 ? -1 : 0} className={s.item}>
+                    {t.mode === 'live' && t.price != null && <span className={s.liveMark} aria-label="temps réel" />}
+                    <span className={s.name}>{t.name}</span>
+                    <span className="num">{t.price != null ? `${priceFmt(t.price)}${t.unit === '€' ? '\u00a0€' : ''}` : '—'}</span>
+                    <span className={`num ${dirClass(t.changePct)}`}>{t.changePct != null ? pct(t.changePct, 2) : ''}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
       </div>
     </div>
   )

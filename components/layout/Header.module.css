@@ -16,7 +16,7 @@
 .status {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 0 16px; height: 100%;
-  font-weight: 600; white-space: nowrap;
+  font-weight: 600; white-space: nowrap; text-decoration: none;
   border-right: 1px solid rgba(231, 234, 227, .16);
 }
 .dot, .dotLive { width: 7px; height: 7px; border-radius: 50%; background: #8A968E; }
@@ -28,6 +28,8 @@
 .item { display: inline-flex; gap: 8px; padding: 0 22px; text-decoration: none; white-space: nowrap; }
 .item:hover .name { text-decoration: underline; }
 .name { color: #B9C2B6; }
+.liveMark { width: 6px; height: 6px; border-radius: 50%; background: #5FD39A; align-self: center; }
+@media (max-width: 640px) { .status { font-size: 0; gap: 0; padding: 0 12px; } }
 .ticker :global(.up) { color: #5FD39A; }
 .ticker :global(.down) { color: #FF8B73; }
 

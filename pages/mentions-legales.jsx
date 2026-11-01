@@ -36,8 +36,8 @@ export default function MentionsLegales() {
 
         <h2>Données de marché</h2>
         <p>
-          Les cours affichés proviennent de fournisseurs tiers (Finnhub, Yahoo Finance, Binance) et sont fournis sans garantie d’exactitude ni d’exhaustivité.
-          Ils peuvent être différés, incomplets ou temporairement indisponibles.
+          Les cours affichés proviennent de sources tierces (flux publics Binance et Coinbase pour les cryptos, Yahoo Finance pour les indices et l’or, données Euronext pour le CAC 40) et sont fournis sans garantie d’exactitude ni d’exhaustivité.
+          Les cours des indices et de l’or sont différés d’au moins 15 minutes. Ils peuvent être incomplets ou temporairement indisponibles.
         </p>
 
         <h2>Liens d’affiliation</h2>

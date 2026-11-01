@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useMarketQuotes, timeFr } from '../../lib/useMarketQuotes'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
@@ -20,20 +21,17 @@ const RANGES = [
 ]
 
 function LiveQuote({ slug }) {
-  const [q, setQ] = useState(null)
-  useEffect(() => {
-    let on = true
-    const load = () => fetch('/api/ticker').then((r) => r.json()).then((d) => on && setQ(d.data?.find((x) => x.slug === slug) || null)).catch(() => {})
-    load()
-    const id = setInterval(load, 60_000)
-    return () => { on = false; clearInterval(id) }
-  }, [slug])
-  if (!q?.live) return null
+  const { items } = useMarketQuotes()
+  const q = items.find((x) => x.slug === slug)
+  if (!q || q.price == null) return null
+  const label = q.mode === 'live'
+    ? `En temps réel (${q.source || 'flux public'})`
+    : q.time ? `Différé, cours de ${timeFr(q.time)}` : 'Dernière clôture'
   return (
     <p className={m.live}>
-      <span className={m.dot} aria-hidden="true" />
-      En direct : <strong className="num">{priceFmt(q.price)} {q.unit}</strong>
-      <span className={`num ${dirClass(q.changePct)}`}>{pct(q.changePct, 2)} aujourd’hui</span>
+      <span className={q.mode === 'live' ? m.dot : m.dotDelayed} aria-hidden="true" />
+      {label} : <strong className="num">{priceFmt(q.price)} {q.unit}</strong>
+      {q.changePct != null && <span className={`num ${dirClass(q.changePct)}`}>{pct(q.changePct, 2)} {q.mode === 'live' ? 'sur 24 h' : 'sur la séance'}</span>}
     </p>
   )
 }

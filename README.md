@@ -15,7 +15,6 @@ GRAPHEKO_DEMO_DATA=1 npm run dev    # données fictives signalées à l'écran, 
 
 | Variable | Usage | Obligatoire |
 |---|---|---|
-| `FINNHUB_KEY` | Cours en direct (ticker, fiches marché) | Oui pour le direct |
 | `BREVO_API_KEY` | Inscription newsletter et envoi du formulaire de contact | Oui |
 | `CONTACT_SENDER` | Adresse expéditrice **validée dans Brevo** pour le formulaire de contact | Oui pour le contact |
 | `CONTACT_TO` | Destinataire des messages (défaut : contact@grapheko.fr) | Non |
@@ -36,6 +35,8 @@ pages/                   Routes
 Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les pages, le sitemap et les liens se mettent à jour seuls.
 
 ## Données de marché
+
+- Ticker : cryptos en temps réel dans le navigateur (flux publics Binance, secours Coinbase, aucune clé) ; indices et or différés d’au moins 15 minutes via `/api/ticker` (affichés avec l’heure du cours). Le temps réel des indices demande des licences payantes auprès des bourses.
 
 - Historique : clôtures mensuelles, converties en euros au taux EUR/USD de fin de mois. Pages régénérées toutes les 12 h (ISR), ou toutes les 5 minutes si la source était indisponible.
 - Aucune valeur inventée : si une source ne répond pas, l’interface affiche un message d’erreur.

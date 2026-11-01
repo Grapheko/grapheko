@@ -29,6 +29,15 @@ export default function Marches({ rows }) {
             Les indices boursiers sont publiés hors dividendes. Un ETF qui réinvestit les dividendes a fait mieux que l’indice affiché ici.
             Les performances passées ne préjugent pas des performances futures.
           </p>
+          <h2 id="sources">D’où viennent les cours en direct</h2>
+          <p>
+            Les cryptos (Bitcoin, Ethereum, Solana) sont affichées en temps réel, en euros, à partir des flux publics de Binance,
+            avec Coinbase en secours. La variation indiquée porte sur les dernières 24 heures.
+          </p>
+          <p>
+            Les indices (CAC 40, S&amp;P 500, Nasdaq) et l’or sont affichés en différé d’au moins 15 minutes, avec l’heure du cours.
+            Diffuser ces cours en temps réel nécessite des licences payantes auprès des bourses. Données Euronext pour le CAC 40.
+          </p>
         </section>
       </div>
     </>
