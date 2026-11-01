@@ -5,13 +5,14 @@
 .link { text-decoration: none; color: var(--fg-muted); }
 .link:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
 .disclaimer { margin-top: 64px; max-width: 70ch; font-size: var(--fs-xs); color: var(--fg-faint); line-height: 1.6; }
-.legal { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: var(--fs-xs); color: var(--fg-faint); }
-.legal a, .legal button { color: var(--fg-muted); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; font-size: inherit; }
+.legal { position: relative; z-index: 1; margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: var(--fs-xs); color: var(--fg-faint); }
+.legal a, .legal button { color: var(--fg-muted); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; font-size: inherit; cursor: pointer; }
+.legal a:hover, .legal button:hover { color: var(--fg); }
 .wordmark {
   font-family: var(--display); font-weight: 800; letter-spacing: -0.07em;
   font-size: 23.5vw; line-height: 0.75;
   margin: 48px 0 -0.08em -0.04em;
   color: transparent; -webkit-text-stroke: 1.5px rgba(231, 234, 227, .22);
-  white-space: nowrap; user-select: none;
+  white-space: nowrap; user-select: none; pointer-events: none;
 }
 @media (max-width: 760px) { .cols { grid-template-columns: 1fr 1fr; } }
