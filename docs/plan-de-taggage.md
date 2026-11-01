@@ -78,6 +78,8 @@ Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env
 
 **À savoir** : les events envoyés après un refus de cookies partent en ping anonyme (Consent Mode) et n’apparaissent pas dans les rapports ; `consent_update` y montrera surtout des acceptations.
 
+**Quiz** : `quiz_name` (`profil_investisseur`, `crypto`, `bourse_debutant`), `quiz_answer` = lettre affichée (A à D), `quiz_correct` = `oui`/`non` (quiz de connaissances), `quiz_result` = profil ou score (`7/10`).
+
 **Pas encore tagué** : `time_on_page`, `tracker_data_refresh`.
 
 ## 6. Idées d’analyses une fois les données en place

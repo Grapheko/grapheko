@@ -120,7 +120,10 @@ export default function QuizRunner({ quiz, terms = {} }) {
     const next = [...answers]
     next[step] = orig
     setAnswers(next)
-    const params = { quiz_step: step + 1, quiz_question: current.id, quiz_answer: orig + 1 }
+    // quiz_answer : la lettre affichée (A, B, C, D), celle que voit l'utilisateur.
+    // L'ordre étant le même pour tout le monde, une lettre désigne toujours la même réponse.
+    const shown = current.options.findIndex((o) => o.orig === orig)
+    const params = { quiz_step: step + 1, quiz_question: current.id, quiz_answer: LETTERS[shown] }
     if (knowledge) {
       trackQuiz('answer', { ...params, quiz_correct: orig === current.ok ? 'oui' : 'non' }, quiz.name)
       setRevealed(true)
