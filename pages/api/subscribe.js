@@ -28,6 +28,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true })
     }
     const data = await response.json()
+    console.error('subscribe brevo', response.status, JSON.stringify(data).slice(0, 300))
     if (data.code === 'duplicate_parameter') {
       return res.status(200).json({ success: true })
     }

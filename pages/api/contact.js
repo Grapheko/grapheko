@@ -29,7 +29,11 @@ export default async function handler(req, res) {
         htmlContent: `<p><strong>De :</strong> ${escape(name || '')} &lt;${escape(email)}&gt;</p><p><strong>Sujet :</strong> ${safeSubject}</p><p>${escape(message).slice(0, 5000).replace(/\n/g, '<br>')}</p>`,
       }),
     })
-    if (!r.ok) throw new Error(String(r.status))
+    if (!r.ok) {
+      // On journalise le message de Brevo (code et explication), jamais la clé
+      const body = await r.text().catch(() => '')
+      throw new Error(`${r.status} ${body.slice(0, 300)}`)
+    }
     return res.status(200).json({ success: true })
   } catch (e) {
     console.error('contact error', e.message)
