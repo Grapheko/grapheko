@@ -47,23 +47,38 @@ Nouvelles clés ajoutées à tous les events : `page_type` (home, hub, outil, ac
 Valeurs de `tool_name` : `dca_<actif>` (ex. `dca_bitcoin`), `interets_composes`, `cout_frais`, `rendement_reel`.
 Clés de page envoyées avec `page.display` : `asset` (fiches marché et DCA), `tool_name`, `glossary_term`, `article_category`.
 
-## 4. Changement de comportement à vérifier
+## 4. Page vue : règle en place
 
-L’ancienne version n’envoyait **pas** `page.display` au premier chargement (seulement aux navigations suivantes).
-La v2 l’envoie à chaque page, premier chargement compris.
-➜ Si la balise GA4 « page_view » est aussi déclenchée sur « All Pages / Initialisation », **retirer ce déclencheur** pour éviter les doublons : la page vue doit partir uniquement sur l’event personnalisé `page.display`.
+La page vue part **uniquement** sur l’event personnalisé `page.display` (premier chargement compris).
+La balise Google se déclenche sur « Initialization - All Pages » avec `send_page_view = false`, et la mesure améliorée GA4 « modifications de page basées sur l’historique du navigateur » est **désactivée** (les simulateurs mettent l’URL à jour à chaque réglage).
 
-## 5. Configuration GTM à ajouter
+Le site vide les clés propres à un event dès qu’elles ne s’appliquent plus (`page.reset`, et sur `tool_*` / `quiz_*`), pour éviter que GTM ne réutilise une ancienne valeur (ex. `share_method` sur un `tool_result`).
 
-**Variables (Variable de couche de données)** : `page_type`, `content_group`, `asset`, `tool_name`, `share_method`, `quiz_step`, `quiz_question`, `quiz_answer`, `quiz_result`, `search_term`, `results_count`, `glossary_term`, `tool_montant`, `tool_annee`, `tool_frais`.
+## 5. Configuration GTM et GA4 en production (1er novembre 2026)
 
-**Déclencheurs (Événement personnalisé)** :
-- `tool_start|tool_result|tool_share` (regex) → balise GA4 Event, nom = `{{Event}}`
-- `quiz_.*` (regex) → balise GA4 Event, nom = `{{Event}}`
-- `glossary_search` → balise GA4 Event `search` (event recommandé GA4) avec `search_term`
+**Balises**
+| Balise | Type | Déclencheur | Nom d’event GA4 |
+|---|---|---|---|
+| Balise GA4 | Balise Google G-9K1C83LWRF, `send_page_view=false` | Initialization - All Pages | — |
+| page_view | Événement GA4 | CE `page.display` (sans regex) | `page_view` |
+| GA4 Clic Standard | Événement GA4 | CE `clicStandard` | (existant) |
+| GA4 Formulaire Contact / Inscription | Événement GA4 | CE formulaires | (existants) |
+| GA4 - tool_* | Événement GA4 | CE `^tool_(start\|result\|share)$` (regex) | `{{Event}}` |
+| GA4 - quiz_* | Événement GA4 | CE `^quiz_(start\|answer\|complete\|restart)$` (regex) | `{{Event}}` |
+| GA4 - glossary_search | Événement GA4 | CE `glossary_search` | `{{Event}}` |
+| GA4 - consent_update | Événement GA4 | CE `consent_update` | `consent_update` |
 
-**GA4 – Dimensions personnalisées (portée événement)** : `page_type`, `content_group`, `asset`, `tool_name`, `quiz_result`, `share_method`.
-**GA4 – Événements clés** : `formulaire_inscription` (ou `generate_lead` si renommé dans GTM), `quiz_complete`, `tool_share`.
+Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env_work`.
+
+**Variables de couche de données** (`dlv - <clé>`) : `page_cat1-3`, `env_work`, `tool_name`, `share_method`, `quiz_name`, `quiz_step`, `quiz_question`, `quiz_answer`, `quiz_result`, `search_term`, `results_count` (avec un s), `consent_analytics`, `consent_marketing`, `consent_method`. Variable intégrée `Event` activée.
+
+**GA4 – Dimensions personnalisées (portée événement)** : Environnement (`env_work`), Page catégorie 1-3, Outil (`tool_name`), Méthode de partage, Quiz question, Quiz réponse, Quiz résultat, Recherche glossaire (`search_term`), Nb résultats glossaire (`results_count`), Méthode de consentement (`consent_method`).
+
+**GA4 – Événements clés** : `formulaire_inscription`, `formulaire_contact`, `quiz_complete` (à étoiler dès qu’il apparaît).
+
+**À savoir** : les events envoyés après un refus de cookies partent en ping anonyme (Consent Mode) et n’apparaissent pas dans les rapports ; `consent_update` y montrera surtout des acceptations.
+
+**Pas encore tagué** : `time_on_page`, `tracker_data_refresh`.
 
 ## 6. Idées d’analyses une fois les données en place
 
