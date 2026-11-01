@@ -1,0 +1,37 @@
+.demo { position: fixed; z-index: 95; left: 50%; bottom: 16px; transform: translateX(-50%); background: var(--baisse); color: var(--blanc); font-size: var(--fs-xs); font-weight: 600; padding: 8px 14px; border-radius: var(--r-pill); }
+.sectionHead { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 64px); }
+.markets { background: var(--brume-2); }
+
+.learn { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 3vw, 40px); align-items: stretch; }
+.quiz {
+  display: flex; flex-direction: column; gap: 18px;
+  padding: clamp(28px, 4vw, 48px); border-radius: var(--r-panel);
+  background: var(--outremer); color: var(--blanc); text-decoration: none;
+  min-height: 420px;
+  transition: transform .4s var(--ease);
+}
+.quiz:hover { transform: rotate(-1deg) translateY(-4px); }
+.quiz p { color: rgba(247, 248, 244, .82); max-width: 38ch; }
+.quizTitle { font-size: clamp(2.2rem, 1.2rem + 3vw, 3.75rem); line-height: 0.98; margin-bottom: auto; }
+.quizGo { font-weight: 600; align-self: flex-start; border-bottom: 2px solid currentColor; }
+.articles { padding: clamp(8px, 1vw, 16px) 0; }
+.articlesTitle { font-size: var(--fs-xl); margin-bottom: 8px; }
+.articles ul { list-style: none; margin-bottom: 24px; }
+.article {
+  display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 4px 20px; align-items: baseline;
+  padding: 22px 0; border-bottom: 1px solid var(--line); text-decoration: none;
+}
+.article :global(.tag) { grid-row: span 2; align-self: start; justify-self: start; }
+.articleTitle { font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); letter-spacing: -0.02em; line-height: 1.15; transition: color .2s; }
+.article:hover .articleTitle { color: var(--outremer); }
+.articleMeta { font-size: var(--fs-xs); color: var(--fg-faint); }
+
+.newsletter { overflow: hidden; }
+.nlGrid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px 64px; align-items: end; }
+.nlGrid h2 { font-size: clamp(2.6rem, 1.2rem + 5vw, 6rem); line-height: 0.95; }
+
+@media (max-width: 900px) {
+  .sectionHead, .learn, .nlGrid { grid-template-columns: 1fr; }
+  .quiz { min-height: 320px; }
+}
+@media (max-width: 520px) { .article { grid-template-columns: 1fr; } .article :global(.tag) { grid-row: auto; } }

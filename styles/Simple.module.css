@@ -1,0 +1,20 @@
+.split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(32px, 5vw, 80px); align-items: start; padding-bottom: var(--section); }
+.form { display: grid; gap: 22px; }
+.form fieldset { border: 0; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.aside { display: grid; gap: 10px; align-content: start; }
+.aside a { color: var(--accent); font-weight: 600; }
+.h2 { font-size: var(--fs-xl); margin-bottom: 8px; }
+.h3 { font-size: var(--fs-lg); letter-spacing: -0.015em; margin-top: 16px; }
+.legal { padding-bottom: var(--section); }
+.legal h2 { font-size: var(--fs-xl); }
+.table { width: 100%; border-collapse: collapse; margin: 1em 0 2em; font-size: var(--fs-sm); }
+.table th, .table td { text-align: left; padding: 12px 10px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.table th { font-weight: 600; }
+.values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 48px 0 var(--section); }
+.values > div { border-top: 2px solid var(--encre); padding-top: 16px; }
+.values h2 { font-size: var(--fs-lg); margin-bottom: 8px; }
+.values p { color: var(--fg-muted); }
+.nf { min-height: 80vh; display: grid; align-content: center; gap: 24px; justify-items: start; padding-top: calc(var(--nav-h) + var(--ticker-h)); }
+.nfTitle { font-size: clamp(3rem, 1rem + 8vw, 8rem); line-height: 0.9; letter-spacing: -0.05em; max-width: 12ch; }
+@media (max-width: 900px) { .split, .values { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } }

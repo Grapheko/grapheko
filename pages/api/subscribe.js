@@ -2,9 +2,12 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
-  const { email, prenom } = req.body
-  if (!email || !email.includes('@')) {
+  const { email, prenom, source } = req.body || {}
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ error: 'Email invalide' })
+  }
+  if (!process.env.BREVO_API_KEY) {
+    return res.status(500).json({ error: 'BREVO_API_KEY manquante' })
   }
   try {
     const response = await fetch('https://api.brevo.com/v3/contacts', {
@@ -16,7 +19,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         email: email.toLowerCase().trim(),
-        attributes: { PRENOM: prenom || '', SOURCE: 'grapheko-website' },
+        attributes: { PRENOM: prenom || '', SOURCE: `grapheko-${String(source || 'site').slice(0, 40)}` },
         listIds: [3],
         updateEnabled: true,
       }),

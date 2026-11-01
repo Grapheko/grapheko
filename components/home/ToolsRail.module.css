@@ -1,0 +1,34 @@
+.rail { position: relative; overflow: hidden; }
+.inner { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--nav-h) + 40px) 0 56px; }
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: clamp(28px, 4vw, 48px); }
+.head h2 { max-width: 14ch; }
+.track {
+  display: flex; gap: 20px;
+  padding: 0 var(--gutter);
+  max-width: calc(var(--max) + 2 * var(--gutter)); margin: 0 auto; width: 100%;
+  overflow: visible;
+}
+.card {
+  flex: 0 0 min(560px, 82vw);
+  display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 14px;
+  min-height: min(62vh, 560px);
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--r-panel);
+  text-decoration: none; color: var(--encre);
+  transition: transform .4s var(--ease);
+}
+.card:hover { transform: translateY(-6px); }
+.card:hover .go { background-size: 100% 2px; }
+.name { font-size: var(--fs-sm); font-weight: 600; color: var(--encre-2); }
+.q { font-size: clamp(1.75rem, 1.1rem + 1.8vw, 2.6rem); line-height: 1.04; max-width: 16ch; }
+.visual { align-self: center; padding: 12px 0; }
+.visual svg { width: 100%; height: auto; max-height: 180px; }
+.text { color: var(--encre-2); max-width: 44ch; }
+.go { font-weight: 600; justify-self: start; background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat; transition: background-size .35s var(--ease); padding-bottom: 2px; }
+
+@media (max-width: 979px) {
+  .inner { min-height: auto; padding: var(--section) 0; }
+  .track { flex-direction: column; }
+  .card { flex-basis: auto; min-height: 0; }
+  .head { flex-direction: column; align-items: flex-start; }
+}

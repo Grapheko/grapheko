@@ -1,0 +1,17 @@
+.band { padding: var(--section) 0; overflow: hidden; }
+.head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(40px, 6vw, 72px); }
+.rows { display: grid; gap: 14px; margin-bottom: clamp(40px, 6vw, 72px); }
+.row { display: flex; gap: 14px; width: max-content; }
+.term {
+  display: inline-flex; align-items: center;
+  padding: 0.18em 0.6em 0.22em;
+  border-radius: var(--r-pill);
+  border: 2px solid var(--encre);
+  font-family: var(--display); font-weight: 700; letter-spacing: -0.035em;
+  font-size: clamp(1.75rem, 1rem + 3vw, 3.6rem); line-height: 1;
+  text-decoration: none; white-space: nowrap;
+  transition: background .25s, color .25s;
+}
+.alt { background: var(--encre); color: var(--brume); }
+.term:hover { background: var(--outremer); border-color: var(--outremer); color: var(--blanc); }
+@media (max-width: 860px) { .head { grid-template-columns: 1fr; } }

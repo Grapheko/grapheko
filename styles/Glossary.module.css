@@ -1,0 +1,31 @@
+.toolbar { display: flex; flex-wrap: wrap; gap: 20px 32px; align-items: flex-end; margin-bottom: 20px; }
+.count { font-size: var(--fs-sm); color: var(--fg-faint); margin-bottom: 8px; }
+.empty { padding: 40px 0; display: grid; gap: 16px; justify-items: start; }
+.group { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; border-top: 2px solid var(--encre); padding: 20px 0 28px; }
+.letter { font-size: clamp(3rem, 2rem + 3vw, 5rem); line-height: 0.8; color: var(--outremer); position: sticky; top: calc(var(--nav-h) + 20px); align-self: start; }
+.terms { list-style: none; display: grid; }
+.term { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) auto; gap: 4px 24px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.term:hover .termName { color: var(--accent); }
+.termName { font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); letter-spacing: -0.02em; line-height: 1.15; transition: color .2s; }
+.termShort { font-size: var(--fs-sm); color: var(--fg-muted); }
+.termCat { justify-self: end; }
+
+.cat { margin-top: 20px; font-weight: 600; color: var(--fg-muted); }
+.def { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+.short { font-family: var(--display); font-weight: 600; font-size: clamp(1.5rem, 1rem + 1.5vw, 2.25rem); line-height: 1.2; letter-spacing: -0.025em; margin-bottom: 28px; max-width: 30ch; }
+.aside { display: grid; gap: 14px; }
+.aside h2 { font-size: var(--fs-md); letter-spacing: -0.01em; }
+.aside ul { list-style: none; border-top: 1px solid var(--line); margin-bottom: 20px; }
+.aside a { display: grid; gap: 2px; padding: 12px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.aside a:hover strong { color: var(--accent); }
+.aside strong { font-family: var(--display); letter-spacing: -0.01em; }
+.aside span { font-size: var(--fs-xs); color: var(--fg-faint); }
+.nl { margin-top: clamp(56px, 8vw, 112px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+.nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
+@media (max-width: 900px) {
+  .def, .nl { grid-template-columns: 1fr; }
+  .group { grid-template-columns: 1fr; gap: 8px; }
+  .letter { position: static; }
+  .term { grid-template-columns: 1fr; }
+  .termCat { justify-self: start; }
+}

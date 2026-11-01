@@ -1,0 +1,11 @@
+.form { display: grid; gap: 16px; max-width: 520px; }
+.row { display: flex; gap: 8px; }
+.row :global(.input) { flex: 1; min-width: 0; }
+.row :global(.btn) { flex-shrink: 0; min-height: 50px; }
+.error { font-size: var(--fs-sm); color: var(--baisse); }
+:global(.theme-encre) .error { color: #FF8B73; }
+.legal { font-size: var(--fs-xs); color: var(--fg-faint); }
+.legal a { color: inherit; }
+.done { padding: 8px 0; }
+.doneTitle { font-family: var(--display); font-weight: 700; font-size: var(--fs-xl); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
+@media (max-width: 480px) { .row { flex-direction: column; } }

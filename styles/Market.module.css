@@ -1,0 +1,18 @@
+.kind { margin-top: 20px; font-size: var(--fs-sm); font-weight: 600; color: var(--fg-muted); }
+.live { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: var(--fs-sm); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hausse); animation: pulse 2s infinite; }
+.stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin-bottom: 24px; border-top: 2px solid var(--encre); }
+.stats > div { padding: 16px 16px 0 0; }
+.stats dt { font-size: var(--fs-sm); color: var(--fg-muted); margin-bottom: 4px; }
+.stats dd { font-size: clamp(1.6rem, 1rem + 1.6vw, 2.5rem); }
+.chartHead { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+.split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px; margin: clamp(56px, 7vw, 96px) 0; align-items: start; }
+.cta { background: var(--lichen); border-radius: var(--r-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 14px; justify-items: start; }
+.cta h2 { font-size: var(--fs-xl); }
+.cta p { color: var(--encre-2); }
+.subTitle { font-size: var(--fs-lg); letter-spacing: -0.015em; margin: 40px 0 14px; }
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats > div:first-child { grid-column: 1 / -1; }
+  .split { grid-template-columns: 1fr; }
+}

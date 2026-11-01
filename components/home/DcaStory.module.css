@@ -1,0 +1,31 @@
+.story { position: relative; }
+.pin { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--nav-h) + 24px) 0 48px; position: relative; }
+.grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+.title { font-size: clamp(1.75rem, 1rem + 2.2vw, 3rem); line-height: 1.05; max-width: 16ch; }
+.date { margin-top: 20px; font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); color: var(--outremer-clair); }
+.figures { margin: 28px 0 24px; display: grid; gap: 18px; }
+.figures dt { font-size: var(--fs-sm); color: var(--fg-faint); }
+.figures dd { font-size: clamp(2rem, 1rem + 3vw, 3.6rem); }
+.value { color: var(--brume); }
+.pct { font-size: 0.42em; letter-spacing: 0; font-family: var(--text); font-weight: 600; vertical-align: middle; }
+.note { font-size: var(--fs-xs); color: var(--fg-faint); max-width: 48ch; margin-bottom: 24px; }
+.chart { position: relative; height: clamp(280px, 52vh, 520px); }
+.svg { width: 100%; height: 100%; overflow: visible; }
+.tip { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--brume); box-shadow: 0 0 0 6px rgba(140, 147, 255, .35); transition: top .08s linear, left .08s linear; }
+.legend { position: absolute; left: 0; top: -36px; display: flex; gap: 20px; font-size: var(--fs-xs); color: var(--fg-faint); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+.legendValue { background: #8C93FF; }
+.legendInvested { background: repeating-linear-gradient(90deg, rgba(231,234,227,.5) 0 5px, transparent 5px 9px); }
+.hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: var(--fs-xs); color: var(--fg-faint); }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .chart { order: -1; height: 34vh; margin-top: 36px; }
+  .figures { margin: 16px 0; gap: 8px; grid-template-columns: 1fr 1fr; }
+  .figures > div:last-child { grid-column: 1 / -1; }
+  .figures dd { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+  .note { display: none; }
+  .hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .hint { display: none; } }

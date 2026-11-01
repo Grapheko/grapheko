@@ -1,122 +1,76 @@
-import Head from 'next/head'
-import Link from 'next/link'
 import { useState } from 'react'
-import { gEvent } from '../lib/gtm'
+import Seo from '../components/layout/Seo'
+import PageIntro from '../components/ui/PageIntro'
+import { trackContactSubmit } from '../lib/gtm'
+import s from '../styles/Simple.module.css'
+
+const SUBJECTS = ['Partenariat', 'Presse', 'Question sur un contenu', 'Signaler une erreur', 'Autre']
+const ERRORS = {
+  email: 'Cette adresse e-mail ne semble pas valide. Vérifie le format (exemple : prenom@domaine.fr).',
+  message: 'Le message est trop court : écris au moins une phrase.',
+  default: 'Le message n’a pas pu être envoyé. Écris-nous directement à contact@grapheko.fr.',
+}
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false)
-  const [subject, setSubject] = useState('[partenariat]')
+  const [subject, setSubject] = useState(SUBJECTS[0])
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    const email = e.target.email.value
-    const message = e.target.message.value
-    if (!email || !message) return
-    gEvent('contact_form_submit', { contact_subject: subject })
-    setSubmitted(true)
+    const f = e.currentTarget
+    const v = (n) => f.elements.namedItem(n)?.value || ''
+    const body = { name: v('name'), email: v('email'), message: v('message'), website: v('website'), subject }
+    setStatus('loading')
+    setError('')
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.error)
+      setStatus('done')
+      trackContactSubmit(subject)
+    } catch (err) {
+      setStatus('idle')
+      setError(ERRORS[err.message] || ERRORS.default)
+    }
   }
 
   return (
     <>
-      <Head>
-        <title>Contact — Grapheko</title>
-        <meta name="description" content="Contacter Grapheko — partenariats, collaboration, presse ou simplement dire bonjour." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://grapheko.fr/contact" />
-      </Head>
-
-      <main style={{minHeight:'100vh',padding:'100px 24px 80px',position:'relative',zIndex:1}}>
-        <div style={{maxWidth:'1100px',margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:'60px',alignItems:'start'}}>
-
-          <div>
-            <div style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#1A3A2A',marginBottom:'20px'}}>
-              <span style={{color:'var(--neon)'}}>[ ✓ ]</span> contact.sh --open channel
-            </div>
-            <h1 style={{fontFamily:'var(--mono)',fontSize:'clamp(28px,4vw,56px)',fontWeight:500,letterSpacing:'-2px',lineHeight:1,marginBottom:'16px'}}>
-              <span style={{color:'var(--neon)'}}>{'>'}</span>./contact
-              <span style={{display:'inline-block',width:'6px',height:'clamp(24px,3.5vw,50px)',background:'var(--neon)',verticalAlign:'middle',marginLeft:'3px',animation:'blink 1s step-end infinite',borderRadius:'1px'}}/>
-            </h1>
-            <p style={{fontFamily:'var(--mono)',fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.8,marginBottom:'40px'}}>
-              <span style={{color:'#1A3A2A'}}>//</span> Une question, un partenariat, une collaboration ou juste dire bonjour — on lit tout et on répond à tout.
-            </p>
-
-            <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
-              {[
-                {icon:'[✉]',label:'EMAIL DIRECT',val:'contact@grapheko.fr',href:'mailto:contact@grapheko.fr'},
-                {icon:'[⟳]',label:'DÉLAI DE RÉPONSE',val:'Sous 48h'},
-                {icon:'[◉]',label:'BASÉ À',val:'France · Remote friendly'},
-              ].map(item=>(
-                <div key={item.label} style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'8px',padding:'16px 20px',display:'flex',gap:'16px',alignItems:'flex-start'}}>
-                  <div style={{fontFamily:'var(--mono)',fontSize:'16px',color:'var(--neon)',minWidth:'28px'}}>{item.icon}</div>
-                  <div>
-                    <div style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',marginBottom:'4px'}}>{item.label}</div>
-                    <div style={{fontFamily:'var(--mono)',fontSize:'13px',color:'var(--text-primary)'}}>
-                      {item.href ? <a href={item.href} style={{color:'var(--neon)',textDecoration:'none'}}>{item.val}</a> : item.val}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{display:'flex',gap:'8px',marginTop:'24px',flexWrap:'wrap'}}>
-              {['Twitter','LinkedIn','Instagram','TikTok'].map(s=>(
-                <a key={s} href="#" style={{fontFamily:'var(--mono)',fontSize:'11px',color:'var(--text-secondary)',border:'0.5px solid var(--border2)',padding:'6px 12px',borderRadius:'4px',textDecoration:'none'}}>{s}</a>
-              ))}
-            </div>
+      <Seo title="Contact" description="Écrire à Grapheko : partenariat, presse, question sur un contenu ou signalement d’une erreur." />
+      <PageIntro crumbs={[{ label: 'Contact' }]} title="Écrire à Grapheko." lede="Une question sur un article, une erreur repérée, une proposition de partenariat : réponse sous quelques jours." />
+      <div className={`wrap ${s.split}`}>
+        {status === 'done' ? (
+          <div className="panel" role="status">
+            <h2 className={s.h2}>Message envoyé.</h2>
+            <p className="muted">Merci. Une réponse arrive à l’adresse indiquée, en général sous quelques jours.</p>
           </div>
-
-          <div style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'12px',padding:'clamp(24px,5vw,40px)',position:'relative',overflow:'hidden'}}>
-            <div style={{position:'absolute',top:0,left:0,right:0,height:'1px',background:'linear-gradient(90deg,transparent,var(--neon),transparent)'}}/>
-            {!submitted ? (
-              <>
-                <div style={{fontFamily:'var(--mono)',fontSize:'12px',color:'var(--text-secondary)',letterSpacing:'.1em',marginBottom:'24px'}}>// ENVOYER UN MESSAGE</div>
-                <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'16px'}}>
-                  <div>
-                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'8px'}}>SUJET</label>
-                    <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'8px'}}>
-                      {['[partenariat]','[collaboration]','[presse]','[autre]'].map(s=>(
-                        <button key={s} type="button" onClick={()=>setSubject(s)} style={{fontFamily:'var(--mono)',fontSize:'11px',padding:'8px 10px',borderRadius:'4px',border:`0.5px solid ${subject===s?'var(--neon)':'var(--border2)'}`,background:subject===s?'var(--neon-ghost)':'transparent',color:subject===s?'var(--neon)':'var(--text-secondary)',cursor:'pointer',textAlign:'left'}}>{s}</button>
-                      ))}
-                    </div>
-                  </div>
-                  <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:'12px'}}>
-                    <div>
-                      <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>PRÉNOM</label>
-                      <input name="prenom" type="text" placeholder="ton_prénom" className="input-field"/>
-                    </div>
-                    <div>
-                      <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>EMAIL *</label>
-                      <input name="email" type="email" placeholder="toi@example.com" className="input-field" required/>
-                    </div>
-                  </div>
-                  <div>
-                    <label style={{fontFamily:'var(--mono)',fontSize:'10px',color:'var(--text-secondary)',letterSpacing:'.1em',display:'block',marginBottom:'6px'}}>MESSAGE *</label>
-                    <textarea name="message" placeholder="// Décris ton projet..." required style={{width:'100%',background:'var(--void)',border:'0.5px solid var(--border2)',borderRadius:'4px',padding:'12px 16px',fontFamily:'var(--mono)',fontSize:'13px',color:'var(--text-primary)',outline:'none',resize:'vertical',minHeight:'120px',lineHeight:1.6}}/>
-                  </div>
-                  <button type="submit" className="btn-primary" style={{justifyContent:'center'}}>./envoyer_message →</button>
-                  <p style={{fontFamily:'var(--mono)',fontSize:'10px',color:'#222',textAlign:'center'}}>// Réponse sous 48h · contact@grapheko.fr</p>
-                </form>
-              </>
-            ) : (
-              <div style={{textAlign:'center',padding:'40px 0'}}>
-                <div style={{fontFamily:'var(--mono)',fontSize:'48px',color:'var(--neon)',marginBottom:'16px'}}>[ ✓ ]</div>
-                <div style={{fontFamily:'var(--mono)',fontSize:'18px',color:'var(--text-primary)',marginBottom:'8px'}}>Message reçu !</div>
-                <p style={{fontSize:'13px',color:'var(--text-secondary)',lineHeight:1.6}}>On te répondra dans les 48h. Merci de ton intérêt pour Grapheko.</p>
+        ) : (
+          <form className={`panel ${s.form}`} onSubmit={submit} noValidate>
+            <fieldset className="field">
+              <legend style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, marginBottom: 8 }}>Sujet</legend>
+              <div className="segmented">
+                {SUBJECTS.map((x) => <button key={x} type="button" aria-pressed={subject === x} onClick={() => setSubject(x)}>{x}</button>)}
               </div>
-            )}
-          </div>
-        </div>
-      </main>
-
-      <footer style={{borderTop:'0.5px solid var(--border)',padding:'24px',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'8px',position:'relative',zIndex:1}}>
-        <Link href="/" style={{fontFamily:'var(--mono)',fontSize:'14px',color:'var(--text-primary)',textDecoration:'none'}}>{'>'} graph<span style={{color:'var(--neon)'}}>eko</span>_</Link>
-        <span style={{fontFamily:'var(--mono)',fontSize:'11px',color:'#222'}}>© 2026 <span style={{color:'var(--neon)'}}>grapheko</span></span>
-      </footer>
-
-      <style jsx global>{`
-        @media (max-width: 768px) { .desktop-nav { display: none !important; } }
-        @media (min-width: 768px) { nav { padding: 0 48px !important; } }
-      `}</style>
+            </fieldset>
+            <div className={s.two}>
+              <div className="field"><label htmlFor="name">Nom <span className="faint">(facultatif)</span></label><input id="name" name="name" className="input" autoComplete="name" /></div>
+              <div className="field"><label htmlFor="email">Adresse e-mail</label><input id="email" name="email" type="email" className="input" required autoComplete="email" /></div>
+            </div>
+            <div className="field"><label htmlFor="message">Message</label><textarea id="message" name="message" className="input" required /></div>
+            <div className="sr-only" aria-hidden="true"><label htmlFor="website">Ne pas remplir</label><input id="website" name="website" tabIndex={-1} autoComplete="off" /></div>
+            {error && <p role="alert" style={{ color: 'var(--baisse)', fontSize: 'var(--fs-sm)' }}>{error}</p>}
+            <div><button className="btn btn--plein" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Envoi…' : 'Envoyer le message'}</button></div>
+            <p className="faint xsmall">Ton adresse sert uniquement à te répondre. Elle n’est pas ajoutée à la newsletter.</p>
+          </form>
+        )}
+        <aside className={s.aside}>
+          <h2 className={s.h3}>Par e-mail</h2>
+          <p><a href="mailto:contact@grapheko.fr">contact@grapheko.fr</a></p>
+          <h2 className={s.h3}>Une erreur dans un contenu ?</h2>
+          <p className="muted">Indique la page et la phrase concernées. Les corrections sont faites rapidement et la date de mise à jour de la page est modifiée.</p>
+        </aside>
+      </div>
     </>
   )
 }

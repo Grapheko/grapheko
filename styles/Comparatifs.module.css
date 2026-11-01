@@ -1,0 +1,16 @@
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--panel); border-radius: var(--r-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 14px; align-content: start; }
+.status { justify-self: start; font-size: var(--fs-xs); font-weight: 600; padding: 4px 12px; border-radius: var(--r-pill); background: var(--brume-2); color: var(--encre-2); }
+.title { font-size: var(--fs-xl); }
+.criteria { list-style: none; display: grid; gap: 0; }
+.criteria li { padding: 10px 0; border-top: 1px solid var(--line); font-size: var(--fs-sm); color: var(--fg-muted); }
+.rules { margin-top: clamp(64px, 8vw, 120px); }
+.rules h2 { font-size: var(--fs-2xl); margin-bottom: 32px; }
+.ruleGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.ruleGrid > div { border-top: 2px solid var(--encre); padding-top: 16px; }
+.ruleGrid h3 { font-size: var(--fs-lg); margin-bottom: 8px; }
+.ruleGrid p { color: var(--fg-muted); font-size: var(--fs-sm); }
+.ruleGrid a { color: var(--accent); }
+.nl { margin-top: clamp(56px, 8vw, 112px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+.nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
+@media (max-width: 900px) { .grid, .ruleGrid, .nl { grid-template-columns: 1fr; } }
