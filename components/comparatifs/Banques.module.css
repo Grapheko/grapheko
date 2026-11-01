@@ -5,9 +5,9 @@
 }
 .featured::after {
   content: ''; position: absolute; right: -10%; top: -60%; width: 50%; aspect-ratio: 1; border-radius: 50%; pointer-events: none;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--outremer) 45%, transparent), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--orange) 26%, transparent), transparent);
 }
-.featLabel { font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--outremer-clair); margin-bottom: 10px; }
+.featLabel { font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--orange); margin-bottom: 10px; }
 .featTitle { font-size: var(--fs-xl); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 10px; }
 .featTerms { font-size: var(--fs-sm); color: var(--fg-muted); line-height: 1.55; max-width: 60ch; }
 .featActions { position: relative; z-index: 1; display: grid; gap: 12px; justify-items: start; }

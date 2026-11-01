@@ -1,6 +1,6 @@
 .footer { padding-top: clamp(72px, 9vw, 120px); overflow: hidden; position: relative; z-index: 2; }
 .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.colTitle { font-size: var(--fs-md); letter-spacing: -0.01em; margin-bottom: 14px; color: var(--outremer-clair); }
+.colTitle { font-size: var(--fs-md); letter-spacing: -0.01em; margin-bottom: 14px; color: var(--orange); }
 .cols ul { list-style: none; display: grid; gap: 8px; }
 .link { text-decoration: none; color: var(--fg-muted); }
 .link:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
@@ -12,7 +12,7 @@
   font-family: var(--display); font-weight: 800; letter-spacing: -0.07em;
   font-size: 23.5vw; line-height: 0.75;
   margin: 48px 0 -0.08em -0.04em;
-  color: transparent; -webkit-text-stroke: 1.5px rgba(231, 234, 227, .22);
+  color: transparent; -webkit-text-stroke: 1.5px rgba(242, 238, 231, .22);
   white-space: nowrap; user-select: none; pointer-events: none;
 }
 @media (max-width: 760px) { .cols { grid-template-columns: 1fr 1fr; } }

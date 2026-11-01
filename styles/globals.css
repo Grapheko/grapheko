@@ -8,25 +8,27 @@
 
 :root {
   /* Couleurs de base */
-  --brume: #E7EAE3;
-  --brume-2: #DCE1D6;
-  --lichen: #C9D8C1;
-  --encre: #14231C;
-  --encre-2: #3E4D45;
-  --encre-3: #6B7870;
+  --brume: #F4F0E6;
+  --brume-2: #EAE3D3;
+  --lichen: #FFE677;
+  --jaune: #FCEC9C;
+  --orange: #FFD60A;
+  --encre: #12142B;
+  --encre-2: #3C3F5C;
+  --encre-3: #6C6F87;
   --outremer: #2F3BF5;
   --outremer-clair: #8C93FF;
   --hausse: #1E8A57;
-  --baisse: #C8402A;
-  --blanc: #F7F8F4;
+  --baisse: #D7263D;
+  --blanc: #FCFAF4;
 
   /* Rôles */
   --bg: var(--brume);
   --fg: var(--encre);
   --fg-muted: var(--encre-2);
   --fg-faint: var(--encre-3);
-  --line: rgba(20, 35, 28, 0.14);
-  --line-strong: rgba(20, 35, 28, 0.32);
+  --line: rgba(18, 20, 43, 0.14);
+  --line-strong: rgba(18, 20, 43, 0.32);
   --accent: var(--outremer);
   --panel: var(--blanc);
 
@@ -61,12 +63,12 @@
 .theme-encre {
   --bg: var(--encre);
   --fg: var(--brume);
-  --fg-muted: #B9C2B6;
-  --fg-faint: #8A968E;
-  --line: rgba(231, 234, 227, 0.16);
-  --line-strong: rgba(231, 234, 227, 0.36);
+  --fg-muted: #BDBFD6;
+  --fg-faint: #8D90A8;
+  --line: rgba(242, 238, 231, 0.16);
+  --line-strong: rgba(242, 238, 231, 0.36);
   --accent: var(--outremer-clair);
-  --panel: #1C2E25;
+  --panel: #1D2045;
   background: var(--bg);
   color: var(--fg);
 }

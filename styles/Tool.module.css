@@ -7,7 +7,7 @@
 .kpi dt { font-size: var(--fs-sm); color: var(--fg-muted); margin-bottom: 6px; }
 .kpi dd { font-size: clamp(1.5rem, 0.9rem + 1.8vw, 2.4rem); overflow-wrap: anywhere; }
 .kpiMain { background: var(--encre); color: var(--brume); }
-.kpiMain dt { color: #B9C2B6; }
+.kpiMain dt { color: #BDBFD6; }
 .kpi .sub { display: block; margin-top: 6px; font-family: var(--text); font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0; }
 .chartPanel { background: var(--panel); border-radius: var(--r-panel); padding: clamp(20px, 3vw, 32px) clamp(16px, 3vw, 32px) clamp(16px, 2vw, 24px); }
 .chartTitle { font-size: var(--fs-lg); letter-spacing: -0.015em; margin-bottom: 36px; }

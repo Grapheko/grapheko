@@ -51,7 +51,7 @@ export default function Frais() {
             <dl className={s.kpis}>
               <div className={`${s.kpi} ${s.kpiMain}`}>
                 <dt>Écart au bout de {st.duree} ans</dt>
-                <dd className="figure"><Counter value={r.gap} format={(v) => eur(v)} /><span className={s.sub} style={{ color: '#B9C2B6' }}>{num(gapPct, 0)} % du capital de l’option A</span></dd>
+                <dd className="figure"><Counter value={r.gap} format={(v) => eur(v)} /><span className={s.sub} style={{ color: '#BDBFD6' }}>{num(gapPct, 0)} % du capital de l’option A</span></dd>
               </div>
               <div className={s.kpi}>
                 <dt>Option A ({pct(st.fraisA, 2, false)} / an)</dt>

@@ -11,7 +11,7 @@
 .num {
   position: absolute; z-index: -1; right: -0.06em; bottom: -0.2em;
   font-family: var(--display); font-weight: 800; font-size: clamp(9rem, 14vw, 14rem); line-height: 1; letter-spacing: -0.08em;
-  color: transparent; -webkit-text-stroke: 1.5px rgba(20, 35, 28, .2);
+  color: transparent; -webkit-text-stroke: 1.5px rgba(18, 20, 43, .2);
 }
 .meta { font-size: var(--fs-xs); font-weight: 600; color: var(--encre-2); }
 .title { font-family: var(--display); font-weight: 700; font-size: var(--fs-xl); line-height: 1; letter-spacing: -0.035em; max-width: 14ch; }

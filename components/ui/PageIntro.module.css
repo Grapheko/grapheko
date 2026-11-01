@@ -1,4 +1,10 @@
-.intro { padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(40px, 7vw, 96px)); padding-bottom: clamp(36px, 5vw, 64px); }
+.intro {
+  padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(40px, 7vw, 96px)); padding-bottom: clamp(40px, 5.5vw, 72px);
+  margin-bottom: clamp(40px, 6vw, 72px);
+  background: var(--jaune);
+  /* étend le fond sur toute la largeur de l'écran */
+  box-shadow: 0 0 0 100vmax var(--jaune); clip-path: inset(0 -100vmax);
+}
 .crumbs ol { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; font-size: var(--fs-sm); color: var(--fg-faint); margin-bottom: 24px; }
 .crumbs li + li::before { content: '/'; margin-right: 6px; opacity: .6; }
 .crumbs a { color: var(--fg-muted); text-decoration: none; }

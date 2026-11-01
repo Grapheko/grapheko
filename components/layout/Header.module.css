@@ -17,9 +17,9 @@
   display: inline-flex; align-items: center; gap: 8px;
   padding: 0 16px; height: 100%;
   font-weight: 600; white-space: nowrap; text-decoration: none;
-  border-right: 1px solid rgba(231, 234, 227, .16);
+  border-right: 1px solid rgba(242, 238, 231, .16);
 }
-.dot, .dotLive { width: 7px; height: 7px; border-radius: 50%; background: #8A968E; }
+.dot, .dotLive { width: 7px; height: 7px; border-radius: 50%; background: #8D90A8; }
 .dotLive { background: #5FD39A; animation: livePulse 2s infinite; }
 .track { flex: 1; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
 .marquee { display: flex; width: max-content; animation: tickerScroll 60s linear infinite; will-change: transform; }
@@ -35,7 +35,7 @@
 .list { display: flex; list-style: none; }
 .item { display: inline-flex; gap: 8px; padding: 0 22px; text-decoration: none; white-space: nowrap; }
 .item:hover .name { text-decoration: underline; }
-.name { color: #B9C2B6; }
+.name { color: #BDBFD6; }
 .liveMark { width: 6px; height: 6px; border-radius: 50%; background: #5FD39A; align-self: center; }
 @media (max-width: 640px) { .status { font-size: 0; gap: 0; padding: 0 12px; } }
 .ticker :global(.up) { color: #5FD39A; }
@@ -57,7 +57,7 @@
   color: var(--encre-2);
   transition: color .2s, background .2s;
 }
-.link:hover { color: var(--encre); background: rgba(20, 35, 28, .06); }
+.link:hover { color: var(--encre); background: rgba(18, 20, 43, .06); }
 .active { color: var(--encre); background: var(--lichen); }
 .cta { min-height: 42px; padding: 0 20px; }
 
