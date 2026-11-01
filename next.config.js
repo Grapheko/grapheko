@@ -4,6 +4,8 @@ const nextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
+      // Une seule adresse officielle : www → domaine nu (cohérent avec les canonical)
+      { source: '/:path*', has: [{ type: 'host', value: 'www.grapheko.fr' }], destination: 'https://grapheko.fr/:path*', permanent: true },
       // Anciennes adresses de la V1 (conserve le référencement acquis)
       { source: '/calculateur-interets-composes', destination: '/simulateurs/interets-composes', permanent: true },
       { source: '/ressources', destination: '/simulateurs', permanent: true },
