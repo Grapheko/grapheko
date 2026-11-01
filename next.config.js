@@ -11,6 +11,10 @@ const nextConfig = {
       { source: '/ressources', destination: '/simulateurs', permanent: true },
     ]
   },
+  async rewrites() {
+    // Flux d'abonnement agenda (webcal://grapheko.fr/calendrier.ics)
+    return [{ source: '/calendrier.ics', destination: '/api/calendrier' }]
+  },
   async headers() {
     return [
       {

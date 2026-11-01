@@ -26,6 +26,9 @@ ${ASSETS.map((a) => `- [${a.name}](${SITE}/marches/${a.slug}): ${a.intro.split('
 ## Glossaire
 ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).join('\n')}
 
+## Calendrier
+- [Calendrier fiscal et financier](${SITE}/calendrier): décisions BCE et Fed, révisions du Livret A, impôts, jours de fermeture de la Bourse, avec flux agenda ${SITE}/calendrier.ics
+
 ## Comparatifs
 - [Courtiers PEA : frais de courtage comparés](${SITE}/comparatifs/courtiers-pea): Bourse Direct, BoursoBank, Fortuneo, Trade Republic, grilles officielles vérifiées, calculateur du coût annuel
 - [Banques en ligne et néobanques](${SITE}/comparatifs/banques-en-ligne): BoursoBank, Fortuneo, Hello bank!, Monabanq, N26, Revolut, Nickel, Trade Republic, frais et conditions vérifiés
