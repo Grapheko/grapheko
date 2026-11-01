@@ -14,6 +14,7 @@ export const NAV = [
   { href: '/blog', label: 'Articles' },
   { href: '/quiz', label: 'Quiz' },
   { href: '/comparatifs', label: 'Comparatifs' },
+  { href: '/calendrier', label: 'Calendrier' },
 ]
 
 function Ticker() {
