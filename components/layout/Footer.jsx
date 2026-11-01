@@ -13,7 +13,7 @@ const COLS = [
       { href: '/simulateurs/rendement-reel', label: 'Rendement réel' },
     ],
   },
-  { title: 'Marchés', links: ASSETS.slice(0, 5).map((a) => ({ href: `/marches/${a.slug}`, label: a.name })) },
+  { title: 'Marchés', links: ASSETS.filter((a) => a.featured !== false).slice(0, 5).map((a) => ({ href: `/marches/${a.slug}`, label: a.name })) },
   {
     title: 'Apprendre',
     links: [

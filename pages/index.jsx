@@ -83,7 +83,9 @@ export default function Home({ msci, markets }) {
 }
 
 export async function getStaticProps() {
-  const [msci, markets] = await Promise.all([getMonthlyHistory('msci-world'), getMarketsRows()])
+  const [msci, allMarkets] = await Promise.all([getMonthlyHistory('msci-world'), getMarketsRows()])
+  // L'accueil montre une sélection ; la liste complète est sur /marches
+  const markets = allMarkets.filter((m) => m.featured)
   return {
     props: { msci: msci || null, markets, tracking: { page_template: 'home' } },
     // Sans données (source indisponible), nouvel essai dans 5 minutes
