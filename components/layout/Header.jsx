@@ -13,6 +13,7 @@ export const NAV = [
   { href: '/glossaire', label: 'Glossaire' },
   { href: '/blog', label: 'Articles' },
   { href: '/quiz', label: 'Quiz' },
+  { href: '/comparatifs', label: 'Comparatifs' },
 ]
 
 function Ticker() {
