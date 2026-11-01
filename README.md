@@ -46,7 +46,7 @@ Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les 
 
 À mettre à jour à chaque changement (recherche : `31,4`, `18,6`, `1,7`) :
 - Flat tax (PFU) : 31,4 % depuis le 1er janvier 2026 (12,8 % + 18,6 % de prélèvements sociaux).
-- Assurance-vie, PEL : prélèvements sociaux à 17,2 %.
+- Assurance-vie, revenus fonciers, plus-values immobilières : prélèvements sociaux à 17,2 % (le cas du PEL varie selon les sources, à vérifier).
 - Livret A : 1,7 % depuis le 1er août 2026, plafond 22 950 €.
 
 ## Accessibilité et animations

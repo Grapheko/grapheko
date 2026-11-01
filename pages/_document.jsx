@@ -39,6 +39,7 @@ export default function Document() {
         <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT }} />
         <script dangerouslySetInnerHTML={{ __html: GTM_SNIPPET }} />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#E7EAE3" />
       </Head>
       <body>

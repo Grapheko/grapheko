@@ -19,7 +19,9 @@ export default function Seo({ title, description, jsonLd, noindex = false, image
       <meta property="og:title" content={fullTitle} />
       {description && <meta property="og:description" content={description} />}
       <meta property="og:url" content={url} />
-      {image && <meta property="og:image" content={image} />}
+      <meta property="og:image" content={image || `${SITE}/og.png`} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta name="twitter:card" content="summary_large_image" />
       {noindex && <meta name="robots" content="noindex" />}
       {jsonLd && (

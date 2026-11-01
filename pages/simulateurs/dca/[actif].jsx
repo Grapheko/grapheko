@@ -9,6 +9,8 @@ import ShareButton from '../../../components/ui/ShareButton'
 import { ASSETS, getAsset } from '../../../lib/assets'
 import { getMonthlyHistory } from '../../../lib/history'
 import { REVALIDATE } from '../../../lib/marketData'
+import { dcaFaq, faqJsonLd } from '../../../lib/faq'
+import Faq from '../../../components/ui/Faq'
 import { backtestDca } from '../../../lib/finance'
 import { eur, pct, num, monthLabel, priceFmt } from '../../../lib/format'
 import { useToolState } from '../../../lib/useToolState'
@@ -17,7 +19,7 @@ import s from '../../../styles/Tool.module.css'
 
 const MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
 
-function DcaPage({ asset, initialHistory }) {
+function DcaPage({ asset, initialHistory, faq }) {
   const [history, setHistory] = useState(initialHistory)
   const [loading, setLoading] = useState(!initialHistory)
 
@@ -63,7 +65,7 @@ function DcaPage({ asset, initialHistory }) {
       <Seo
         title={`Simulateur DCA ${asset.name} : et si tu avais investi chaque mois ?`}
         description={`Calcule ce qu’aurait rapporté un investissement régulier sur ${asset.name}, mois par mois, à partir des vrais cours historiques en euros.`}
-        jsonLd={crumbsJsonLd(crumbs)}
+        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(faq)].filter(Boolean)}
       />
       <PageIntro
         crumbs={crumbs}
@@ -206,6 +208,7 @@ function DcaPage({ asset, initialHistory }) {
               return t ? <Link key={slug} href={`/glossaire/${slug}`} className={s.chip}>{t.term}</Link> : null
             })}
           </div>
+          <Faq items={faq} title={`DCA sur ${asset.name} : questions fréquentes`} />
         </section>
       </div>
     </>
@@ -228,6 +231,7 @@ export async function getStaticProps({ params }) {
     props: {
       asset,
       initialHistory: history,
+      faq: dcaFaq(asset, history),
       tracking: { asset: asset.slug, tool_name: `dca_${asset.slug}` },
     },
     revalidate: history ? REVALIDATE : 300,

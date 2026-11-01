@@ -1,0 +1,12 @@
+.faq { margin-top: clamp(56px, 7vw, 96px); }
+.title { font-size: var(--fs-xl); margin-bottom: 16px; }
+.list { border-top: 2px solid var(--encre); }
+.item { border-bottom: 1px solid var(--line); }
+.item summary {
+  list-style: none; cursor: pointer; padding: 18px 40px 18px 0; position: relative;
+  font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); letter-spacing: -0.015em; line-height: 1.25;
+}
+.item summary::-webkit-details-marker { display: none; }
+.item summary::after { content: '+'; position: absolute; right: 4px; top: 14px; font-size: 1.6rem; font-weight: 400; transition: transform .25s var(--ease); }
+.item[open] summary::after { transform: rotate(45deg); }
+.item p { padding: 0 0 20px; max-width: 70ch; color: var(--fg-muted); }

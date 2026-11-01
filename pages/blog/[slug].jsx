@@ -3,6 +3,8 @@ import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
 import NewsletterForm from '../../components/ui/NewsletterForm'
+import Faq from '../../components/ui/Faq'
+import { faqJsonLd } from '../../lib/faq'
 import { ARTICLES, getArticle, CAT_LABEL, dateFr } from '../../lib/content/articles'
 import { getTerm } from '../../lib/content/glossary'
 import { useScrollFx, gsap } from '../../lib/motion'
@@ -42,7 +44,8 @@ export default function Article({ article, related, terms }) {
             author: { '@type': 'Organization', name: 'Grapheko' }, publisher: { '@type': 'Organization', name: 'Grapheko' },
             mainEntityOfPage: `https://grapheko.fr/blog/${article.slug}`,
           },
-        ]}
+          faqJsonLd(article.faq || []),
+        ].filter(Boolean)}
       />
       <div className={s.progress} data-progress aria-hidden="true" />
       <PageIntro crumbs={crumbs} title={article.title} wide>
@@ -57,6 +60,7 @@ export default function Article({ article, related, terms }) {
         <article className="prose" data-body>
           <p className={s.intro}>{article.intro}</p>
           {article.blocks.map((b, i) => <Block key={i} b={b} />)}
+          <Faq items={article.faq} />
           <p className={s.disclaimer}>
             Cet article a une vocation pédagogique et ne constitue pas un conseil en investissement personnalisé.
             Investir comporte un risque de perte en capital.

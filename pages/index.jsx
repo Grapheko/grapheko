@@ -20,7 +20,10 @@ export default function Home({ msci, markets }) {
       <Seo
         title={null}
         description="Simulateurs sur données réelles, cours en direct et glossaire sans jargon pour comprendre la Bourse, la crypto et l’épargne."
-        jsonLd={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Grapheko', url: 'https://grapheko.fr', inLanguage: 'fr-FR' }}
+        jsonLd={[
+          { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Grapheko', url: 'https://grapheko.fr', inLanguage: 'fr-FR', description: 'Média éducatif sur la Bourse, la crypto et l’épargne : simulateurs sur données réelles, fiches marché et glossaire.' },
+          { '@context': 'https://schema.org', '@type': 'Organization', name: 'Grapheko', url: 'https://grapheko.fr', logo: 'https://grapheko.fr/icon-512.png', email: 'contact@grapheko.fr' },
+        ]}
       />
 
       {demo && <p className={s.demo}>Données de démonstration (développement local) : les chiffres affichés ne sont pas réels.</p>}

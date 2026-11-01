@@ -7,6 +7,8 @@ import LineChart from '../../components/ui/LineChart'
 import { ASSETS, getAsset, KIND_LABEL } from '../../lib/assets'
 import { getMonthlyHistory, historyStats } from '../../lib/history'
 import { REVALIDATE } from '../../lib/marketData'
+import { marketFaq, faqJsonLd } from '../../lib/faq'
+import Faq from '../../components/ui/Faq'
 import { getTerm } from '../../lib/content/glossary'
 import { pct, priceFmt, monthLabel, dirClass } from '../../lib/format'
 import { trackClick } from '../../lib/gtm'
@@ -36,7 +38,7 @@ function LiveQuote({ slug }) {
   )
 }
 
-function MarketPage({ asset, history, stats }) {
+function MarketPage({ asset, history, stats, faq }) {
   const [range, setRange] = useState('60')
   const points = history?.points || []
   const visible = useMemo(() => {
@@ -51,7 +53,7 @@ function MarketPage({ asset, history, stats }) {
       <Seo
         title={`${asset.name} : cours, performance et pire baisse en euros`}
         description={`${asset.name} en euros : performance sur 1, 5 et 10 ans, pire baisse historique et graphique des clôtures mensuelles. ${asset.intro.slice(0, 90)}…`}
-        jsonLd={crumbsJsonLd(crumbs)}
+        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(faq)].filter(Boolean)}
       />
       <PageIntro crumbs={crumbs} title={asset.name} lede={asset.intro}>
         <p className={m.kind}>{KIND_LABEL[asset.kind]}</p>
@@ -116,6 +118,8 @@ function MarketPage({ asset, history, stats }) {
           </aside>
         </div>
 
+        <Faq items={faq} title={`${asset.name} : questions fréquentes`} />
+
         <h2 className={m.subTitle}>Les notions liées</h2>
         <div className={s.chips}>
           {asset.related.map((slug) => {
@@ -145,7 +149,10 @@ export async function getStaticProps({ params }) {
   const asset = getAsset(params.actif)
   const history = await getMonthlyHistory(asset.slug)
   return {
-    props: { asset, history, stats: history ? historyStats(history.points) : null, tracking: { asset: asset.slug } },
+    props: (() => {
+      const stats = history ? historyStats(history.points) : null
+      return { asset, history, stats, faq: marketFaq(asset, history, stats), tracking: { asset: asset.slug } }
+    })(),
     revalidate: history ? REVALIDATE : 300,
   }
 }
