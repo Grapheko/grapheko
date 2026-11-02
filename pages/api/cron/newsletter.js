@@ -56,18 +56,12 @@ export default async function handler(req, res) {
     if (existing && mode === 'send') {
       return res.status(200).json({ ok: true, date, action: 'déjà créée, rien à faire', campaignId: existing.id, status: existing.status })
     }
+    const content = { subject: n.subject, previewText: n.preheader, sender: SENDER, replyTo: SENDER.email, htmlContent: html }
+    // Un brouillon de test déjà créé est mis à jour avec la dernière version de l'édition
+    if (existing && mode === 'test') await brevo(`/emailCampaigns/${existing.id}`, { method: 'PUT', body: content })
     const campaign = existing || await brevo('/emailCampaigns', {
       method: 'POST',
-      body: {
-        name,
-        subject: n.subject,
-        previewText: n.preheader,
-        sender: SENDER,
-        replyTo: SENDER.email,
-        htmlContent: html,
-        recipients: { listIds: [LIST_ID] },
-        inlineImageActivation: false,
-      },
+      body: { name, ...content, recipients: { listIds: [LIST_ID] }, inlineImageActivation: false },
     })
     if (mode === 'test') {
       const to = (process.env.NEWSLETTER_TEST_EMAIL || SENDER.email).split(',').map((s) => s.trim()).filter(Boolean)

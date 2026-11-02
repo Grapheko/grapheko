@@ -12,6 +12,15 @@
 3. Graphiques : écrire un SVG sur le modèle de `charts_novembre_2026.py`, puis `node render.js <noms>` pour le PNG.
 
 ## Règles éditoriales
-Une courbe, ce qu'elle montre (3 points), ce qu'elle ne montre pas (3-4 points), un lien vers un outil Grapheko avec UTM
-`utm_source=brevo&utm_medium=email&utm_campaign=newsletter-AAAA-MM-JJ&utm_content=simulateur`. Tutoiement, phrases courtes,
-chiffres vérifiés par le calcul. Jamais de recommandation d'acheter, vendre ou verser (pas de conseil personnalisé : agrément AMF).
+**Lecteur visé : un débutant complet**, qui ne connaît ni le jargon ni les mécanismes. Il doit comprendre l'édition sans rien chercher ailleurs.
+
+Structure (champs de `lib/content/newsletters.js`) :
+1. `tldr` — « En bref » : la conclusion en une phrase simple, sans chiffre compliqué.
+2. `context` — « Le contexte », 2 ou 3 paragraphes : de quoi on parle, chaque terme technique expliqué en une phrase la première fois (PER, ETF, indice, DCA, tranche, décote, dividendes…), et la question exacte à laquelle la courbe répond, avec l'hypothèse de calcul (montant, durée, période).
+3. `image` — la courbe.
+4. `shows` — 3 points. Chacun commence par une phrase en gras qui dit le constat, puis explique le chiffre avec des mots simples (« une perte de 266 € sur le papier », « 44 % de moins »).
+5. `hides` — 3 ou 4 limites, chacune avec un titre en gras : passé ≠ avenir, dividendes, frais, impôts, situation personnelle, selon le cas.
+6. `outro` — facultatif : un repère pratique (date limite, où trouver une information).
+7. `cta` — un outil Grapheko, avec les UTM `utm_source=brevo&utm_medium=email&utm_campaign=newsletter-AAAA-MM-JJ&utm_content=simulateur`.
+
+Style : tutoiement, phrases de 20 mots au plus, un chiffre par phrase quand c'est possible, typographie française. Objet ≤ 50 caractères, aperçu ≤ 35. Chaque chiffre sort d'un calcul exécuté. Jamais de recommandation d'acheter, vendre, verser ou choisir un produit (pas de conseil personnalisé : agrément AMF), pas de nom de banque ou de courtier, pas de promesse de rendement.
