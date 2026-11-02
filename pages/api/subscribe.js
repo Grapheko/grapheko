@@ -25,21 +25,34 @@ export default async function handler(req, res) {
   const doi = Number(process.env.BREVO_DOI_TEMPLATE_ID) || null
   const headers = { Accept: 'application/json', 'Content-Type': 'application/json', 'api-key': process.env.BREVO_API_KEY }
 
+  const direct = () => fetch('https://api.brevo.com/v3/contacts', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ email: mail, attributes, listIds: [LIST_ID], updateEnabled: true }),
+  })
+
   try {
-    const response = doi
+    let pending = Boolean(doi)
+    let response = doi
       ? await fetch('https://api.brevo.com/v3/contacts/doubleOptinConfirmation', {
         method: 'POST',
         headers,
         body: JSON.stringify({ email: mail, attributes, includeListIds: [LIST_ID], templateId: doi, redirectionUrl: 'https://grapheko.fr/newsletter?confirmation=ok' }),
       })
-      : await fetch('https://api.brevo.com/v3/contacts', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ email: mail, attributes, listIds: [LIST_ID], updateEnabled: true }),
-      })
-    if (response.status === 201 || response.status === 204) return res.status(200).json({ success: true, pending: Boolean(doi) })
+      : await direct()
+    // Modèle de confirmation refusé par Brevo (inactif, sans tag « optin »…) : on ne bloque
+    // pas le visiteur, on l'inscrit directement et on le signale dans les journaux.
+    if (doi && response.status === 400) {
+      const err = await response.clone().json().catch(() => ({}))
+      if (err.code === 'invalid_parameter' && /template/i.test(err.message || '')) {
+        console.error('subscribe brevo DOI indisponible, inscription directe :', err.message)
+        response = await direct()
+        pending = false
+      }
+    }
+    if (response.status === 201 || response.status === 204) return res.status(200).json({ success: true, pending })
     const data = await response.json().catch(() => ({}))
-    if (data.code === 'duplicate_parameter') return res.status(200).json({ success: true, pending: Boolean(doi) })
+    if (data.code === 'duplicate_parameter') return res.status(200).json({ success: true, pending })
     console.error('subscribe brevo', response.status, JSON.stringify(data).slice(0, 300))
     return res.status(502).json({ error: 'Erreur du service d’envoi' })
   } catch {
