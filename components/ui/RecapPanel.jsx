@@ -4,26 +4,28 @@ import { downloadRecap } from '../../lib/recapPdf'
 import { trackClick } from '../../lib/gtm'
 import s from './RecapPanel.module.css'
 
-// Récapitulatif téléchargeable + compte rendu rédigé par l'IA (à la demande).
-// recap  : contenu du PDF (voir lib/recapPdf.js)
-// aiTool : 'per' | 'flat_tax' ; aiData : chiffres envoyés à /api/compte-rendu
-export default function RecapPanel({ toolName, recap, aiTool, aiData, aiEnabled }) {
+// Compte rendu de la simulation + récapitulatif PDF.
+// report : compte rendu rédigé par des règles (lib/taxReport.js), toujours affiché, gratuit.
+// Option en sommeil : si ANTHROPIC_API_KEY est configurée (aiEnabled), un bouton propose
+// une version rédigée par l'IA via /api/compte-rendu.
+export default function RecapPanel({ toolName, recap, report, aiTool, aiData, aiEnabled }) {
   const [ai, setAi] = useState(null) // { text, key }
   const [state, setState] = useState('idle') // idle | loading | error
   const [error, setError] = useState('')
   const [pdfBusy, setPdfBusy] = useState(false)
   const key = useMemo(() => JSON.stringify(aiData), [aiData])
-  const stale = ai && ai.key !== key
+  const aiFresh = ai && ai.key === key
+  const shown = aiFresh ? { text: ai.text, kind: 'ia' } : { text: report, kind: 'auto' }
 
   const pdf = async () => {
     setPdfBusy(true)
-    trackClick('recap_pdf', toolName, ai && !stale ? 'avec_ia' : 'sans_ia')
-    try { await downloadRecap(recap, ai && !stale ? ai.text : null) } finally { setPdfBusy(false) }
+    trackClick('recap_pdf', toolName, shown.kind === 'ia' ? 'avec_ia' : 'compte_rendu_auto')
+    try { await downloadRecap(recap, shown) } finally { setPdfBusy(false) }
   }
 
   const ask = async () => {
     setState('loading'); setError('')
-    trackClick('compte_rendu_ia', toolName, stale ? 'mise_a_jour' : 'demande')
+    trackClick('compte_rendu_ia', toolName, ai ? 'mise_a_jour' : 'demande')
     try {
       const r = await fetch('/api/compte-rendu', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ tool: aiTool, data: aiData }) })
       const json = await r.json().catch(() => ({}))
@@ -39,51 +41,48 @@ export default function RecapPanel({ toolName, recap, aiTool, aiData, aiEnabled 
     <section className={s.panel} aria-labelledby="recap-title">
       <div className={s.head}>
         <div>
-          <h2 id="recap-title" className={s.title}>Garde une trace de ta simulation</h2>
-          <p className={s.sub}>
-            Un PDF avec tes paramètres, tes résultats et le barème appliqué{aiEnabled ? ', et si tu le souhaites un compte rendu rédigé par l’IA' : ''}. Il est fabriqué dans ton navigateur.
-          </p>
+          <h2 id="recap-title" className={s.title}>Ton compte rendu</h2>
+          <p className={s.sub}>Ta simulation résumée en clair. Le PDF reprend ce compte rendu, tes paramètres, tes résultats et le barème appliqué. Il est fabriqué dans ton navigateur : rien n’est envoyé.</p>
         </div>
         <div className={s.buttons}>
           <button type="button" className="btn btn--plein" onClick={pdf} disabled={pdfBusy}>
-            {pdfBusy ? 'Préparation…' : ai && !stale ? 'Télécharger le PDF avec le compte rendu' : 'Télécharger le récapitulatif (PDF)'}
+            {pdfBusy ? 'Préparation…' : 'Télécharger le récapitulatif (PDF)'}
           </button>
-          {aiEnabled && (!ai || stale) && (
+          {aiEnabled && !aiFresh && (
             <button type="button" className="btn" onClick={ask} disabled={state === 'loading'}>
-              {state === 'loading' ? 'Rédaction en cours…' : stale ? 'Mettre à jour le compte rendu' : 'Obtenir un compte rendu par l’IA'}
+              {state === 'loading' ? 'Rédaction en cours…' : 'Version rédigée par l’IA'}
             </button>
           )}
         </div>
       </div>
 
-      {aiEnabled && !ai && state !== 'loading' && (
+      {aiEnabled && !aiFresh && state === 'idle' && (
         <p className={s.privacy}>
-          Le compte rendu explique ta situation à partir de tes chiffres. Ceux-ci, sans nom ni e-mail, sont envoyés à notre fournisseur d’IA, Anthropic, et ne sont pas conservés par Grapheko.{' '}
+          La version IA envoie les chiffres de ta simulation, sans nom ni e-mail, à notre fournisseur d’IA, Anthropic. Grapheko ne les conserve pas.{' '}
           <Link href="/confidentialite">En savoir plus</Link>
         </p>
       )}
       {state === 'loading' && <div className={s.loading} aria-live="polite"><span /><span /><span /> Rédaction de ton compte rendu…</div>}
       {state === 'error' && <p className={s.error} role="alert">{error}</p>}
 
-      {ai && (
-        <article className={`${s.ai} ${stale ? s.stale : ''}`} aria-live="polite">
-          <p className={s.aiLabel}>Compte rendu rédigé par l’IA</p>
-          {stale && <p className={s.staleNote}>Tes paramètres ont changé : ce texte correspond à ta simulation précédente.</p>}
-          <AiText text={ai.text} />
-          <p className={s.aiFoot}>
-            Texte généré automatiquement à partir des chiffres ci-dessus. Il peut contenir des erreurs et ne constitue pas un conseil fiscal ou en investissement personnalisé.
-          </p>
-        </article>
-      )}
+      <article className={s.ai} aria-live="polite">
+        <p className={s.aiLabel}>{shown.kind === 'ia' ? 'Compte rendu rédigé par l’IA' : 'Compte rendu de ta simulation'}</p>
+        <ReportText text={shown.text} />
+        <p className={s.aiFoot}>
+          {shown.kind === 'ia'
+            ? 'Texte généré automatiquement à partir de tes chiffres. Il peut contenir des erreurs et ne constitue pas un conseil fiscal ou en investissement personnalisé.'
+            : 'Rédigé automatiquement à partir de tes chiffres, il se met à jour à chaque modification. Explication pédagogique, pas un conseil fiscal ou en investissement personnalisé.'}
+        </p>
+      </article>
     </section>
   )
 }
 
 // Rendu minimal et sûr : « ## » titres, « - » puces, le reste en paragraphes (aucun HTML interprété)
-function AiText({ text }) {
+function ReportText({ text }) {
   const blocks = []
   let list = null
-  text.split('\n').map((l) => l.trim()).filter(Boolean).forEach((line, i) => {
+  String(text || '').split('\n').map((l) => l.trim()).filter(Boolean).forEach((line, i) => {
     const plain = line.replace(/\*\*/g, '')
     if (plain.startsWith('- ')) {
       if (!list) { list = []; blocks.push({ type: 'ul', items: list, key: i }) }

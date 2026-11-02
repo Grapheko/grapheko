@@ -9,6 +9,7 @@ import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
 import BaremeTable, { baremeRows } from '../../components/ui/BaremeTable'
 import RecapPanel from '../../components/ui/RecapPanel'
+import { flatReport } from '../../lib/taxReport'
 import StickyResult from '../../components/ui/StickyResult'
 import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { flatTaxVsScale, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
@@ -208,7 +209,7 @@ export default function FlatTaxOuBareme({ aiEnabled }) {
 
             <BaremeTable tmi={r.tmi} parts={parts} note="Les revenus de placements perçus en 2026 seront imposés en 2027 avec un barème relevé de 2,1 % dans le projet de loi de finances 2027, pas encore voté." />
 
-            <RecapPanel toolName="flat_tax_bareme" recap={recap} aiTool="flat_tax" aiData={aiData} aiEnabled={aiEnabled} />
+            <RecapPanel toolName="flat_tax_bareme" recap={recap} aiTool="flat_tax" aiData={aiData} aiEnabled={aiEnabled} report={flatReport({ situation: st.situation, enfants: st.enfants, isolated, parts, income, dividends: st.dividendes, interest: st.interets, gains: st.plusValues, r, crossover: crossover?.income })} />
 
             <div className={s.reading}>
               <div>

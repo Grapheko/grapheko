@@ -9,6 +9,7 @@ import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
 import BaremeTable, { baremeRows } from '../../components/ui/BaremeTable'
 import RecapPanel from '../../components/ui/RecapPanel'
+import { perReport } from '../../lib/taxReport'
 import StickyResult from '../../components/ui/StickyResult'
 import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { perSaving, perCurve, perCeilingEstimate, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
@@ -212,7 +213,7 @@ export default function Per({ aiEnabled }) {
 
             <BaremeTable tmi={r.tmi} parts={parts} note="Un versement fait en 2026 réduira l’impôt 2027 sur les revenus 2026 : son barème, relevé de 2,1 % dans le projet de loi de finances 2027, n’est pas encore voté." />
 
-            <RecapPanel toolName="economie_per" recap={recap} aiTool="per" aiData={aiData} aiEnabled={aiEnabled} />
+            <RecapPanel toolName="economie_per" recap={recap} aiTool="per" aiData={aiData} aiEnabled={aiEnabled} report={perReport({ situation: st.situation, enfants: st.enfants, isolated, parts, income, payment: st.versement, ceiling, plafondMode: st.plafondMode, r, tmiRetraite: st.tmiRetraite, exitTax, netGain })} />
 
             <div className={s.reading}>
               <div>

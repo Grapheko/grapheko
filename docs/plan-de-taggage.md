@@ -94,7 +94,7 @@ Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env
 
 ## Récapitulatif et compte rendu IA (simulateurs fiscaux)
 Événement `clicStandard` :
-- `click` = `recap_pdf`, `click_chapter1` = nom de l'outil, `click_chapter2` = `avec_ia` ou `sans_ia` : téléchargement du PDF.
-- `click` = `compte_rendu_ia`, `click_chapter1` = nom de l'outil, `click_chapter2` = `demande` ou `mise_a_jour` : demande d'un compte rendu à l'IA.
+- `click` = `recap_pdf`, `click_chapter1` = nom de l'outil, `click_chapter2` = `compte_rendu_auto` (compte rendu rédigé par règles, par défaut) ou `avec_ia` : téléchargement du PDF.
+- `click` = `compte_rendu_ia` (`demande` ou `mise_a_jour`) : demande de la version IA. Option en sommeil, visible seulement si `ANTHROPIC_API_KEY` est configurée dans Vercel.
 Le PDF est généré dans le navigateur ; le compte rendu passe par `/api/compte-rendu` (variable Vercel `ANTHROPIC_API_KEY`), sans aucune donnée d'identité.
 
