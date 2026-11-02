@@ -118,7 +118,7 @@ export default function Per({ aiEnabled }) {
       />
       <PageIntro
         crumbs={crumbs}
-        title="Combien d’impôt économise ton versement sur un PER ?"
+        title="Combien d’impôt peux-tu économiser avec un PER ?"
         lede="Chaque euro versé sur un plan d’épargne retraite avant le 31 décembre est déduit de ton revenu imposable. Le calcul complet, avec le barème officiel, le quotient familial et la décote, et ce que tu repaieras à la sortie."
         wide
       />
