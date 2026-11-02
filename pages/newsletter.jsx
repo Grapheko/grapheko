@@ -1,9 +1,12 @@
+import { useRouter } from 'next/router'
 import Seo from '../components/layout/Seo'
 import PageIntro from '../components/ui/PageIntro'
 import NewsletterForm from '../components/ui/NewsletterForm'
 import s from '../styles/Simple.module.css'
 
 export default function Newsletter() {
+  // Retour du lien de confirmation (double opt-in Brevo)
+  const confirmed = useRouter().query.confirmation === 'ok'
   return (
     <>
       <Seo title="Newsletter" description="Chaque dimanche, un graphique expliqué : ce qu’il montre, ce qu’il ne montre pas. Cinq minutes, sans conseil déguisé." />
@@ -14,7 +17,14 @@ export default function Newsletter() {
         wide
       />
       <div className={`wrap ${s.split}`}>
-        <div className="panel"><NewsletterForm location="page_newsletter" /></div>
+        <div className="panel">
+          {confirmed ? (
+            <div role="status">
+              <p className={s.h3} style={{ marginBottom: 8 }}>Ton inscription est confirmée.</p>
+              <p className="muted">Merci ! La prochaine édition arrive dimanche matin dans ta boîte mail.</p>
+            </div>
+          ) : <NewsletterForm location="page_newsletter" />}
+        </div>
         <aside className={s.aside}>
           <h2 className={s.h3}>Ce que tu reçois</h2>
           <p className="muted">Un e-mail le dimanche matin, avec un graphique, son explication et un lien vers un simulateur ou une définition pour aller plus loin.</p>
