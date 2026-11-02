@@ -7,7 +7,8 @@ import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
-import BaremeTable from '../../components/ui/BaremeTable'
+import BaremeTable, { baremeRows } from '../../components/ui/BaremeTable'
+import RecapPanel from '../../components/ui/RecapPanel'
 import StickyResult from '../../components/ui/StickyResult'
 import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { flatTaxVsScale, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
@@ -37,7 +38,7 @@ const FAQ = [
   },
 ]
 
-export default function FlatTaxOuBareme() {
+export default function FlatTaxOuBareme({ aiEnabled }) {
   const [st, set] = useToolState(
     'flat_tax_bareme',
     { situation: 'single', enfants: 0, isole: 0, revenuMode: 'salaires', salaire1: 28000, salaire2: 20000, revenu: 25000, dividendes: 2000, interets: 0, plusValues: 0 },
@@ -62,6 +63,46 @@ export default function FlatTaxOuBareme() {
   const w = (v) => `${Math.max(0, (v / max) * 100)}%`
   const bestName = r.best === 'bareme' ? 'Le barème' : 'La flat tax'
   const otherName = r.best === 'bareme' ? 'la flat tax' : 'le barème'
+
+  const couple = st.situation === 'couple'
+  const recap = {
+    tool: 'flat-tax-ou-bareme',
+    title: 'Flat tax ou barème : comparaison',
+    lede: `Simulation Grapheko avec le ${TAX_YEAR_LABEL} et la flat tax à 31,4 %.`,
+    highlight: { label: 'Option la moins chère', value: r.best ? `${bestName}, ${eur(r.gap)} de moins` : 'Aucun revenu de placement saisi' },
+    params: [
+      ['Situation', `${couple ? 'Marié(e) ou pacsé(e)' : 'Seul(e)'}${isolated ? ', parent isolé (case T)' : ''}`],
+      ['Enfants à charge', `${st.enfants} (${num(parts, parts % 1 ? 1 : 0)} part${parts > 1 ? 's' : ''} fiscale${parts > 1 ? 's' : ''})`],
+      ...(foyer.fromSalaries
+        ? [[couple ? 'Ton salaire annuel net imposable' : 'Salaire annuel net imposable', eur(st.salaire1)], ...(couple ? [['Salaire annuel du conjoint', eur(st.salaire2)]] : [])]
+        : []),
+      ['Revenu imposable hors placements', `${eur(income)}${foyer.fromSalaries ? ' (après déduction de 10 %)' : ' (avis d’impôt)'}`],
+      ['Dividendes bruts', eur(st.dividendes)],
+      ['Intérêts', eur(st.interets)],
+      ['Plus-values sur titres', eur(st.plusValues)],
+    ],
+    results: [
+      ['Flat tax : impôt (12,8 %)', eur(r.pfu.ir)],
+      ['Prélèvements sociaux (18,6 %, identiques dans les deux cas)', eur(r.social)],
+      ['Total avec la flat tax', eur(r.pfu.total), true],
+      ['Barème : impôt supplémentaire', eur(r.scale.ir)],
+      ['Barème : CSG déductible, économie l’année suivante', `- ${eur(r.scale.csgRelief)}`],
+      ['Total avec le barème', eur(r.scale.total), true],
+      ['Tranche marginale avec ces revenus', `${num(r.tmi * 100)} %`],
+    ],
+    notes: r.best ? [`${bestName} est l’option la moins chère pour cette simulation, avec ${eur(r.gap)} d’écart. L’option pour le barème se coche case 2OP de la déclaration et vaut pour tous les revenus et plus-values de placements de l’année.`] : [],
+    baremeTitle: `Le barème utilisé : ${TAX_YEAR_LABEL}`,
+    bareme: baremeRows(r.tmi),
+    method: `Flat tax : 12,8 % d’impôt et 18,6 % de prélèvements sociaux sur le montant brut. Barème : revenus de placements ajoutés au revenu du foyer, après abattement de 40 % sur les dividendes, avec plafonnement du quotient familial et décote ; CSG déductible (6,8 % du brut) valorisée sur l’impôt de l’année suivante. Non pris en compte : abattements pour durée de détention sur les titres achetés avant 2018, contribution exceptionnelle sur les hauts revenus. PEA et assurance-vie ne sont pas concernés. Règles vérifiées le ${dateFr(TAX_VERIFIED_AT)}.`,
+    url: 'https://grapheko.fr/simulateurs/flat-tax-ou-bareme',
+  }
+  const aiData = {
+    situation: st.situation, enfants: st.enfants, isole: isolated ? 1 : 0, revenuMode: st.revenuMode, parts,
+    revenu: Math.round(income), dividendes: st.dividendes, interets: st.interets, plusValues: st.plusValues,
+    pfuImpot: Math.round(r.pfu.ir), prelevementsSociaux: Math.round(r.social), pfuTotal: Math.round(r.pfu.total),
+    baremeImpot: Math.round(r.scale.ir), csgDeductible: Math.round(r.scale.csgRelief), baremeTotal: Math.round(r.scale.total),
+    meilleure: r.best || 'aucune', ecart: Math.round(r.gap), tmi: Math.round(r.tmi * 100),
+  }
 
   return (
     <>
@@ -167,6 +208,8 @@ export default function FlatTaxOuBareme() {
 
             <BaremeTable tmi={r.tmi} parts={parts} note="Les revenus de placements perçus en 2026 seront imposés en 2027 avec un barème relevé de 2,1 % dans le projet de loi de finances 2027, pas encore voté." />
 
+            <RecapPanel toolName="flat_tax_bareme" recap={recap} aiTool="flat_tax" aiData={aiData} aiEnabled={aiEnabled} />
+
             <div className={s.reading}>
               <div>
                 <h3>Une option pour toute l’année</h3>
@@ -215,5 +258,5 @@ function faqJsonLd(items) {
 }
 
 export async function getStaticProps() {
-  return { props: { tracking: { tool_name: 'flat_tax_bareme' } } }
+  return { props: { aiEnabled: Boolean(process.env.ANTHROPIC_API_KEY), tracking: { tool_name: 'flat_tax_bareme' } } }
 }

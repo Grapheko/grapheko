@@ -48,6 +48,14 @@ export default function BaremeTable({ tmi, parts = 1, note }) {
   )
 }
 
+// Lignes du barème pour le PDF : [tranche par part, taux, est la tranche du foyer]
+export function baremeRows(tmi) {
+  return BRACKETS.map(([high, rate], i) => {
+    const low = i === 0 ? 0 : BRACKETS[i - 1][0]
+    return [`${range(low, high, 1)} par part`, `${num(rate * 100)} %`, tmi === rate]
+  })
+}
+
 function range(low, high, k) {
   if (high === Infinity) return `Plus de ${eur(Math.round(low * k))}`
   if (low === 0) return `Jusqu’à ${eur(Math.round(high * k))}`

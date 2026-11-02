@@ -7,7 +7,8 @@ import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
-import BaremeTable from '../../components/ui/BaremeTable'
+import BaremeTable, { baremeRows } from '../../components/ui/BaremeTable'
+import RecapPanel from '../../components/ui/RecapPanel'
 import StickyResult from '../../components/ui/StickyResult'
 import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { perSaving, perCurve, perCeilingEstimate, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
@@ -37,7 +38,7 @@ const FAQ = [
   },
 ]
 
-export default function Per() {
+export default function Per({ aiEnabled }) {
   const [st, set] = useToolState(
     'economie_per',
     { situation: 'single', enfants: 0, isole: 0, revenuMode: 'salaires', salaire1: 50000, salaire2: 30000, revenu: 45000, versement: 4000, plafondMode: 'auto', plafond: 6000, tmiRetraite: 11 },
@@ -61,6 +62,51 @@ export default function Per() {
   const exitTax = r.deductible * (st.tmiRetraite / 100)
   const netGain = r.saving - exitTax
   const noTax = r.before === 0
+
+  const situationTxt = `${couple ? 'Marié(e) ou pacsé(e)' : 'Seul(e)'}${isolated ? ', parent isolé (case T)' : ''}`
+  const partsTxt = `${num(parts, parts % 1 ? 1 : 0)} part${parts > 1 ? 's' : ''} fiscale${parts > 1 ? 's' : ''}`
+  const recap = {
+    tool: 'per',
+    title: 'Économie d’impôt d’un versement sur un PER',
+    lede: `Simulation Grapheko avec le ${TAX_YEAR_LABEL}.`,
+    highlight: { label: 'Impôt économisé', value: eur(r.saving) },
+    params: [
+      ['Situation', situationTxt],
+      ['Enfants à charge', `${st.enfants} (${partsTxt})`],
+      ...(foyer.fromSalaries
+        ? [[couple ? 'Ton salaire annuel net imposable' : 'Salaire annuel net imposable', eur(st.salaire1)], ...(couple ? [['Salaire annuel du conjoint', eur(st.salaire2)]] : [])]
+        : []),
+      ['Revenu imposable du foyer', `${eur(income)}${foyer.fromSalaries ? ' (après déduction de 10 %)' : ' (avis d’impôt)'}`],
+      ['Versement sur le PER', eur(st.versement)],
+      [`Plafond de déduction (${st.plafondMode === 'auto' ? 'estimé' : 'indiqué'})`, eur(ceiling)],
+      ['Tranche d’imposition prévue à la retraite', `${st.tmiRetraite} %`],
+    ],
+    results: [
+      ['Montant déduit du revenu imposable', eur(r.deductible)],
+      ['Impôt sur le revenu avant versement', eur(r.before)],
+      ['Impôt sur le revenu après versement', eur(r.after)],
+      ['Impôt économisé', eur(r.saving), true],
+      ['Coût réel du versement', eur(r.netCost)],
+      ['Tranche marginale d’imposition actuelle', `${num(r.tmi * 100)} %`],
+      ['Impôt estimé à la sortie en capital sur ce versement', eur(exitTax)],
+      ['Ordre de grandeur du gain net (en euros actuels)', eur(netGain)],
+    ],
+    notes: [
+      ...(r.excess > 0 ? [`${eur(r.excess)} dépassent ton plafond et ne sont pas déductibles cette année.`] : []),
+      ...(noTax ? ['Avec ces paramètres, tu ne paies pas d’impôt sur le revenu : la déduction ne rapporte rien.'] : []),
+    ],
+    baremeTitle: `Le barème utilisé : ${TAX_YEAR_LABEL}`,
+    bareme: baremeRows(r.tmi),
+    method: `Impôt calculé avec le ${TAX_YEAR_LABEL} (loi de finances pour 2026) : plafonnement du quotient familial et décote compris. Un versement fait en 2026 réduit l’impôt 2027 sur les revenus 2026, dont le barème n’est pas encore voté (relèvement de 2,1 % prévu). Le plafond exact figure sur ton avis d’impôt. Les gains du PER seront imposés à la sortie à la flat tax de 31,4 %. Règles vérifiées le ${dateFr(TAX_VERIFIED_AT)}.`,
+    url: 'https://grapheko.fr/simulateurs/per',
+  }
+  const aiData = {
+    situation: st.situation, enfants: st.enfants, isole: isolated ? 1 : 0, revenuMode: st.revenuMode, parts,
+    revenu: Math.round(income), versement: st.versement, plafond: Math.round(ceiling), plafondMode: st.plafondMode,
+    deduit: Math.round(r.deductible), excedent: Math.round(r.excess), impotAvant: r.before, impotApres: r.after, economie: r.saving,
+    tauxEffectif: Math.round(r.effectiveRate * 1000) / 10, tmi: Math.round(r.tmi * 100), tmiRetraite: st.tmiRetraite,
+    impotSortie: Math.round(exitTax), gainNet: Math.round(netGain),
+  }
 
   return (
     <>
@@ -166,6 +212,8 @@ export default function Per() {
 
             <BaremeTable tmi={r.tmi} parts={parts} note="Un versement fait en 2026 réduira l’impôt 2027 sur les revenus 2026 : son barème, relevé de 2,1 % dans le projet de loi de finances 2027, n’est pas encore voté." />
 
+            <RecapPanel toolName="economie_per" recap={recap} aiTool="per" aiData={aiData} aiEnabled={aiEnabled} />
+
             <div className={s.reading}>
               <div>
                 <h3>À la sortie, l’impôt revient</h3>
@@ -217,5 +265,5 @@ function faqJsonLd(items) {
 }
 
 export async function getStaticProps() {
-  return { props: { tracking: { tool_name: 'economie_per' } } }
+  return { props: { aiEnabled: Boolean(process.env.ANTHROPIC_API_KEY), tracking: { tool_name: 'economie_per' } } }
 }

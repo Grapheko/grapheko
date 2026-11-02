@@ -91,3 +91,10 @@ Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env
 - Parcours inter-sections : exploration de chemins GA4 sur `content_group` (glossaire → simulateur → newsletter).
 - Termes recherchés sans résultat (`results_count = 0`) : liste de mots à ajouter au glossaire.
 - Export BigQuery (gratuit) pour croiser `tool_result` et `formulaire_inscription` par session.
+
+## Récapitulatif et compte rendu IA (simulateurs fiscaux)
+Événement `clicStandard` :
+- `click` = `recap_pdf`, `click_chapter1` = nom de l'outil, `click_chapter2` = `avec_ia` ou `sans_ia` : téléchargement du PDF.
+- `click` = `compte_rendu_ia`, `click_chapter1` = nom de l'outil, `click_chapter2` = `demande` ou `mise_a_jour` : demande d'un compte rendu à l'IA.
+Le PDF est généré dans le navigateur ; le compte rendu passe par `/api/compte-rendu` (variable Vercel `ANTHROPIC_API_KEY`), sans aucune donnée d'identité.
+
