@@ -8,6 +8,8 @@ import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
 import BaremeTable from '../../components/ui/BaremeTable'
+import StickyResult from '../../components/ui/StickyResult'
+import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { flatTaxVsScale, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
 import { eur, num } from '../../lib/format'
 import { dateFr } from '../../lib/content/articles'
@@ -38,33 +40,28 @@ const FAQ = [
 export default function FlatTaxOuBareme() {
   const [st, set] = useToolState(
     'flat_tax_bareme',
-    { situation: 'single', parts: 1, revenu: 25000, dividendes: 2000, interets: 0, plusValues: 0 },
-    { syncUrl: false, trackKeys: ['situation', 'parts'], resultParams: () => ({}) }
+    { situation: 'single', enfants: 0, isole: 0, revenuMode: 'salaires', salaire1: 28000, salaire2: 20000, revenu: 25000, dividendes: 2000, interets: 0, plusValues: 0 },
+    { syncUrl: false, trackKeys: ['situation', 'enfants', 'isole', 'revenuMode'], resultParams: () => ({ tool_best: r.best }) }
   )
-  const couple = st.situation === 'couple'
-  const parts = Math.max(couple ? 2 : 1, st.parts)
-  const input = { income: st.revenu, parts, situation: st.situation, dividends: st.dividendes, interest: st.interets, gains: st.plusValues }
-  const r = useMemo(() => flatTaxVsScale(input), [st.revenu, parts, st.situation, st.dividendes, st.interets, st.plusValues]) // eslint-disable-line react-hooks/exhaustive-deps
+  const foyer = foyerFrom(st)
+  const { parts, isolated, income } = foyer
+  const input = { income, parts, situation: st.situation, isolated, dividends: st.dividendes, interest: st.interets, gains: st.plusValues }
+  const r = useMemo(() => flatTaxVsScale(input), [income, parts, st.situation, isolated, st.dividendes, st.interets, st.plusValues]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const curve = useMemo(() => {
-    const top = Math.max(60000, Math.round((st.revenu * 2) / 10000) * 10000)
+    const top = Math.max(60000, Math.round((income * 2) / 10000) * 10000)
     return Array.from({ length: 31 }, (_, i) => {
       const income = Math.round((top * i) / 30 / 500) * 500
       const c = flatTaxVsScale({ ...input, income })
       return { income, pfu: c.pfu.total, scale: c.scale.total }
     })
-  }, [st.revenu, parts, st.situation, st.dividendes, st.interets, st.plusValues]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [income, parts, st.situation, isolated, st.dividendes, st.interets, st.plusValues]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const crossover = curve.find((p, i) => i > 0 && curve[i - 1].scale < curve[i - 1].pfu && p.scale >= p.pfu)
   const max = Math.max(r.pfu.total, r.scale.total, 1)
   const w = (v) => `${Math.max(0, (v / max) * 100)}%`
-  const bestLabel = r.best === 'bareme' ? 'le barème' : 'la flat tax'
-
-  const setSituation = (v) => {
-    set('situation')(v)
-    if (v === 'couple' && st.parts < 2) set('parts')(2)
-    if (v === 'single' && st.parts === 2) set('parts')(1)
-  }
+  const bestName = r.best === 'bareme' ? 'Le barème' : 'La flat tax'
+  const otherName = r.best === 'bareme' ? 'la flat tax' : 'le barème'
 
   return (
     <>
@@ -80,18 +77,15 @@ export default function FlatTaxOuBareme() {
         wide
       />
       <div className={`wrap ${s.more}`}>
+        <p className={s.notice}>
+          <strong>Tes placements sont sur un PEA ou une assurance-vie ?</strong> Ce choix ne te concerne pas : ces enveloppes ont leur propre fiscalité.
+          Ce simulateur vise les revenus d’un compte-titres, d’un compte à terme ou d’un livret bancaire fiscalisé.
+        </p>
         <div className={s.layout}>
           <form className={`panel ${s.controls}`} onSubmit={(e) => e.preventDefault()} aria-label="Paramètres du calcul">
             <h2>Ton foyer</h2>
-            <div className="field">
-              <span className="label" id="sit-label">Situation</span>
-              <div className="segmented" role="group" aria-labelledby="sit-label">
-                <button type="button" aria-pressed={!couple} onClick={() => setSituation('single')}>Seul(e)</button>
-                <button type="button" aria-pressed={couple} onClick={() => setSituation('couple')}>Marié(e) ou pacsé(e)</button>
-              </div>
-            </div>
-            <RangeField label="Nombre de parts" value={parts} onChange={set('parts')} min={couple ? 2 : 1} max={6} step={0.5} />
-            <RangeField label="Revenu net imposable, hors placements" value={st.revenu} onChange={set('revenu')} min={0} max={250000} step={500} suffix="€" hint="Salaires, pensions… après l’abattement de 10 %." />
+            <FoyerFields st={st} set={set} foyer={foyer} />
+            <RevenuFields st={st} set={set} foyer={foyer} label="Tes revenus, hors placements" />
             <hr className="rule" />
             <h2>Tes revenus de placements</h2>
             <RangeField label="Dividendes" value={st.dividendes} onChange={set('dividendes')} min={0} max={100000} step={100} suffix="€" hint="Montant brut, sur un compte-titres." />
@@ -100,12 +94,12 @@ export default function FlatTaxOuBareme() {
           </form>
 
           <div className={s.results} aria-live="polite">
-            <dl className={s.kpis}>
+            <dl className={s.kpis} id="resultat">
               <div className={`${s.kpi} ${s.kpiMain}`}>
-                <dt>{r.best ? `Le plus avantageux : ${bestLabel}` : 'Saisis tes revenus de placements'}</dt>
+                <dt>Option la moins chère</dt>
                 <dd className="figure">
-                  <Counter value={r.gap} format={(v) => eur(v)} />
-                  <span className={s.sub} style={{ color: '#BDBFD6' }}>{r.best ? 'd’économie sur l’année' : 'pour comparer'}</span>
+                  {r.best ? bestName : '—'}
+                  <span className={s.sub} style={{ color: '#BDBFD6' }}>{r.best ? `${eur(r.gap)} de moins que ${otherName}` : 'Saisis tes revenus de placements'}</span>
                 </dd>
               </div>
               <div className={s.kpi}>
@@ -153,11 +147,11 @@ export default function FlatTaxOuBareme() {
               <div className={s.chartPanel}>
                 <h2 className={s.chartTitle}>Et si ton revenu était différent ?</h2>
                 <LineChart
-                  animateKey={`${parts}-${st.situation}-${r.capital}`}
+                  animateKey={`${parts}-${st.situation}-${isolated}-${r.capital}`}
                   labels={curve.map((p) => p.income)}
                   series={[
                     { key: 'pfu', label: 'Flat tax', color: 'var(--encre)', values: curve.map((p) => p.pfu), dashed: true, width: 2 },
-                    { key: 'scale', label: 'Barème', color: 'var(--outremer)', values: curve.map((p) => p.scale) },
+                    { key: 'scale', label: 'Barème', color: 'var(--outremer)', values: curve.map((p) => p.scale), area: true },
                   ]}
                   formatX={(v) => eur(v)}
                   formatY={(v) => eur(v)}
@@ -182,10 +176,10 @@ export default function FlatTaxOuBareme() {
                 </p>
               </div>
               <div>
-                <h3>PEA et assurance-vie à part</h3>
+                <h3>Pas d’effet sur tes aides</h3>
                 <p>
-                  Ces enveloppes ont leur propre fiscalité : après 5 ans, les gains d’un <Link href="/glossaire/pea">PEA</Link> ne paient que les prélèvements sociaux, et l’assurance-vie a ses abattements après 8 ans.
-                  Les plus-values sur cryptos ont aussi leur option propre.
+                  Tes revenus de placements comptent dans ton revenu fiscal de référence avec les deux options, dividendes pris avant l’abattement de 40 %.
+                  Opter pour le barème ne change donc pas tes droits aux aides sous conditions de ressources. Les plus-values sur cryptos ont leur option propre.
                 </p>
               </div>
             </div>
@@ -199,7 +193,7 @@ export default function FlatTaxOuBareme() {
             <p className={s.method}>
               <strong>Méthode.</strong> Flat tax : 12,8 % d’impôt et 18,6 % de prélèvements sociaux sur le montant brut. Barème : les revenus de placements s’ajoutent au revenu du foyer, après abattement de 40 % sur les dividendes,
               et l’impôt supplémentaire est calculé avec le {TAX_YEAR_LABEL}, plafonnement du quotient familial et décote compris. La CSG déductible (6,8 % du brut) est valorisée sur l’impôt de l’année suivante, à revenus identiques.
-              Non pris en compte : abattements pour durée de détention sur les titres achetés avant 2018, contribution exceptionnelle sur les hauts revenus, cas du parent isolé.
+              Non pris en compte : abattements pour durée de détention sur les titres achetés avant 2018, contribution exceptionnelle sur les hauts revenus, garde alternée.
               Règles vérifiées le {dateFr(TAX_VERIFIED_AT)}. Aucune donnée saisie n’est enregistrée ni transmise. Outil pédagogique, pas un conseil fiscal.
             </p>
 
@@ -207,6 +201,7 @@ export default function FlatTaxOuBareme() {
           </div>
         </div>
       </div>
+      <StickyResult targetId="resultat" label="Option la moins chère" value={r.best ? `${bestName} · ${eur(r.gap)} de moins` : '—'} />
     </>
   )
 }

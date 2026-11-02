@@ -46,7 +46,7 @@ Nouvelles clés ajoutées à tous les events : `page_type` (home, hub, outil, ac
 
 Valeurs de `tool_name` : `dca_<actif>` (ex. `dca_bitcoin`), `interets_composes`, `cout_frais`, `rendement_reel`, `economie_per`, `flat_tax_bareme`.
 
-Simulateurs fiscaux (`economie_per`, `flat_tax_bareme`) : aucun montant (revenu, versement, dividendes) n'est envoyé au dataLayer ni écrit dans l'URL. Seuls `tool_situation`, `tool_parts` et, pour le PER, `tool_plafondMode` et `tool_tmiRetraite` remontent.
+Simulateurs fiscaux (`economie_per`, `flat_tax_bareme`) : aucun montant (revenu, versement, dividendes) n'est envoyé au dataLayer ni écrit dans l'URL. Seuls `tool_situation`, `tool_enfants`, `tool_isole` (parent isolé, 0 ou 1), `tool_revenuMode` (`salaires` ou `avis`) remontent, plus `tool_plafondMode` et `tool_tmiRetraite` pour le PER, et `tool_best` (`bareme` ou `pfu`, l'option la moins chère) pour flat tax ou barème.
 Clés de page envoyées avec `page.display` : `asset` (fiches marché et DCA), `tool_name`, `glossary_term`, `article_category`.
 
 ## 4. Page vue : règle en place

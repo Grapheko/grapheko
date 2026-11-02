@@ -27,6 +27,8 @@
 .assetPicker a { min-height: 38px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: var(--r-pill); border: 1.5px solid var(--line-strong); text-decoration: none; font-size: var(--fs-sm); font-weight: 500; }
 .assetPicker a[aria-current="page"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .more { padding-bottom: var(--section); }
+.notice { margin: 0 0 clamp(20px, 3vw, 32px); padding: 14px 20px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line); font-size: var(--fs-sm); line-height: 1.55; color: var(--fg-muted); }
+.notice strong { color: var(--fg); }
 .alert { background: var(--jaune); border-radius: 18px; padding: 16px 20px; font-size: var(--fs-sm); line-height: 1.55; border-left: 6px solid var(--orange); }
 .alert strong { color: var(--encre); }
 .compare { display: grid; gap: 14px; }

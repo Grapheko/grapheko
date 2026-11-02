@@ -41,16 +41,23 @@ export default function LineChart({
     () =>
       series.map((se) => {
         const d = se.values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(2)},${y(v).toFixed(2)}`).join(' ')
-        const area = `${d} L${W},${H} L0,${H} Z`
-        return { ...se, d, area }
+        // Remplissage uniquement pour les séries marquées area: true
+        const fill = se.area ? `${d} L${W},${H} L0,${H} Z` : null
+        return { ...se, d, fill }
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [series, min, max, n, H]
   )
 
+  // Graduations « rondes » (1, 2, 2,5 ou 5 × 10^n) pour des montants lisibles
   const yTicks = useMemo(() => {
-    const step = (max - min) / 4
-    return Array.from({ length: 5 }, (_, i) => min + step * i).filter((v, i) => i > 0)
+    const raw = (max - min) / 5
+    if (!(raw > 0)) return []
+    const mag = 10 ** Math.floor(Math.log10(raw))
+    const step = [1, 2, 2.5, 5, 10].map((k) => k * mag).find((k) => k >= raw)
+    const out = []
+    for (let v = Math.ceil(min / step) * step; v < max; v += step) if (v > min + step * 0.15) out.push(Number(v.toPrecision(12)))
+    return out
   }, [min, max])
 
   const xTickIdx = useMemo(() => {
@@ -114,7 +121,7 @@ export default function LineChart({
             ))}
           </defs>
           <g clipPath={`url(#clip-${id})`}>
-            {paths.map((p) => p.area && <path key={`a-${p.key}`} d={p.area} fill={`url(#g-${id}-${p.key})`} />)}
+            {paths.map((p) => p.fill && <path key={`a-${p.key}`} d={p.fill} fill={`url(#g-${id}-${p.key})`} />)}
             {paths.map((p) => (
               <path
                 key={p.key}

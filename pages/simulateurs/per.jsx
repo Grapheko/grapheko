@@ -8,6 +8,8 @@ import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
 import BaremeTable from '../../components/ui/BaremeTable'
+import StickyResult from '../../components/ui/StickyResult'
+import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
 import { perSaving, perCurve, perCeilingEstimate, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
 import { eur, num } from '../../lib/format'
 import { dateFr } from '../../lib/content/articles'
@@ -38,39 +40,33 @@ const FAQ = [
 export default function Per() {
   const [st, set] = useToolState(
     'economie_per',
-    { situation: 'single', parts: 1, revenu: 45000, versement: 4000, plafondMode: 'auto', plafond: 6000, tmiRetraite: 11 },
-    { syncUrl: false, trackKeys: ['situation', 'parts', 'plafondMode', 'tmiRetraite'] }
+    { situation: 'single', enfants: 0, isole: 0, revenuMode: 'salaires', salaire1: 50000, salaire2: 30000, revenu: 45000, versement: 4000, plafondMode: 'auto', plafond: 6000, tmiRetraite: 11 },
+    { syncUrl: false, trackKeys: ['situation', 'enfants', 'isole', 'revenuMode', 'plafondMode', 'tmiRetraite'] }
   )
-  const couple = st.situation === 'couple'
-  const parts = Math.max(couple ? 2 : 1, st.parts)
-  const estimated = couple
-    ? Math.min(2 * PER_MAX, Math.max(2 * PER_MIN, Math.round(st.revenu * 0.1)))
-    : perCeilingEstimate(st.revenu)
+  const foyer = foyerFrom(st)
+  const { couple, parts, isolated, income } = foyer
+  const estimated = foyer.fromSalaries
+    ? perCeilingEstimate(foyer.net1) + (couple ? perCeilingEstimate(foyer.net2) : 0)
+    : couple ? 2 * perCeilingEstimate(income / 2) : perCeilingEstimate(income)
   const ceiling = st.plafondMode === 'auto' ? estimated : st.plafond
 
   const r = useMemo(
-    () => perSaving({ income: st.revenu, parts, situation: st.situation, payment: st.versement, ceiling }),
-    [st.revenu, parts, st.situation, st.versement, ceiling]
+    () => perSaving({ income, parts, situation: st.situation, isolated, payment: st.versement, ceiling }),
+    [income, parts, st.situation, isolated, st.versement, ceiling]
   )
   const curve = useMemo(
-    () => perCurve({ income: st.revenu, parts, situation: st.situation, ceiling, max: Math.max(ceiling * 1.25, st.versement * 1.2) }),
-    [st.revenu, parts, st.situation, ceiling, st.versement]
+    () => perCurve({ income, parts, situation: st.situation, isolated, ceiling, max: Math.max(ceiling * 1.25, st.versement * 1.2) }),
+    [income, parts, st.situation, isolated, ceiling, st.versement]
   )
   const exitTax = r.deductible * (st.tmiRetraite / 100)
   const netGain = r.saving - exitTax
   const noTax = r.before === 0
 
-  const setSituation = (v) => {
-    set('situation')(v)
-    if (v === 'couple' && st.parts < 2) set('parts')(2)
-    if (v === 'single' && st.parts > 1 && st.parts === 2) set('parts')(1)
-  }
-
   return (
     <>
       <Seo
         title="Simulateur PER 2026 : combien d’impôt économiser avant le 31 décembre ?"
-        description="Calcule l’économie d’impôt d’un versement sur un plan d’épargne retraite selon ton revenu, ta situation familiale et ton plafond. Barème officiel, quotient familial et décote inclus."
+        description="Calcule l’économie d’impôt d’un versement sur un plan d’épargne retraite selon ton salaire, ta situation familiale et ton plafond. Barème officiel, quotient familial et décote inclus."
         jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ)]}
       />
       <PageIntro
@@ -83,15 +79,8 @@ export default function Per() {
         <div className={s.layout}>
           <form className={`panel ${s.controls}`} onSubmit={(e) => e.preventDefault()} aria-label="Paramètres du calcul">
             <h2>Ton foyer</h2>
-            <div className="field">
-              <span className="label" id="sit-label">Situation</span>
-              <div className="segmented" role="group" aria-labelledby="sit-label">
-                <button type="button" aria-pressed={!couple} onClick={() => setSituation('single')}>Seul(e)</button>
-                <button type="button" aria-pressed={couple} onClick={() => setSituation('couple')}>Marié(e) ou pacsé(e)</button>
-              </div>
-            </div>
-            <RangeField label="Nombre de parts" value={parts} onChange={set('parts')} min={couple ? 2 : 1} max={6} step={0.5} hint={couple ? '2 parts pour le couple, + 0,5 par enfant (1 à partir du 3e).' : '1 part, + 0,5 par enfant (1 à partir du 3e).'} />
-            <RangeField label="Revenu net imposable du foyer" value={st.revenu} onChange={set('revenu')} min={0} max={250000} step={500} suffix="€" hint="Après l’abattement de 10 %. Il figure sur ton avis d’imposition." />
+            <FoyerFields st={st} set={set} foyer={foyer} />
+            <RevenuFields st={st} set={set} foyer={foyer} />
             <hr className="rule" />
             <h2>Ton versement</h2>
             <RangeField label="Versement sur le PER" value={st.versement} onChange={set('versement')} min={0} max={50000} step={100} suffix="€" />
@@ -102,7 +91,11 @@ export default function Per() {
                 <button type="button" aria-pressed={st.plafondMode === 'manuel'} onClick={() => set('plafondMode')('manuel')}>Je le connais</button>
               </div>
               {st.plafondMode === 'auto' && (
-                <span className="hint">Estimé à {eur(estimated)} (10 % des revenus, entre {eur(couple ? 2 * PER_MIN : PER_MIN)} et {eur(couple ? 2 * PER_MAX : PER_MAX)}). Ton avis d’imposition donne le montant exact, reliquats des années passées compris.</span>
+                <span className="hint">
+                  Estimé à {eur(estimated)} : 10 % des revenus d’activité, entre {eur(PER_MIN)} et {eur(PER_MAX)} par personne
+                  {couple ? (foyer.fromSalaries ? ', calculé pour chacun de vous deux puis additionné' : ', en supposant des revenus égaux entre vous deux') : ''}.
+                  Retraité(e) ou sans activité : {eur(PER_MIN)}. Ton avis d’impôt donne le montant exact, avec les plafonds non utilisés des années passées.
+                </span>
               )}
             </div>
             {st.plafondMode === 'manuel' && (
@@ -121,7 +114,7 @@ export default function Per() {
           </form>
 
           <div className={s.results} aria-live="polite">
-            <dl className={s.kpis}>
+            <dl className={s.kpis} id="resultat">
               <div className={`${s.kpi} ${s.kpiMain}`}>
                 <dt>Impôt économisé</dt>
                 <dd className="figure">
@@ -158,7 +151,7 @@ export default function Per() {
             <div className={s.chartPanel}>
               <h2 className={s.chartTitle}>Impôt économisé selon le montant versé</h2>
               <LineChart
-                animateKey={`${st.revenu}-${parts}-${st.situation}-${ceiling}`}
+                animateKey={`${income}-${parts}-${st.situation}-${ceiling}`}
                 labels={curve.map((p) => p.payment)}
                 series={[{ key: 'saving', label: 'Impôt économisé', color: 'var(--outremer)', values: curve.map((p) => p.saving), area: true }]}
                 formatX={(v) => eur(v)}
@@ -179,7 +172,9 @@ export default function Per() {
                 <p>
                   La déduction n’est pas un cadeau, c’est un report. Si tu récupères ce versement en capital à la retraite, il sera ajouté à tes revenus de l’année :
                   environ {eur(exitTax)} d’impôt avec une tranche à {st.tmiRetraite} %. Les gains, eux, seront soumis à la flat tax de 31,4 %.
-                  {r.saving > 0 && <> Gain fiscal net estimé : <strong>{eur(netGain)}</strong>.</>}
+                  {r.saving > 0 && (
+                    <> Ordre de grandeur du gain net : <strong>{eur(netGain)}</strong> (économie d’aujourd’hui moins impôt de demain, en euros actuels, pour une sortie en capital).</>
+                  )}
                 </p>
               </div>
               <div>
@@ -200,7 +195,7 @@ export default function Per() {
             <p className={s.method}>
               <strong>Méthode.</strong> Impôt calculé avec le {TAX_YEAR_LABEL} : tranches à 0, 11, 30, 41 et 45 %, plafonnement du quotient familial (1 807 € par demi-part, cas général) et décote.
               Un versement fait en 2026 réduit l’impôt sur les revenus 2026, payé en 2027 avec un barème que le projet de loi de finances 2027 prévoit de relever de 2,1 % : l’économie réelle peut varier de quelques euros.
-              Cas particuliers non pris en compte : parent isolé, demi-parts spécifiques, revenus exceptionnels, contribution sur les hauts revenus. Le revenu saisi est supposé déjà net de l’abattement de 10 %.
+              Cas particuliers non pris en compte : garde alternée, demi-parts pour invalidité ou ancien combattant, revenus exceptionnels, contribution sur les hauts revenus. À partir des salaires, la déduction forfaitaire de 10 % est appliquée à chacun (entre 509 € et 14 555 €).
               Règles vérifiées le {dateFr(TAX_VERIFIED_AT)} (loi de finances pour 2026). Aucune donnée saisie n’est enregistrée ni transmise. Outil pédagogique, pas un conseil en investissement.
             </p>
 
@@ -208,6 +203,7 @@ export default function Per() {
           </div>
         </div>
       </div>
+      <StickyResult targetId="resultat" label="Impôt économisé" value={eur(r.saving)} />
     </>
   )
 }

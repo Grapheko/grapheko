@@ -260,3 +260,9 @@ input[type=range]::-moz-range-thumb {
 
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* Case à cocher des formulaires de simulateurs */
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-sm); font-weight: 600; cursor: pointer; line-height: 1.45; }
+.check input { flex: none; width: 20px; height: 20px; margin-top: 1px; accent-color: var(--outremer); }
+p.hint, .check .hint { font-size: var(--fs-xs); color: var(--fg-faint); font-weight: 400; }
+p.hint strong { color: var(--fg-muted); }
