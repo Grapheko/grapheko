@@ -18,6 +18,12 @@ const TOOL_FOR = {
   'livret-a': { href: '/simulateurs/rendement-reel', label: 'Le Livret A face à l’inflation' },
   volatilite: { href: '/simulateurs/dca/bitcoin', label: 'Voir la volatilité du Bitcoin en DCA' },
   drawdown: { href: '/marches', label: 'Les pires baisses des grands marchés' },
+  'plan-epargne-retraite': { href: '/simulateurs/per', label: 'Calculer l’économie d’impôt d’un versement PER' },
+  tmi: { href: '/simulateurs/per', label: 'Voir ce que ta tranche change sur un versement PER' },
+  'flat-tax': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
+  'bareme-progressif': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
+  dividende: { href: '/simulateurs/flat-tax-ou-bareme', label: 'Calculer l’impôt sur tes dividendes' },
+  'prelevements-sociaux': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
 }
 
 export default function Terme({ term, related, articles }) {

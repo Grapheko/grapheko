@@ -19,6 +19,8 @@ Les chiffres des fiches et simulateurs sont recalculés automatiquement à parti
 - [Intérêts composés](${SITE}/simulateurs/interets-composes): capital futur avec versements mensuels
 - [Coût des frais](${SITE}/simulateurs/frais): écart en euros entre deux niveaux de frais annuels
 - [Rendement réel](${SITE}/simulateurs/rendement-reel): placement face à l’inflation
+- [Économie d’impôt PER](${SITE}/simulateurs/per): impôt économisé par un versement sur un plan d’épargne retraite, barème 2026, quotient familial et décote inclus, impôt à la sortie
+- [Flat tax ou barème](${SITE}/simulateurs/flat-tax-ou-bareme): PFU à 31,4 % ou option pour le barème sur dividendes, intérêts et plus-values, avec abattement de 40 % et CSG déductible
 
 ## Marchés (performances en euros, pire baisse historique, FAQ chiffrée)
 ${ASSETS.map((a) => `- [${a.name}](${SITE}/marches/${a.slug}): ${a.intro.split('. ')[0]}.`).join('\n')}

@@ -28,6 +28,28 @@ export default function ToolVisual({ kind }) {
       </svg>
     )
   }
+  if (kind === 'per') {
+    // Un versement (barre pleine) dont une part revient en impôt économisé
+    return (
+      <svg viewBox="0 0 240 120" aria-hidden="true">
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i}>
+            <rect x={14 + i * 58} y={118 - (34 + i * 20)} width="34" height={34 + i * 20} rx="5" fill={stroke} opacity=".14" />
+            <rect x={14 + i * 58} y={118 - (34 + i * 20) * 0.3} width="34" height={(34 + i * 20) * 0.3} rx="5" fill={accent} />
+          </g>
+        ))}
+      </svg>
+    )
+  }
+  if (kind === 'flat') {
+    return (
+      <svg viewBox="0 0 240 120" aria-hidden="true">
+        <path d="M6 70 L234 70" stroke={stroke} strokeWidth="3" strokeDasharray="6 7" fill="none" opacity=".55" />
+        <path d="M6 112 L70 98 L150 62 L234 22" stroke={accent} strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="132" cy="70" r="6" fill={accent} />
+      </svg>
+    )
+  }
   return (
     <svg viewBox="0 0 240 120" aria-hidden="true">
       {[0, 1, 2, 3, 4, 5].map((i) => (
