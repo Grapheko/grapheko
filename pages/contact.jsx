@@ -8,6 +8,7 @@ const SUBJECTS = ['Partenariat', 'Presse', 'Question sur un contenu', 'Signaler 
 const ERRORS = {
   email: 'Cette adresse e-mail ne semble pas valide. Vérifie le format (exemple : prenom@domaine.fr).',
   message: 'Le message est trop court : écris au moins une phrase.',
+  rate: 'Plusieurs messages viennent d’être envoyés depuis ta connexion. Réessaie dans quelques minutes.',
   default: 'Le message n’a pas pu être envoyé. Écris-nous directement à contact@grapheko.fr.',
 }
 

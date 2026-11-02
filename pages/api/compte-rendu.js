@@ -4,11 +4,12 @@
 // - Rien n'est enregistré par Grapheko.
 // Nécessite la variable d'environnement ANTHROPIC_API_KEY (Vercel).
 
+import { rateLimited } from '../../lib/rateLimit'
+
 export const config = { api: { bodyParser: { sizeLimit: '8kb' } } }
 
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5'
 const LIMIT = { max: 5, windowMs: 10 * 60 * 1000 } // 5 comptes rendus par IP toutes les 10 minutes
-const hits = new Map()
 
 const eur = (v) => `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(v).replace(/ /g, ' ')} €`
 const pct = (v, d = 0) => `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: d }).format(v)} %`
@@ -87,15 +88,6 @@ Règles impératives :
 - Ne cite aucun établissement, aucune marque, aucun produit commercial.
 - Format : texte brut de 170 à 250 mots, exactement trois sections, avec ces titres sur leur propre ligne : « ## Ta situation », « ## Ce que montre le calcul », « ## Points à vérifier ». La dernière section contient 2 à 4 puces commençant par « - ». Pas de gras, pas de tableau, pas d'emoji, pas de formule de politesse.`
 
-function limited(ip) {
-  const now = Date.now()
-  const list = (hits.get(ip) || []).filter((t) => now - t < LIMIT.windowMs)
-  if (list.length >= LIMIT.max) { hits.set(ip, list); return true }
-  list.push(now); hits.set(ip, list)
-  if (hits.size > 5000) hits.clear()
-  return false
-}
-
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store')
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return res.status(405).json({ error: 'Méthode non autorisée' }) }
@@ -111,8 +103,7 @@ export default async function handler(req, res) {
   const clean = validate(tool, data)
   if (!clean) return res.status(400).json({ error: 'Données de simulation invalides' })
 
-  const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim()
-  if (limited(ip)) return res.status(429).json({ error: 'Trop de demandes. Réessaie dans quelques minutes.' })
+  if (rateLimited(req, 'compte-rendu', LIMIT)) return res.status(429).json({ error: 'Trop de demandes. Réessaie dans quelques minutes.' })
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {

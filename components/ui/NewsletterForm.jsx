@@ -8,6 +8,8 @@ export default function NewsletterForm({ location = 'inline', compact = false })
   const [prenom, setPrenom] = useState('')
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
+  const [pending, setPending] = useState(false)
+  const [website, setWebsite] = useState('')
 
   const submit = async (e) => {
     e.preventDefault()
@@ -21,10 +23,11 @@ export default function NewsletterForm({ location = 'inline', compact = false })
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, prenom, source: location }),
+        body: JSON.stringify({ email, prenom, source: location, website }),
       })
       const data = await res.json()
       if (!data.success) throw new Error()
+      setPending(Boolean(data.pending))
       setStatus('done')
       trackNewsletterSignup(location)
     } catch {
@@ -36,8 +39,8 @@ export default function NewsletterForm({ location = 'inline', compact = false })
   if (status === 'done') {
     return (
       <div className={s.done} role="status">
-        <p className={s.doneTitle}>Inscription confirmée{prenom ? `, ${prenom}` : ''}.</p>
-        <p className="muted">La prochaine édition arrive dimanche matin dans ta boîte mail.</p>
+        <p className={s.doneTitle}>{pending ? `Plus qu’une étape${prenom ? `, ${prenom}` : ''}.` : `Inscription confirmée${prenom ? `, ${prenom}` : ''}.`}</p>
+        <p className="muted">{pending ? 'Clique sur le lien de confirmation que tu viens de recevoir par e-mail (pense à regarder dans les indésirables).' : 'La prochaine édition arrive dimanche matin dans ta boîte mail.'}</p>
       </div>
     )
   }
@@ -47,9 +50,14 @@ export default function NewsletterForm({ location = 'inline', compact = false })
       {!compact && (
         <div className="field">
           <label htmlFor={`prenom-${location}`}>Prénom <span className="faint">(facultatif)</span></label>
-          <input id={`prenom-${location}`} className="input" value={prenom} onChange={(e) => setPrenom(e.target.value)} autoComplete="given-name" />
+          <input id={`prenom-${location}`} className="input" maxLength={40} value={prenom} onChange={(e) => setPrenom(e.target.value)} autoComplete="given-name" />
         </div>
       )}
+      {/* Champ piège pour les robots : invisible et ignoré par les humains */}
+      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
+        <label htmlFor={`website-${location}`}>Site web</label>
+        <input id={`website-${location}`} tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+      </div>
       <div className="field">
         <label htmlFor={`email-${location}`}>Adresse e-mail</label>
         <div className={s.row}>

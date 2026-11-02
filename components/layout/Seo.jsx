@@ -25,7 +25,7 @@ export default function Seo({ title, description, jsonLd, noindex = false, image
       <meta name="twitter:card" content="summary_large_image" />
       {noindex && <meta name="robots" content="noindex" />}
       {jsonLd && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
       )}
     </Head>
   )

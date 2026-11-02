@@ -1,6 +1,8 @@
 // Envoi du formulaire de contact par e-mail via l'API transactionnelle Brevo.
 // Variables Vercel requises : BREVO_API_KEY, CONTACT_SENDER (adresse expéditrice
 // validée dans Brevo), CONTACT_TO (destinataire, par défaut contact@grapheko.fr).
+import { rateLimited } from '../../lib/rateLimit'
+
 const SUBJECTS = ['Partenariat', 'Presse', 'Question sur un contenu', 'Signaler une erreur', 'Autre']
 
 export default async function handler(req, res) {
@@ -10,7 +12,8 @@ export default async function handler(req, res) {
   // Champ piège anti-robot : rempli = robot, on fait comme si tout allait bien
   if (website) return res.status(200).json({ success: true })
 
-  if (!email || !/^\S+@\S+\.\S+$/.test(email)) return res.status(400).json({ error: 'email' })
+  if (rateLimited(req, 'contact', { max: 3, windowMs: 10 * 60 * 1000 })) return res.status(429).json({ error: 'rate' })
+  if (!email || String(email).length > 254 || !/^[^\s@<>()]+@[^\s@<>()]+\.[^\s@<>()]{2,}$/.test(String(email).trim())) return res.status(400).json({ error: 'email' })
   if (!message || String(message).trim().length < 10) return res.status(400).json({ error: 'message' })
   if (!process.env.BREVO_API_KEY || !process.env.CONTACT_SENDER) return res.status(503).json({ error: 'config' })
 
@@ -24,7 +27,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         sender: { email: process.env.CONTACT_SENDER, name: 'Formulaire Grapheko' },
         to: [{ email: process.env.CONTACT_TO || 'contact@grapheko.fr' }],
-        replyTo: { email: String(email).trim(), name: String(name || '').slice(0, 80) || undefined },
+        replyTo: { email: String(email).trim(), name: String(name || '').replace(/[<>"\r\n]/g, '').slice(0, 80) || undefined },
         subject: `[Grapheko] ${safeSubject}`,
         htmlContent: `<p><strong>De :</strong> ${escape(name || '')} &lt;${escape(email)}&gt;</p><p><strong>Sujet :</strong> ${safeSubject}</p><p>${escape(message).slice(0, 5000).replace(/\n/g, '<br>')}</p>`,
       }),
