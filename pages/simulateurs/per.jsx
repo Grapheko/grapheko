@@ -7,6 +7,7 @@ import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
+import BaremeTable from '../../components/ui/BaremeTable'
 import { perSaving, perCurve, perCeilingEstimate, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
 import { eur, num } from '../../lib/format'
 import { dateFr } from '../../lib/content/articles'
@@ -169,6 +170,8 @@ export default function Per() {
                 La courbe s’aplatit quand le versement dépasse ton plafond ({eur(ceiling)}), et ralentit quand il te fait descendre d’une tranche.
               </p>
             </div>
+
+            <BaremeTable tmi={r.tmi} parts={parts} note="Un versement fait en 2026 réduira l’impôt 2027 sur les revenus 2026 : son barème, relevé de 2,1 % dans le projet de loi de finances 2027, n’est pas encore voté." />
 
             <div className={s.reading}>
               <div>

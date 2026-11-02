@@ -7,6 +7,7 @@ import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
+import BaremeTable from '../../components/ui/BaremeTable'
 import { flatTaxVsScale, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
 import { eur, num } from '../../lib/format'
 import { dateFr } from '../../lib/content/articles'
@@ -169,6 +170,8 @@ export default function FlatTaxOuBareme() {
                 </p>
               </div>
             )}
+
+            <BaremeTable tmi={r.tmi} parts={parts} note="Les revenus de placements perçus en 2026 seront imposés en 2027 avec un barème relevé de 2,1 % dans le projet de loi de finances 2027, pas encore voté." />
 
             <div className={s.reading}>
               <div>
