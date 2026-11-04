@@ -35,6 +35,7 @@ Pas d’outil de volume ici : la liste est construite sur l’intention de reche
 | `/blog/flat-tax-2026-31-4` | « flat tax 2026 », « pfu 31,4 », « hausse csg 2026 placement » | Sujet d’actualité, exemples chiffrés |
 | `/blog/livret-a-2026-combien-rapporte` | « livret a 2026 combien rapporte », « taux livret a novembre 2026 » | Requête récurrente, calcul complet |
 | `/blog/acheter-bitcoin-france-2026` | « acheter bitcoin france », « fiscalité crypto 305 euros », « 3916 bis crypto » | Synthèse réglementaire à jour |
+| `/blog/per-combien-verser-avant-31-decembre` | « combien verser per avant 31 décembre », « plafond per 2026 », « plafond 2023 perdu » | Méthode chiffrée, sources officielles, simulateur relié |
 | `/blog/dca-investir-chaque-mois` | « dca c’est quoi », « dca ou investir en une fois » | Réponse nuancée + outil |
 | `/glossaire/<terme>` | « drawdown définition », « mvrv », « ter etf définition » | Longue traîne, définitions courtes |
 

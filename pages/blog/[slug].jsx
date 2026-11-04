@@ -8,14 +8,50 @@ import { faqJsonLd } from '../../lib/faq'
 import { ARTICLES, getArticle, CAT_LABEL, dateFr } from '../../lib/content/articles'
 import { getTerm } from '../../lib/content/glossary'
 import { useScrollFx, gsap } from '../../lib/motion'
-import { trackArticleClick, trackClick } from '../../lib/gtm'
+import { trackArticleClick, trackClick, trackOutboundClick } from '../../lib/gtm'
 import s from '../../styles/Blog.module.css'
 
-function Block({ b }) {
+function Block({ b, slug }) {
   if (b.t === 'h2') return <h2>{b.text}</h2>
   if (b.t === 'h3') return <h3>{b.text}</h3>
   if (b.t === 'quote') return <blockquote>{b.text}</blockquote>
   if (b.t === 'ul') return <ul>{b.items.map((i) => <li key={i.slice(0, 30)}>{i}</li>)}</ul>
+  if (b.t === 'table') {
+    return (
+      <figure className={s.tableBlock}>
+        <figcaption className={s.tableCaption}>{b.caption}</figcaption>
+        <div className={s.tableScroll} tabIndex={0} role="region" aria-label={b.caption}>
+          <table className={s.table}>
+            <thead><tr>{b.head.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead>
+            <tbody>
+              {b.rows.map((row) => (
+                <tr key={row[0]}>{row.map((c, i) => (i === 0 ? <th key={i} scope="row">{c}</th> : <td key={i}>{c}</td>))}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {b.note && <p className={s.tableNote}>{b.note}</p>}
+      </figure>
+    )
+  }
+  if (b.t === 'actions') {
+    return (
+      <p className={s.actions}>
+        {b.items.map((a) => (
+          <Link key={a.href} href={a.href} className="btn" onClick={() => trackClick('lien_article', 'article', slug, a.href)}>{a.label}</Link>
+        ))}
+      </p>
+    )
+  }
+  if (b.t === 'sources') {
+    return (
+      <ul className={s.sources}>
+        {b.items.map((a) => (
+          <li key={a.href}><a href={a.href} target="_blank" rel="noopener noreferrer" onClick={() => trackOutboundClick(a.href, a.label)}>{a.label}</a></li>
+        ))}
+      </ul>
+    )
+  }
   return <p>{b.text}</p>
 }
 
@@ -59,7 +95,7 @@ export default function Article({ article, related, terms }) {
       <div className={`wrap ${s.articleGrid}`}>
         <article className="prose" data-body>
           <p className={s.intro}>{article.intro}</p>
-          {article.blocks.map((b, i) => <Block key={i} b={b} />)}
+          {article.blocks.map((b, i) => <Block key={i} b={b} slug={article.slug} />)}
           <Faq items={article.faq} />
           <p className={s.disclaimer}>
             Cet article a une vocation pédagogique et ne constitue pas un conseil en investissement personnalisé.

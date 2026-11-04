@@ -114,6 +114,7 @@ export default function Calendrier({ events, builtOn }) {
                     </p>
                     <h3 className={s.title}>{e.title}</h3>
                     <p className={s.note}>{e.note}</p>
+                    {e.link && <p className={s.note}><Link href={e.link.href} onClick={() => track('lien_article', e.id)}>{e.link.label}</Link></p>}
                     <p className={s.source}>
                       Source : <a href={e.source.url} target="_blank" rel="noopener noreferrer">{e.source.label}</a>
                     </p>
