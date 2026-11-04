@@ -20,7 +20,7 @@ GRAPHEKO_DEMO_DATA=1 npm run dev    # données fictives signalées à l'écran, 
 | `CONTACT_TO` | Destinataire des messages (défaut : contact@grapheko.fr) | Non |
 | `CRON_SECRET` | Protège les tâches planifiées `/api/cron/*` | Oui |
 | `NEWSLETTER_TEST_EMAIL` | Destinataire des tests de newsletter et, par défaut, des alertes | Non |
-| `ALERT_EMAIL` | Destinataire des alertes du contrôle quotidien, s'il diffère | Non |
+| `ALERT_EMAIL` | Destinataires des alertes du contrôle quotidien, séparés par des virgules | Non |
 
 ## Structure
 
