@@ -15,10 +15,23 @@ export default function ToolsRail() {
     const mm = gsap.matchMedia()
     mm.add('(min-width: 980px)', () => {
       const track = root.querySelector('[data-track]')
-      const distance = () => track.scrollWidth - track.clientWidth
-      gsap.to(track, {
+      // La dernière carte s'arrête à une marge du bord, comme la première
+      const distance = () => track.scrollWidth - track.clientWidth + parseFloat(getComputedStyle(track).paddingRight)
+      const cards = [...track.children]
+      const bar = root.querySelector('[data-rail-bar]')
+      const count = root.querySelector('[data-rail-count]')
+      // La jauge suit le défilement lissé, donc ce qui est réellement à l'écran
+      let tween = null
+      const updateGauge = () => {
+        if (!tween) return // ScrollTrigger peut rafraîchir pendant sa création
+        bar.style.transform = `scaleX(${tween.progress()})`
+        const seen = cards.filter((c) => c.getBoundingClientRect().right <= window.innerWidth + 1).length
+        count.textContent = `${Math.max(1, seen)} / ${cards.length}`
+      }
+      tween = gsap.to(track, {
         x: () => -distance(),
         ease: 'none',
+        onUpdate: updateGauge,
         scrollTrigger: {
           trigger: root,
           start: 'top top',
@@ -26,8 +39,10 @@ export default function ToolsRail() {
           pin: true,
           scrub: 0.5,
           invalidateOnRefresh: true,
+          onRefresh: updateGauge,
         },
       })
+      updateGauge()
       root.querySelectorAll('[data-tool-visual]').forEach((v) => {
         gsap.from(v, {
           scale: 0.86, rotate: -3, ease: 'none',
@@ -42,7 +57,7 @@ export default function ToolsRail() {
     <section ref={ref} className={s.rail} aria-labelledby="tools-title">
       <div className={s.inner}>
         <div className={`wrap ${s.head}`}>
-          <h2 id="tools-title" data-reveal-lines>Quatre questions, quatre simulateurs.</h2>
+          <h2 id="tools-title" data-reveal-lines>Six questions, six simulateurs.</h2>
           <Link href="/simulateurs" className="link-arrow">Tous les simulateurs</Link>
         </div>
         <div className={s.track} data-track>
@@ -61,6 +76,13 @@ export default function ToolsRail() {
               <span className={s.go}>Ouvrir le simulateur</span>
             </Link>
           ))}
+        </div>
+        <div className={`wrap ${s.gauge}`} aria-hidden="true">
+          <p className={s.gaugeHead}>
+            <span>Fais défiler pour tous les voir</span>
+            <strong data-rail-count className="num" />
+          </p>
+          <span className={s.gaugeTrack}><span data-rail-bar className={s.gaugeBar} /></span>
         </div>
       </div>
     </section>
