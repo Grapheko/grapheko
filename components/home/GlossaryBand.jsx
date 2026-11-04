@@ -11,11 +11,15 @@ export default function GlossaryBand() {
   const rows = [TERMS.slice(0, half), TERMS.slice(half)]
 
   useScrollFx(ref, (root) => {
+    // Distance en pixels, et non en % de la rangée : la vitesse ne change pas
+    // quand le glossaire s'allonge. La vitesse est exprimée en pixels parcourus
+    // par pixel de scroll.
+    const travel = () => (window.innerWidth < 860 ? 2.5 : 4) * (root.offsetHeight + window.innerHeight)
     root.querySelectorAll('[data-row]').forEach((row, i) => {
-      gsap.fromTo(row, { xPercent: i ? -22 : 0 }, {
-        xPercent: i ? 0 : -22,
+      gsap.fromTo(row, { x: () => (i ? -travel() : 0) }, {
+        x: () => (i ? 0 : -travel()),
         ease: 'none',
-        scrollTrigger: { trigger: root, start: 'top bottom', end: 'bottom top', scrub: 0.4 },
+        scrollTrigger: { trigger: root, start: 'top bottom', end: 'bottom top', scrub: 0.4, invalidateOnRefresh: true },
       })
     })
   }, [])
