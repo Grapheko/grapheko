@@ -47,7 +47,7 @@ export default function Home({ msci, markets }) {
 
       <GlossaryBand />
 
-      <section className="section" aria-labelledby="learn-title">
+      <section className={`section ${s.learnSection}`} aria-labelledby="learn-title">
         <div className={`wrap ${s.learn}`}>
           <Link href="/quiz/profil-investisseur" className={s.quiz} onClick={() => trackCTAClick('quiz', 'home')}>
             <h2 id="learn-title" className={s.quizTitle}>Quel investisseur es-tu ?</h2>

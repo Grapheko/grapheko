@@ -2,6 +2,8 @@
 .sectionHead { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 64px); }
 .markets { background: var(--brume-2); }
 
+/* Même fond que le glossaire juste au-dessus : son padding bas suffit à séparer */
+section.learnSection { padding-top: 0; }
 .learn { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 3vw, 40px); align-items: stretch; }
 .quiz {
   display: flex; flex-direction: column; gap: 18px;
