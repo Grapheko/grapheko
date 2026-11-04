@@ -313,7 +313,7 @@ export default function QuizRunner({ quiz, terms = {} }) {
         <h2 id="autres-quiz" className={s.reviewTitle}>Les autres quiz</h2>
         <div className={s.otherGrid}>
           {others.map((o) => (
-            <Link key={o.slug} href={`/quiz/${o.slug}`} className={s.otherCard} style={{ '--quiz-tone': o.tone }}>
+            <Link key={o.slug} href={`/quiz/${o.slug}`} className={s.otherCard} style={{ '--quiz-tone': o.tone, '--quiz-card': o.cardColor }}>
               <span className={s.otherMeta}>{o.count || o.questions?.length} questions · {o.minutes} min</span>
               <span className={s.otherTitle}>{o.title}</span>
               <span className={s.otherText}>{o.teaser}</span>

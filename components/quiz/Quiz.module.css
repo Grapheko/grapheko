@@ -141,7 +141,7 @@
 .otherCard {
   display: grid; gap: 10px; align-content: start; padding: clamp(22px, 2.6vw, 32px); border-radius: var(--r-panel);
   text-decoration: none; color: var(--encre); min-height: 220px;
-  background: color-mix(in srgb, var(--quiz-tone, var(--outremer)) 55%, var(--blanc));
+  background: var(--quiz-card, color-mix(in srgb, var(--quiz-tone, var(--outremer)) 55%, var(--blanc)));
   transition: transform .35s var(--ease);
 }
 .otherCard:hover { transform: translateY(-4px); }
