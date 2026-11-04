@@ -1,7 +1,8 @@
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
-.card { background: var(--panel); border-radius: var(--r-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 14px; align-content: start; }
-.status { justify-self: start; font-size: var(--fs-xs); font-weight: 600; padding: 4px 12px; border-radius: var(--r-pill); background: var(--brume-2); color: var(--encre-2); }
+.card { background: var(--panel); border-radius: var(--r-panel); padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 14px; }
+.status { align-self: flex-start; font-size: var(--fs-xs); font-weight: 600; padding: 4px 12px; border-radius: var(--r-pill); background: var(--brume-2); color: var(--encre-2); }
 .title { font-size: var(--fs-xl); }
+.cardCta { margin-top: auto; align-self: flex-start; }
 .criteria { list-style: none; display: grid; gap: 0; }
 .criteria li { padding: 10px 0; border-top: 1px solid var(--line); font-size: var(--fs-sm); color: var(--fg-muted); }
 .rules { margin-top: clamp(64px, 8vw, 120px); }

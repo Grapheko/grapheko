@@ -48,7 +48,7 @@ export default function Comparatifs() {
               <p className={`${s.status} ${c.href ? s.statusLive : ''}`}>{c.href ? 'Disponible' : 'En préparation'}</p>
               <h2 className={s.title}>{c.href ? <Link href={c.href}>{c.title}</Link> : c.title}</h2>
               <ul className={s.criteria}>{c.criteria.map((k) => <li key={k}>{k}</li>)}</ul>
-              {c.href && <Link href={c.href} className="btn btn--plein" style={{ justifySelf: 'start' }}>Voir le comparatif</Link>}
+              {c.href && <Link href={c.href} className={`btn btn--plein ${s.cardCta}`}>Voir le comparatif</Link>}
             </section>
           ))}
         </div>
