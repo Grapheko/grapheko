@@ -88,7 +88,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const isActive = (href) => router.pathname.startsWith(href.split('/').slice(0, 2).join('/'))
+  const isActive = (href) => (href === '/' ? router.pathname === '/' : router.pathname.startsWith(href.split('/').slice(0, 2).join('/')))
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function Header() {
       <header className={`${s.header} ${hidden && !open ? s.hidden : ''} ${scrolled ? s.scrolled : ''}`}>
         <Ticker />
         <div className={s.bar}>
-          <Link href="/" className={s.logo} aria-label="Grapheko, accueil">
+          <Link href="/" className={s.logo} aria-label="Grapheko, accueil" onClick={() => setOpen(false)}>
             <Logo size={24} />
           </Link>
           <nav className={s.nav} aria-label="Navigation principale">
@@ -120,7 +120,7 @@ export default function Header() {
       <div id="menu-mobile" className={`${s.mobile} ${open ? s.mobileOpen : ''}`} aria-hidden={!open}>
         <nav aria-label="Menu mobile">
           {[{ href: '/', label: 'Accueil' }, ...NAV, { href: '/newsletter', label: 'Newsletter' }].map((l, i) => (
-            <Link key={l.href} href={l.href} tabIndex={open ? 0 : -1} className={s.mobileLink} style={{ transitionDelay: open ? `${80 + i * 45}ms` : '0ms' }}>
+            <Link key={l.href} href={l.href} tabIndex={open ? 0 : -1} className={`${s.mobileLink} ${isActive(l.href) ? s.mobileActive : ''}`} aria-current={isActive(l.href) ? 'page' : undefined} onClick={() => setOpen(false)} style={{ transitionDelay: open ? `${80 + i * 45}ms` : '0ms' }}>
               {l.label}
             </Link>
           ))}

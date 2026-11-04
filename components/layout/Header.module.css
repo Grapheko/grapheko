@@ -87,6 +87,12 @@
   transition: opacity .4s var(--ease), transform .5s var(--ease);
 }
 .mobileOpen .mobileLink { opacity: 1; transform: none; }
+.mobileActive {
+  align-self: flex-start;
+  margin-left: -0.3em; padding: 0 0.3em 0.05em;
+  border-radius: var(--r-pill);
+  background: var(--encre); color: var(--brume);
+}
 
 @media (max-width: 1080px) {
   .nav, .cta { display: none; }
