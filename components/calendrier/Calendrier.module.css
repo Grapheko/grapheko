@@ -4,7 +4,8 @@
 .subTitle { font-size: var(--fs-xl); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 10px; max-width: 22ch; }
 .subText { font-size: var(--fs-sm); color: var(--fg-muted); line-height: 1.55; max-width: 58ch; }
 .subActions { position: relative; z-index: 1; display: grid; gap: 10px; justify-items: start; }
-.subLink { font-size: var(--fs-sm); color: var(--fg-muted); text-underline-offset: 3px; }
+.subLink { font-size: var(--fs-sm); color: var(--fg-muted); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color .2s, text-decoration-color .2s; }
+.subLink:hover, .subLink:focus-visible { color: var(--fg); text-decoration-color: var(--orange); text-decoration-thickness: 2px; }
 
 .next { margin: 28px 0 0; font-size: var(--fs-md); color: var(--fg-muted); }
 .next strong { color: var(--fg); }
