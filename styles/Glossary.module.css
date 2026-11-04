@@ -20,7 +20,7 @@
 .aside a:hover strong { color: var(--accent); }
 .aside strong { font-family: var(--display); letter-spacing: -0.01em; }
 .aside span { font-size: var(--fs-xs); color: var(--fg-faint); }
-.nl { margin-top: clamp(56px, 8vw, 112px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+.nl { margin-top: clamp(40px, 5vw, 72px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
 .nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
 @media (max-width: 900px) {
   .def, .nl { grid-template-columns: 1fr; }

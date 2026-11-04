@@ -48,7 +48,7 @@
   /* Espacement */
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1320px;
-  --section: clamp(88px, 12vw, 180px);
+  --section: clamp(56px, 6.5vw, 96px);
 
   /* Formes : la hiérarchie se lit dans les rayons */
   --r-panel: 28px;
@@ -133,8 +133,9 @@ p { text-wrap: pretty; }
 
 .prose { max-width: 66ch; }
 .prose p, .prose ul, .prose ol { margin-bottom: 1.2em; font-size: 1.125rem; line-height: 1.7; }
-.prose h2 { font-size: var(--fs-xl); margin: 1.8em 0 0.6em; }
-.prose h3 { font-size: var(--fs-lg); margin: 1.6em 0 0.5em; letter-spacing: -0.015em; }
+.prose h2 { font-size: var(--fs-xl); margin: 1.4em 0 0.6em; }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { font-size: var(--fs-lg); margin: 1.3em 0 0.5em; letter-spacing: -0.015em; }
 .prose ul, .prose ol { padding-left: 1.2em; }
 .prose li { margin-bottom: 0.4em; }
 .prose a { text-decoration-color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 2px; }
@@ -151,7 +152,7 @@ p { text-wrap: pretty; }
 /* ── Mise en page ──────────────────────────────────────────── */
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .section { padding: var(--section) 0; position: relative; }
-.page-top { padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(48px, 8vw, 120px)); }
+.page-top { padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(32px, 5vw, 64px)); }
 .stack > * + * { margin-top: var(--stack, 1rem); }
 .grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
 

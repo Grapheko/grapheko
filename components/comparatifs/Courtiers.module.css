@@ -22,7 +22,7 @@
 .simNote { font-size: var(--fs-xs); color: var(--fg-faint); max-width: 80ch; }
 
 /* ── Blocs ─────────────────────────────────────────────────── */
-.block { padding-top: clamp(56px, 8vw, 104px); }
+.block { padding-top: clamp(40px, 5vw, 72px); }
 .h2 { font-size: var(--fs-xl); letter-spacing: -0.03em; margin-bottom: 20px; }
 .small { font-size: var(--fs-xs); color: var(--fg-faint); margin-top: 12px; }
 
@@ -52,7 +52,7 @@
 .limits p { color: var(--fg-muted); font-size: var(--fs-sm); line-height: 1.55; }
 .limits a { color: var(--accent); }
 
-.method { margin-top: clamp(56px, 8vw, 104px); padding: clamp(22px, 3vw, 36px); border-radius: 22px; background: var(--brume-2); display: grid; gap: 12px; }
+.method { margin-top: clamp(40px, 5vw, 72px); padding: clamp(22px, 3vw, 36px); border-radius: 22px; background: var(--brume-2); display: grid; gap: 12px; }
 .method h2 { font-size: var(--fs-lg); }
 .method p { color: var(--fg-muted); font-size: var(--fs-sm); line-height: 1.6; max-width: 90ch; }
 .method a { color: var(--fg); }

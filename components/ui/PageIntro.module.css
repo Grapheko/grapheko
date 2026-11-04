@@ -1,6 +1,6 @@
 .intro {
-  padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(40px, 7vw, 96px)); padding-bottom: clamp(40px, 5.5vw, 72px);
-  margin-bottom: clamp(40px, 6vw, 72px);
+  padding-top: calc(var(--nav-h) + var(--ticker-h) + clamp(32px, 5vw, 64px)); padding-bottom: clamp(32px, 4vw, 56px);
+  margin-bottom: clamp(28px, 3.5vw, 48px);
   background: var(--jaune);
   /* étend le fond sur toute la largeur de l'écran */
   box-shadow: 0 0 0 100vmax var(--jaune); clip-path: inset(0 -100vmax);

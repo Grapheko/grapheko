@@ -40,9 +40,9 @@
 .sideTerms { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
 .sideTerms a { display: inline-flex; min-height: 34px; align-items: center; padding: 0 12px; border-radius: var(--r-pill); border: 1.5px solid var(--line-strong); text-decoration: none; font-size: var(--fs-sm); }
 .sideTerms a:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.nl { margin-top: clamp(56px, 8vw, 112px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+.nl { margin-top: clamp(40px, 5vw, 72px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
 .nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
-.relatedTitle { font-size: var(--fs-xl); margin: clamp(56px, 7vw, 96px) 0 8px; }
+.relatedTitle { font-size: var(--fs-xl); margin: clamp(40px, 4.5vw, 64px) 0 8px; }
 @media (max-width: 900px) {
   .articleGrid, .nl { grid-template-columns: 1fr; }
   .side { position: static; }

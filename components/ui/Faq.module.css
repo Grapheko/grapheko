@@ -1,4 +1,4 @@
-.faq { margin-top: clamp(56px, 7vw, 96px); }
+.faq { margin-top: clamp(40px, 4.5vw, 64px); }
 .title { font-size: var(--fs-xl); margin-bottom: 16px; }
 .list { border-top: 2px solid var(--encre); }
 .item { border-bottom: 1px solid var(--line); }

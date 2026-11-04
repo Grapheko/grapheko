@@ -5,14 +5,14 @@
 .cardCta { margin-top: auto; align-self: flex-start; }
 .criteria { list-style: none; display: grid; gap: 0; }
 .criteria li { padding: 10px 0; border-top: 1px solid var(--line); font-size: var(--fs-sm); color: var(--fg-muted); }
-.rules { margin-top: clamp(64px, 8vw, 120px); }
+.rules { margin-top: clamp(40px, 5vw, 72px); }
 .rules h2 { font-size: var(--fs-2xl); margin-bottom: 32px; }
 .ruleGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .ruleGrid > div { border-top: 2px solid var(--encre); padding-top: 16px; }
 .ruleGrid h3 { font-size: var(--fs-lg); margin-bottom: 8px; }
 .ruleGrid p { color: var(--fg-muted); font-size: var(--fs-sm); }
 .ruleGrid a { color: var(--accent); }
-.nl { margin-top: clamp(56px, 8vw, 112px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+.nl { margin-top: clamp(40px, 5vw, 72px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
 .nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
 @media (max-width: 900px) { .grid, .ruleGrid, .nl { grid-template-columns: 1fr; } }
 .live { outline: 2px solid var(--outremer); outline-offset: -2px; }
