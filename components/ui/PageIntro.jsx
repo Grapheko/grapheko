@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { fr } from '../../lib/format'
 import s from './PageIntro.module.css'
 
 // En-tête des pages intérieures : fil d'Ariane, titre, chapeau
@@ -11,14 +12,14 @@ export default function PageIntro({ crumbs = [], title, lede, children, wide = f
             <li><Link href="/">Accueil</Link></li>
             {crumbs.map((c, i) => (
               <li key={c.href || c.label}>
-                {c.href && i < crumbs.length - 1 ? <Link href={c.href}>{c.label}</Link> : <span aria-current="page">{c.label}</span>}
+                {c.href && i < crumbs.length - 1 ? <Link href={c.href}>{c.label}</Link> : <span aria-current="page">{fr(c.label)}</span>}
               </li>
             ))}
           </ol>
         </nav>
       )}
-      <h1 className={s.title} data-reveal-lines>{title}</h1>
-      {lede && <p className={s.lede}>{lede}</p>}
+      <h1 className={s.title} data-reveal-lines>{fr(title)}</h1>
+      {lede && <p className={s.lede}>{fr(lede)}</p>}
       {children}
     </header>
   )

@@ -1,3 +1,4 @@
+import { fr } from '../../lib/format'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro from '../../components/ui/PageIntro'
@@ -25,7 +26,7 @@ export default function Simulateurs() {
           {TOOLS.map((t, i) => (
             <Link key={t.slug} href={t.href} className={`${s.tool} ${i === 0 ? s.toolWide : ''}`} style={{ background: t.tone }} onClick={() => trackClick(t.slug, 'hub_simulateurs', 'simulateur')}>
               <span className={s.toolName}>{t.name}</span>
-              <h2 className={s.toolQ}>{t.title}</h2>
+              <h2 className={s.toolQ}>{fr(t.title)}</h2>
               <div className={s.toolVisual}><ToolVisual kind={t.visual} /></div>
               <p className={s.toolText}>{t.text}</p>
             </Link>

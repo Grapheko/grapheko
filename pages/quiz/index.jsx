@@ -1,3 +1,4 @@
+import { fr } from '../../lib/format'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
@@ -27,7 +28,7 @@ export default function QuizHub() {
               <Link href={`/quiz/${q.slug}`} className={s.card} style={{ '--quiz-tone': q.tone, '--quiz-card': q.cardColor }} onClick={() => trackClick(q.slug, 'quiz_hub', 'quiz')}>
                 <span className={s.num} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <span className={s.meta}>{q.type === 'profil' ? 'Profil' : 'Connaissances'} · {q.count || q.questions.length} questions · {q.minutes} min</span>
-                <span className={s.title}>{q.title}</span>
+                <span className={s.title}>{fr(q.title)}</span>
                 <span className={s.text}>{q.teaser}</span>
                 <span className={`btn btn--plein ${s.cta}`}>Commencer</span>
               </Link>

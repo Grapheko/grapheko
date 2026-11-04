@@ -9,13 +9,14 @@ import { ARTICLES, getArticle, CAT_LABEL, dateFr } from '../../lib/content/artic
 import { getTerm } from '../../lib/content/glossary'
 import { useScrollFx, gsap } from '../../lib/motion'
 import { trackArticleClick, trackClick, trackOutboundClick } from '../../lib/gtm'
+import { fr } from '../../lib/format'
 import s from '../../styles/Blog.module.css'
 
 function Block({ b, slug }) {
-  if (b.t === 'h2') return <h2>{b.text}</h2>
-  if (b.t === 'h3') return <h3>{b.text}</h3>
-  if (b.t === 'quote') return <blockquote>{b.text}</blockquote>
-  if (b.t === 'ul') return <ul>{b.items.map((i) => <li key={i.slice(0, 30)}>{i}</li>)}</ul>
+  if (b.t === 'h2') return <h2>{fr(b.text)}</h2>
+  if (b.t === 'h3') return <h3>{fr(b.text)}</h3>
+  if (b.t === 'quote') return <blockquote>{fr(b.text)}</blockquote>
+  if (b.t === 'ul') return <ul>{b.items.map((i) => <li key={i.slice(0, 30)}>{fr(i)}</li>)}</ul>
   if (b.t === 'table') {
     return (
       <figure className={s.tableBlock}>
@@ -30,7 +31,7 @@ function Block({ b, slug }) {
             </tbody>
           </table>
         </div>
-        {b.note && <p className={s.tableNote}>{b.note}</p>}
+        {b.note && <p className={s.tableNote}>{fr(b.note)}</p>}
       </figure>
     )
   }
@@ -52,7 +53,7 @@ function Block({ b, slug }) {
       </ul>
     )
   }
-  return <p>{b.text}</p>
+  return <p>{fr(b.text)}</p>
 }
 
 export default function Article({ article, related, terms }) {
@@ -94,7 +95,7 @@ export default function Article({ article, related, terms }) {
 
       <div className={`wrap ${s.articleGrid}`}>
         <article className="prose" data-body>
-          <p className={s.intro}>{article.intro}</p>
+          <p className={s.intro}>{fr(article.intro)}</p>
           {article.blocks.map((b, i) => <Block key={i} b={b} slug={article.slug} />)}
           <Faq items={article.faq} />
           <p className={s.disclaimer}>
@@ -129,7 +130,7 @@ export default function Article({ article, related, terms }) {
             <li key={a.slug}>
               <Link href={`/blog/${a.slug}`} className={s.item} onClick={() => trackArticleClick(a.title, a.cat)}>
                 <span className={`tag tag--${a.cat}`}>{CAT_LABEL[a.cat]}</span>
-                <span className={s.itemTitle}>{a.title}</span>
+                <span className={s.itemTitle}>{fr(a.title)}</span>
                 <span className={s.itemText}>{a.description}</span>
                 <span className={s.meta}>{a.readTime} min</span>
               </Link>

@@ -17,4 +17,4 @@
 .title { font-family: var(--display); font-weight: 700; font-size: var(--fs-xl); line-height: 1; letter-spacing: -0.035em; max-width: 14ch; }
 .text { color: var(--encre-2); line-height: 1.5; max-width: 34ch; }
 .cta { margin-top: auto; align-self: flex-start; }
-@media (max-width: 980px) { .grid { grid-template-columns: 1fr; } .card { min-height: 300px; } }
+@media (max-width: 980px) { .grid { grid-template-columns: minmax(0, 1fr); } .card { min-height: 300px; } }

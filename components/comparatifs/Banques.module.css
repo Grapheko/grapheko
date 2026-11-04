@@ -41,9 +41,10 @@
 .facts { display: grid; gap: 0; }
 .facts > div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
 .facts dt { font-size: var(--fs-xs); font-weight: 600; color: var(--fg-muted); padding-top: 2px; }
-.facts dd { font-size: var(--fs-sm); line-height: 1.45; }
+.facts dd { font-size: var(--fs-sm); line-height: 1.45; overflow-wrap: break-word; min-width: 0; }
+@media (max-width: 380px) { .facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
 .extra { font-size: var(--fs-sm); color: var(--fg-muted); line-height: 1.5; padding: 10px 12px; border-radius: 12px; background: var(--brume); }
 .empty { grid-column: 1 / -1; padding: 32px; border-radius: 22px; background: var(--panel); color: var(--fg-muted); }
 
-@media (max-width: 860px) { .featured { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .featured { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .card { animation: none; } }

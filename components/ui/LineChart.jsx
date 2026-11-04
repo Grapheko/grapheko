@@ -23,6 +23,7 @@ export default function LineChart({
   const wrapRef = useRef(null)
   const [hover, setHover] = useState(null)
   const [drawn, setDrawn] = useState(false)
+  const [plotW, setPlotW] = useState(null)
 
   const n = labels.length
   const { min, max } = useMemo(() => {
@@ -62,9 +63,19 @@ export default function LineChart({
 
   const xTickIdx = useMemo(() => {
     if (n < 2) return [0]
-    const count = Math.min(ticksX, n)
+    // Une graduation tous les 110 px au plus, pour que les dates ne se chevauchent pas
+    const fit = plotW ? Math.max(2, Math.floor(plotW / 110) + 1) : ticksX
+    const count = Math.min(ticksX, n, fit)
     return Array.from({ length: count }, (_, i) => Math.round((i / (count - 1)) * (n - 1)))
-  }, [n, ticksX])
+  }, [n, ticksX, plotW])
+
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return undefined
+    const ro = new ResizeObserver(([entry]) => setPlotW(entry.contentRect.width))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   // Animation de tracé à chaque nouvelle donnée
   useEffect(() => {

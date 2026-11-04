@@ -4,6 +4,7 @@ import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
 import NewsletterForm from '../../components/ui/NewsletterForm'
 import { TERMS, getTerm, CATEGORIES } from '../../lib/content/glossary'
 import { ARTICLES } from '../../lib/content/articles'
+import { fr } from '../../lib/format'
 import s from '../../styles/Glossary.module.css'
 
 // Simulateurs à proposer selon le terme
@@ -52,8 +53,8 @@ export default function Terme({ term, related, articles }) {
       <div className="wrap" style={{ paddingBottom: 'var(--section)' }}>
         <div className={s.def}>
           <article>
-            <p className={s.short}>{term.short}</p>
-            <div className="prose">{term.body.map((p) => <p key={p.slice(0, 24)}>{p}</p>)}</div>
+            <p className={s.short}>{fr(term.short)}</p>
+            <div className="prose">{term.body.map((p) => <p key={p.slice(0, 24)}>{fr(p)}</p>)}</div>
             {tool && <Link href={tool.href} className="btn btn--plein" style={{ marginTop: 8 }}>{tool.label}</Link>}
           </article>
           <aside className={s.aside}>
@@ -71,7 +72,7 @@ export default function Terme({ term, related, articles }) {
               <>
                 <h2>Pour aller plus loin</h2>
                 <ul>
-                  {articles.map((a) => <li key={a.slug}><Link href={`/blog/${a.slug}`}><strong>{a.title}</strong></Link></li>)}
+                  {articles.map((a) => <li key={a.slug}><Link href={`/blog/${a.slug}`}><strong>{fr(a.title)}</strong></Link></li>)}
                 </ul>
               </>
             )}

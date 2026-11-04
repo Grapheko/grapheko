@@ -1,3 +1,4 @@
+import { fr } from '../../lib/format'
 import { useRef } from 'react'
 import Link from 'next/link'
 import { useScrollFx, gsap } from '../../lib/motion'
@@ -70,7 +71,7 @@ export default function ToolsRail() {
               onClick={() => trackClick(t.slug, 'home_outils', 'simulateur')}
             >
               <span className={s.name}>{t.name}</span>
-              <h3 className={s.q}>{t.title}</h3>
+              <h3 className={s.q}>{fr(t.title)}</h3>
               <div className={s.visual} data-tool-visual><ToolVisual kind={t.visual} /></div>
               <p className={s.text}>{t.text}</p>
               <span className={s.go}>Ouvrir le simulateur</span>

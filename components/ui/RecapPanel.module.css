@@ -22,6 +22,6 @@
 .stale { opacity: .6; }
 .staleNote { font-weight: 600; color: var(--encre) !important; }
 @media (max-width: 760px) {
-  .head { grid-template-columns: 1fr; }
+  .head { grid-template-columns: minmax(0, 1fr); }
   .buttons button { white-space: normal; }
 }

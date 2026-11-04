@@ -10,6 +10,7 @@ import { ARTICLES, CAT_LABEL, dateFr } from '../lib/content/articles'
 import { getMonthlyHistory } from '../lib/history'
 import { getMarketsRows, REVALIDATE } from '../lib/marketData'
 import { trackArticleClick, trackCTAClick } from '../lib/gtm'
+import { fr } from '../lib/format'
 import s from '../styles/Home.module.css'
 
 export default function Home({ msci, markets }) {
@@ -61,7 +62,7 @@ export default function Home({ msci, markets }) {
                 <li key={a.slug}>
                   <Link href={`/blog/${a.slug}`} className={s.article} onClick={() => trackArticleClick(a.title, a.cat)}>
                     <span className={`tag tag--${a.cat}`}>{CAT_LABEL[a.cat]}</span>
-                    <span className={s.articleTitle}>{a.title}</span>
+                    <span className={s.articleTitle}>{fr(a.title)}</span>
                     <span className={s.articleMeta}>Mis à jour le {dateFr(a.updated)}</span>
                   </Link>
                 </li>

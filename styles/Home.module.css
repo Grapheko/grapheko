@@ -33,7 +33,7 @@ section.learnSection { padding-top: 0; }
 .nlGrid h2 { font-size: clamp(2.6rem, 1.2rem + 5vw, 6rem); line-height: 0.95; }
 
 @media (max-width: 900px) {
-  .sectionHead, .learn, .nlGrid { grid-template-columns: 1fr; }
+  .sectionHead, .learn, .nlGrid { grid-template-columns: minmax(0, 1fr); }
   .quiz { min-height: 320px; }
 }
-@media (max-width: 520px) { .article { grid-template-columns: 1fr; } .article :global(.tag) { grid-row: auto; } }
+@media (max-width: 520px) { .article { grid-template-columns: minmax(0, 1fr); } .article :global(.tag) { grid-row: auto; } }

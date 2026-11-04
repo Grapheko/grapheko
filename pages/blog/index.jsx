@@ -4,6 +4,7 @@ import Seo from '../../components/layout/Seo'
 import PageIntro from '../../components/ui/PageIntro'
 import { ARTICLES, CAT_LABEL, dateFr } from '../../lib/content/articles'
 import { trackArticleClick, trackBlogFilter } from '../../lib/gtm'
+import { fr } from '../../lib/format'
 import s from '../../styles/Blog.module.css'
 
 export default function Blog({ articles }) {
@@ -25,7 +26,7 @@ export default function Blog({ articles }) {
         {first && (
           <Link href={`/blog/${first.slug}`} className={s.lead} onClick={() => trackArticleClick(first.title, first.cat)}>
             <span className={`tag tag--${first.cat}`}>{CAT_LABEL[first.cat]}</span>
-            <h2 className={s.leadTitle}>{first.title}</h2>
+            <h2 className={s.leadTitle}>{fr(first.title)}</h2>
             <p className={s.leadText}>{first.description}</p>
             <span className={s.meta}>{first.readTime} min de lecture, mis à jour le {dateFr(first.updated)}</span>
           </Link>
@@ -36,7 +37,7 @@ export default function Blog({ articles }) {
             <li key={a.slug}>
               <Link href={`/blog/${a.slug}`} className={s.item} onClick={() => trackArticleClick(a.title, a.cat)}>
                 <span className={`tag tag--${a.cat}`}>{CAT_LABEL[a.cat]}</span>
-                <span className={s.itemTitle}>{a.title}</span>
+                <span className={s.itemTitle}>{fr(a.title)}</span>
                 <span className={s.itemText}>{a.description}</span>
                 <span className={s.meta}>{a.readTime} min</span>
               </Link>

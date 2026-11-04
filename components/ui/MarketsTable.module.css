@@ -5,11 +5,11 @@
 .table tbody tr { transition: background .2s; }
 .table tbody tr:hover { background: color-mix(in srgb, var(--fg) 4%, transparent); }
 .table th:first-child, .table td:first-child { padding-left: 0; }
-.right { text-align: right !important; }
+.right { text-align: right !important; white-space: nowrap; }
 .name { display: flex; flex-direction: column; text-decoration: none; font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); letter-spacing: -0.02em; line-height: 1.1; }
 .name:hover { color: var(--accent); }
 .kind { font-family: var(--text); font-weight: 400; font-size: var(--fs-xs); color: var(--fg-faint); letter-spacing: 0; margin-top: 2px; }
 .spark { width: 140px; height: 40px; }
 .foot { margin-top: 16px; font-size: var(--fs-xs); color: var(--fg-faint); max-width: 80ch; }
 @media (max-width: 900px) { .hideMd { display: none; } }
-@media (max-width: 640px) { .hideSm { display: none; } .table th, .table td { padding: 14px 6px; } }
+@media (max-width: 640px) { .hideSm { display: none; } .table th, .table td { padding: 14px 6px; } .table { font-size: var(--fs-sm); } .name { font-size: var(--fs-md); } }

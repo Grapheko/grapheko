@@ -23,9 +23,9 @@
 .nl { margin-top: clamp(40px, 5vw, 72px); border-radius: var(--r-panel); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; }
 .nl h2 { font-size: var(--fs-xl); max-width: 16ch; }
 @media (max-width: 900px) {
-  .def, .nl { grid-template-columns: 1fr; }
-  .group { grid-template-columns: 1fr; gap: 8px; }
+  .def, .nl { grid-template-columns: minmax(0, 1fr); }
+  .group { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .letter { position: static; }
-  .term { grid-template-columns: 1fr; }
+  .term { grid-template-columns: minmax(0, 1fr); }
   .termCat { justify-self: start; }
 }

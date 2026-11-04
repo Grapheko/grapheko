@@ -11,4 +11,6 @@
 .crumbs a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .title { font-size: clamp(2.6rem, 1rem + 5.6vw, 6.5rem); line-height: 0.94; letter-spacing: -0.05em; max-width: 14ch; }
 .wide .title { max-width: 20ch; }
+.title { overflow-wrap: break-word; }
+@media (max-width: 360px) { .title { font-size: 2.2rem; } }
 .lede { margin-top: 24px; font-size: var(--fs-lg); line-height: 1.45; color: var(--fg-muted); max-width: 52ch; }

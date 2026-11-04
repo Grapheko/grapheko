@@ -26,10 +26,10 @@
 .hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: var(--fs-xs); color: var(--fg-faint); }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
   .viz { order: -1; margin-top: 36px; gap: 12px; }
   .chart { height: 34vh; }
-  .figures { margin: 16px 0; gap: 8px; grid-template-columns: 1fr 1fr; }
+  .figures { margin: 16px 0; gap: 8px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .figures > div:last-child { grid-column: 1 / -1; }
   .figures dd { font-size: clamp(1.6rem, 7vw, 2.4rem); }
   .note { display: none; }

@@ -150,10 +150,10 @@
 .otherText { color: var(--encre-2); line-height: 1.5; }
 
 @media (max-width: 760px) {
-  .options { grid-template-columns: 1fr; gap: 8px; }
+  .options { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .option { min-height: 64px; padding: 12px 14px; border-radius: 16px; gap: 12px; }
   .letter { width: 30px; height: 30px; border-radius: 10px; }
-  .result { grid-template-columns: 1fr; justify-items: start; }
+  .result { grid-template-columns: minmax(0, 1fr); justify-items: start; }
   .stage { border-radius: 22px; }
 }
 

@@ -25,7 +25,8 @@
 }
 .tbc { background: transparent; border-style: dashed; }
 .date { display: grid; justify-items: center; align-content: start; padding: 8px 0; border-radius: 14px; background: var(--lichen); min-height: 64px; }
-.tbc .date { background: var(--brume-2); padding: 12px 6px; text-align: center; }
+.tbc .date { background: var(--brume-2); padding: 12px 3px; text-align: center; }
+.tbc .wd { text-transform: none; font-size: 0.6875rem; line-height: 1.2; }
 .day { font-family: var(--display); font-size: 2rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; }
 .wd { font-size: var(--fs-xs); font-weight: 600; color: var(--encre-2); text-transform: capitalize; }
 .tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 6px; }
@@ -49,8 +50,8 @@
 .method a { color: var(--fg); }
 
 @media (max-width: 860px) {
-  .sub { grid-template-columns: 1fr; }
+  .sub { grid-template-columns: minmax(0, 1fr); }
   .event { grid-template-columns: 60px minmax(0, 1fr); gap: 14px; padding: 16px; }
-  .add { grid-column: 2; justify-items: start; grid-auto-flow: column; justify-content: start; }
+  .add { grid-column: 2; display: flex; flex-wrap: wrap; justify-content: flex-start; }
   .addWait { text-align: left; max-width: none; }
 }

@@ -1,3 +1,4 @@
+import { fr } from '../../lib/format'
 import s from './Faq.module.css'
 
 export default function Faq({ items, title = 'Questions fréquentes' }) {
@@ -8,8 +9,8 @@ export default function Faq({ items, title = 'Questions fréquentes' }) {
       <div className={s.list}>
         {items.map((i) => (
           <details key={i.q} className={s.item}>
-            <summary>{i.q}</summary>
-            <p>{i.a}</p>
+            <summary>{fr(i.q)}</summary>
+            <p>{fr(i.a)}</p>
           </details>
         ))}
       </div>

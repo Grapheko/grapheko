@@ -22,8 +22,8 @@
 .row:hover .rowTitle { color: var(--accent); }
 .rowMeta { font-size: var(--fs-sm); color: var(--fg-faint); }
 @media (max-width: 900px) {
-  .toolGrid { grid-template-columns: 1fr; }
-  .toolWide { grid-column: auto; grid-template-columns: 1fr; grid-template-rows: auto; }
+  .toolGrid { grid-template-columns: minmax(0, 1fr); }
+  .toolWide { grid-column: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
   .toolWide .toolVisual { grid-column: 1; grid-row: auto; }
-  .row { grid-template-columns: 1fr; }
+  .row { grid-template-columns: minmax(0, 1fr); }
 }

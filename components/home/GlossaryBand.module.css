@@ -14,4 +14,4 @@
 }
 .alt { background: var(--encre); color: var(--brume); }
 .term:hover { background: var(--outremer); border-color: var(--outremer); color: var(--blanc); }
-@media (max-width: 860px) { .head { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .head { grid-template-columns: minmax(0, 1fr); } }
