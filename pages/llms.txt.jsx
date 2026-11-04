@@ -21,6 +21,7 @@ Les chiffres des fiches et simulateurs sont recalculés automatiquement à parti
 - [Rendement réel](${SITE}/simulateurs/rendement-reel): placement face à l’inflation
 - [Économie d’impôt PER](${SITE}/simulateurs/per): impôt économisé par un versement sur un plan d’épargne retraite, barème 2026, quotient familial et décote inclus, impôt à la sortie
 - [Flat tax ou barème](${SITE}/simulateurs/flat-tax-ou-bareme): PFU à 31,4 % ou option pour le barème sur dividendes, intérêts et plus-values, avec abattement de 40 % et CSG déductible
+- [Test d’éligibilité LEP](${SITE}/simulateurs/eligibilite-lep): plafonds 2026 de revenu fiscal de référence selon les parts et le lieu de vie, gain face au Livret A
 
 ## Marchés (performances en euros, pire baisse historique, FAQ chiffrée)
 ${ASSETS.map((a) => `- [${a.name}](${SITE}/marches/${a.slug}): ${a.intro.split('. ')[0]}.`).join('\n')}

@@ -21,6 +21,7 @@ const TOOL_FOR = {
   drawdown: { href: '/marches', label: 'Les pires baisses des grands marchés' },
   'plan-epargne-retraite': { href: '/simulateurs/per', label: 'Calculer l’économie d’impôt d’un versement PER' },
   tmi: { href: '/simulateurs/per', label: 'Voir ce que ta tranche change sur un versement PER' },
+  lep: { href: '/simulateurs/eligibilite-lep', label: 'Tester ton éligibilité au LEP' },
   'flat-tax': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
   'bareme-progressif': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
   dividende: { href: '/simulateurs/flat-tax-ou-bareme', label: 'Calculer l’impôt sur tes dividendes' },

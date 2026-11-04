@@ -13,6 +13,7 @@ const COLS = [
       { href: '/simulateurs/rendement-reel', label: 'Rendement réel' },
       { href: '/simulateurs/per', label: 'Économie d’impôt PER' },
       { href: '/simulateurs/flat-tax-ou-bareme', label: 'Flat tax ou barème' },
+      { href: '/simulateurs/eligibilite-lep', label: 'Test d’éligibilité LEP' },
     ],
   },
   { title: 'Marchés', links: ASSETS.filter((a) => a.featured !== false).slice(0, 5).map((a) => ({ href: `/marches/${a.slug}`, label: a.name })) },

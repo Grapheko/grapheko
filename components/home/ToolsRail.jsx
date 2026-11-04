@@ -58,7 +58,7 @@ export default function ToolsRail() {
     <section ref={ref} className={s.rail} aria-labelledby="tools-title">
       <div className={s.inner}>
         <div className={`wrap ${s.head}`}>
-          <h2 id="tools-title" data-reveal-lines>Six questions, six simulateurs.</h2>
+          <h2 id="tools-title" data-reveal-lines>Sept questions, sept simulateurs.</h2>
           <Link href="/simulateurs" className="link-arrow">Tous les simulateurs</Link>
         </div>
         <div className={s.track} data-track>

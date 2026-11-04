@@ -8,7 +8,7 @@ const TODAY = new Date().toISOString().slice(0, 10)
 
 const STATIC = [
   ['/', '1.0'], ['/simulateurs', '0.9'], ['/simulateurs/interets-composes', '0.8'], ['/simulateurs/frais', '0.8'],
-  ['/simulateurs/rendement-reel', '0.8'], ['/simulateurs/per', '0.8'], ['/simulateurs/flat-tax-ou-bareme', '0.8'], ['/marches', '0.8'], ['/glossaire', '0.8'], ['/blog', '0.8'],
+  ['/simulateurs/rendement-reel', '0.8'], ['/simulateurs/per', '0.8'], ['/simulateurs/flat-tax-ou-bareme', '0.8'], ['/simulateurs/eligibilite-lep', '0.8'], ['/marches', '0.8'], ['/glossaire', '0.8'], ['/blog', '0.8'],
   ['/quiz', '0.7'], ['/quiz/profil-investisseur', '0.7'], ['/quiz/crypto', '0.7'], ['/quiz/bourse-debutant', '0.7'], ['/calendrier', '0.7'], ['/comparatifs', '0.5'], ['/comparatifs/courtiers-pea', '0.8'], ['/comparatifs/banques-en-ligne', '0.8'], ['/newsletter', '0.6'], ['/about', '0.4'], ['/contact', '0.3'],
 ]
 

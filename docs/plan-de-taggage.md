@@ -44,9 +44,10 @@ Nouvelles clés ajoutées à tous les events : `page_type` (home, hub, outil, ac
 | `consent_update` | Choix de cookies | `consent_analytics`, `consent_marketing` |
 | `page.reset` | Juste avant chaque `page.display` | vide les clés de page (`asset`, `tool_name`…) |
 
-Valeurs de `tool_name` : `dca_<actif>` (ex. `dca_bitcoin`), `interets_composes`, `cout_frais`, `rendement_reel`, `economie_per`, `flat_tax_bareme`.
+Valeurs de `tool_name` : `dca_<actif>` (ex. `dca_bitcoin`), `interets_composes`, `cout_frais`, `rendement_reel`, `economie_per`, `flat_tax_bareme`, `test_lep`.
 
 Simulateurs fiscaux (`economie_per`, `flat_tax_bareme`) : aucun montant (revenu, versement, dividendes) n'est envoyé au dataLayer ni écrit dans l'URL. Seuls `tool_situation`, `tool_enfants`, `tool_isole` (parent isolé, 0 ou 1), `tool_revenuMode` (`salaires` ou `avis`) remontent, plus `tool_plafondMode` et `tool_tmiRetraite` pour le PER, et `tool_best` (`bareme` ou `pfu`, l'option la moins chère) pour flat tax ou barème.
+Test LEP (`test_lep`) : ni revenu, ni montant, ni résultat (il révélerait le niveau de revenu du foyer). Seuls `tool_zone`, `tool_revenuMode`, `tool_situation`, `tool_enfants` et `tool_isole` remontent.
 Clés de page envoyées avec `page.display` : `asset` (fiches marché et DCA), `tool_name`, `glossary_term`, `article_category`.
 
 ## 4. Page vue : règle en place

@@ -41,6 +41,16 @@ export default function ToolVisual({ kind }) {
       </svg>
     )
   }
+  if (kind === 'lep') {
+    return (
+      <svg viewBox="0 0 240 120" aria-hidden="true">
+        {[46, 62, 38, 70, 54, 96].map((h, i) => (
+          <rect key={i} x={14 + i * 37} y={118 - h} width="24" height={h} rx="4" fill={h > 78 ? stroke : accent} opacity={h > 78 ? 0.25 : 1} />
+        ))}
+        <path d="M4 40 L236 40" stroke={stroke} strokeWidth="3" strokeDasharray="6 7" fill="none" />
+      </svg>
+    )
+  }
   if (kind === 'flat') {
     return (
       <svg viewBox="0 0 240 120" aria-hidden="true">

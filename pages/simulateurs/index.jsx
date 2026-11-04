@@ -13,7 +13,7 @@ export default function Simulateurs() {
     <>
       <Seo
         title="Simulateurs d’investissement"
-        description="DCA rétroactif sur vrais historiques, intérêts composés, coût des frais, rendement réel, économie d’impôt PER, flat tax ou barème : des simulateurs gratuits pour comprendre avant d’investir."
+        description="DCA rétroactif sur vrais historiques, intérêts composés, coût des frais, rendement réel, économie d’impôt PER, flat tax ou barème, test LEP : des simulateurs gratuits pour comprendre avant d’investir."
       />
       <PageIntro
         crumbs={[{ label: 'Simulateurs' }]}

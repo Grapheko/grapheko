@@ -8,7 +8,7 @@
 .kpi dd { font-size: clamp(1.5rem, 0.9rem + 1.8vw, 2.4rem); overflow-wrap: anywhere; }
 .kpiMain { background: var(--encre); color: var(--brume); }
 .kpiMain dt { color: #BDBFD6; }
-.kpi .sub { display: block; margin-top: 6px; font-family: var(--text); font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0; }
+.kpi .sub { display: block; margin-top: 6px; line-height: 1.3; font-family: var(--text); font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0; }
 .chartPanel { background: var(--panel); border-radius: var(--r-panel); padding: clamp(20px, 3vw, 32px) clamp(16px, 3vw, 32px) clamp(16px, 2vw, 24px); }
 .chartTitle { font-size: var(--fs-lg); letter-spacing: -0.015em; margin-bottom: 36px; }
 .reading { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -39,6 +39,8 @@
 .barTotal { font-family: var(--display); font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.02em; }
 .track { display: flex; height: 18px; border-radius: 9px; background: var(--brume-2); overflow: hidden; }
 .track span { display: block; height: 100%; transition: width .5s var(--ease); }
+.limitWrap { position: relative; }
+.limit { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--encre); }
 .barDetail { font-size: var(--fs-xs); color: var(--fg-muted); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-xs); color: var(--fg-muted); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
