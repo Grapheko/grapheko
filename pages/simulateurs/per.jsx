@@ -12,7 +12,7 @@ import RecapPanel from '../../components/ui/RecapPanel'
 import { perReport } from '../../lib/taxReport'
 import StickyResult from '../../components/ui/StickyResult'
 import { FoyerFields, RevenuFields, foyerFrom } from '../../components/ui/FoyerFields'
-import { perSaving, perCurve, perCeilingEstimate, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
+import { perSaving, perCurve, perCeilingEstimate, perExitTax, PER_MIN, PER_MAX, TAX_YEAR_LABEL, TAX_VERIFIED_AT } from '../../lib/tax'
 import { eur, num } from '../../lib/format'
 import { dateFr } from '../../lib/content/articles'
 import { useToolState } from '../../lib/useToolState'
@@ -60,7 +60,7 @@ export default function Per({ aiEnabled }) {
     () => perCurve({ income, parts, situation: st.situation, isolated, ceiling, max: Math.max(ceiling * 1.25, st.versement * 1.2) }),
     [income, parts, st.situation, isolated, ceiling, st.versement]
   )
-  const exitTax = r.deductible * (st.tmiRetraite / 100)
+  const exitTax = perExitTax(st.versement, st.tmiRetraite / 100)
   const netGain = r.saving - exitTax
   const noTax = r.before === 0
 
@@ -186,7 +186,7 @@ export default function Per({ aiEnabled }) {
 
             {r.excess > 0 && (
               <p className={s.alert}>
-                <strong>{eur(r.excess)} dépassent ton plafond</strong> et ne sont pas déductibles cette année. Ils restent sur ton PER, mais sans avantage fiscal à l’entrée.
+                <strong>{eur(r.excess)} dépassent ton plafond</strong> et ne sont pas déductibles cette année. Ils restent sur ton PER, sans avantage fiscal à l’entrée, et leur capital sera quand même imposé à la sortie, sauf si tu renonces à la déduction au plus tard lors du versement.
               </p>
             )}
             {noTax && (

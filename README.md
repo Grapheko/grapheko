@@ -18,6 +18,9 @@ GRAPHEKO_DEMO_DATA=1 npm run dev    # données fictives signalées à l'écran, 
 | `BREVO_API_KEY` | Inscription newsletter et envoi du formulaire de contact | Oui |
 | `CONTACT_SENDER` | Adresse expéditrice **validée dans Brevo** pour le formulaire de contact | Oui pour le contact |
 | `CONTACT_TO` | Destinataire des messages (défaut : contact@grapheko.fr) | Non |
+| `CRON_SECRET` | Protège les tâches planifiées `/api/cron/*` | Oui |
+| `NEWSLETTER_TEST_EMAIL` | Destinataire des tests de newsletter et, par défaut, des alertes | Non |
+| `ALERT_EMAIL` | Destinataire des alertes du contrôle quotidien, s'il diffère | Non |
 
 ## Structure
 
@@ -48,6 +51,10 @@ Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les 
 - Flat tax (PFU) : 31,4 % depuis le 1er janvier 2026 (12,8 % + 18,6 % de prélèvements sociaux).
 - Assurance-vie, revenus fonciers, plus-values immobilières : prélèvements sociaux à 17,2 % (le cas du PEL varie selon les sources, à vérifier).
 - Livret A : 1,7 % depuis le 1er août 2026, plafond 22 950 €.
+
+## Surveillance
+
+`/api/cron/health` tourne chaque matin (`vercel.json`) : historiques, bandeau de cours, accès Brevo, édition de la semaine et envoi du dimanche. En cas de problème, un e-mail part via Brevo. Si Brevo est en panne, l'alerte ne peut pas partir et seuls les journaux Vercel gardent la trace.
 
 ## Accessibilité et animations
 
