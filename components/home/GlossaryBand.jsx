@@ -14,7 +14,7 @@ export default function GlossaryBand() {
     // Distance en pixels, et non en % de la rangée : la vitesse ne change pas
     // quand le glossaire s'allonge. La vitesse est exprimée en pixels parcourus
     // par pixel de scroll.
-    const travel = () => (window.innerWidth < 860 ? 2.5 : 4) * (root.offsetHeight + window.innerHeight)
+    const travel = () => (window.innerWidth < 860 ? 2 : 3.2) * (root.offsetHeight + window.innerHeight)
     root.querySelectorAll('[data-row]').forEach((row, i) => {
       gsap.fromTo(row, { x: () => (i ? -travel() : 0) }, {
         x: () => (i ? 0 : -travel()),
