@@ -58,7 +58,7 @@
   transition: color .2s, background .2s;
 }
 .link:hover { color: var(--encre); background: rgba(18, 20, 43, .06); }
-.active { color: var(--encre); background: var(--lichen); }
+.active, .active:hover { color: var(--brume); background: var(--encre); }
 .cta { min-height: 42px; padding: 0 20px; }
 
 .burger { display: none; width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--encre); background: transparent; position: relative; }
