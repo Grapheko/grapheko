@@ -1,6 +1,6 @@
 .footer { padding-top: clamp(40px, 4.5vw, 64px); overflow: hidden; position: relative; z-index: 2; }
 .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.colTitle { font-size: var(--fs-md); letter-spacing: -0.01em; margin-bottom: 14px; color: var(--orange); }
+.colTitle { font-size: var(--fs-md); letter-spacing: -0.01em; margin-bottom: 14px; color: var(--jaune); }
 .cols ul { list-style: none; display: grid; gap: 8px; }
 .link { text-decoration: none; color: var(--fg-muted); }
 .link:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
