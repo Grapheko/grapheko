@@ -53,6 +53,7 @@ export default function DcaStory({ history }) {
   const gain = r.value - r.invested
   const tipX = (x(idx) / W) * 100
   const tipY = (y(r.value) / H) * 100
+  const progress = idx / Math.max(1, rows.length - 1)
 
   return (
     <section ref={ref} className={`${s.story} theme-encre`} aria-labelledby="story-title">
@@ -86,27 +87,37 @@ export default function DcaStory({ history }) {
             </Link>
           </div>
 
-          <div className={s.chart} aria-hidden="true">
-            <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className={s.svg}>
-              <defs>
-                <clipPath id="story-clip">
-                  <rect ref={clipRef} x="0" y="0" width={W} height={H} style={{ transformOrigin: '0 0', transform: `scaleX(${Math.max(0.002, idx / (rows.length - 1))})` }} />
-                </clipPath>
-                <linearGradient id="story-grad" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#8C93FF" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#8C93FF" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <g clipPath="url(#story-clip)">
-                <path d={investedPath} fill="none" stroke="rgba(231,234,227,.4)" strokeWidth="2" strokeDasharray="6 6" vectorEffect="non-scaling-stroke" />
-                <path d={area} fill="url(#story-grad)" />
-                <path d={valuePath} fill="none" stroke="#8C93FF" strokeWidth="3.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
-              </g>
-            </svg>
-            <span className={s.tip} style={{ left: `${tipX}%`, top: `${tipY}%` }} />
-            <div className={s.legend}>
-              <span><i className={s.legendValue} />Valeur du portefeuille</span>
-              <span><i className={s.legendInvested} />Total versé</span>
+          <div className={s.viz} aria-hidden="true">
+            <div className={s.chart}>
+              <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className={s.svg}>
+                <defs>
+                  <clipPath id="story-clip">
+                    <rect ref={clipRef} x="0" y="0" width={W} height={H} style={{ transformOrigin: '0 0', transform: `scaleX(${Math.max(0.002, idx / (rows.length - 1))})` }} />
+                  </clipPath>
+                  <linearGradient id="story-grad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#8C93FF" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#8C93FF" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <g clipPath="url(#story-clip)">
+                  <path d={investedPath} fill="none" stroke="rgba(231,234,227,.4)" strokeWidth="2" strokeDasharray="6 6" vectorEffect="non-scaling-stroke" />
+                  <path d={area} fill="url(#story-grad)" />
+                  <path d={valuePath} fill="none" stroke="#8C93FF" strokeWidth="3.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+                </g>
+              </svg>
+              <span className={s.tip} style={{ left: `${tipX}%`, top: `${tipY}%` }} />
+              <div className={s.legend}>
+                <span><i className={s.legendValue} />Valeur du portefeuille</span>
+                <span><i className={s.legendInvested} />Total versé</span>
+              </div>
+            </div>
+            <div className={s.gauge}>
+              <p className={s.gaugeHead}>
+                <span>{monthLabel(rows[0].m)}</span>
+                <strong className="num">{Math.round(progress * 100)} %</strong>
+                <span>{monthLabel(rows[rows.length - 1].m)}</span>
+              </p>
+              <span className={s.gaugeTrack}><span className={s.gaugeBar} style={{ transform: `scaleX(${progress})` }} /></span>
             </div>
           </div>
         </div>

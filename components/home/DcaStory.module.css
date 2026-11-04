@@ -17,15 +17,24 @@
 .legend i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
 .legendValue { background: #8C93FF; }
 .legendInvested { background: repeating-linear-gradient(90deg, rgba(231,234,227,.5) 0 5px, transparent 5px 9px); }
+/* Jauge : avance au même rythme que la courbe. Inutile sans animation. */
+.viz { display: grid; gap: 18px; min-width: 0; }
+.gaugeHead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; font-size: var(--fs-xs); color: var(--fg-faint); white-space: nowrap; }
+.gaugeHead strong { font-weight: 600; color: var(--outremer-clair); }
+.gaugeTrack { display: block; height: 6px; border-radius: var(--r-pill); background: rgba(231, 234, 227, .16); overflow: hidden; }
+.gaugeBar { display: block; height: 100%; background: var(--outremer-clair); transform-origin: 0 50%; }
 .hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: var(--fs-xs); color: var(--fg-faint); }
 
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; }
-  .chart { order: -1; height: 34vh; margin-top: 36px; }
+  .viz { order: -1; margin-top: 36px; gap: 12px; }
+  .chart { height: 34vh; }
   .figures { margin: 16px 0; gap: 8px; grid-template-columns: 1fr 1fr; }
   .figures > div:last-child { grid-column: 1 / -1; }
   .figures dd { font-size: clamp(1.6rem, 7vw, 2.4rem); }
   .note { display: none; }
   .hint { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .hint { display: none; } }
+/* Petits téléphones : la courbe rend la place prise par la jauge */
+@media (max-width: 900px) and (max-height: 720px) { .chart { height: calc(34vh - 47px); } }
+@media (prefers-reduced-motion: reduce) { .hint, .gauge { display: none; } }
