@@ -14,12 +14,11 @@ const START = '2015-01'
 export default function DcaStory({ history }) {
   const ref = useRef(null)
   const clipRef = useRef(null)
+  const tipRef = useRef(null)
+  const barRef = useRef(null)
   const result = useMemo(() => (history?.points ? backtestDca(history.points, { start: START, amount: AMOUNT }) : null), [history])
   const rows = result?.rows || []
   const [idx, setIdx] = useState(rows.length ? rows.length - 1 : 0)
-
-  // Sans animation : on montre directement le résultat final
-  useIsoLayoutEffect(() => { if (!prefersReducedMotion()) setIdx(0) }, [rows.length])
 
   const W = 1000
   const H = 420
@@ -30,29 +29,52 @@ export default function DcaStory({ history }) {
   const investedPath = rows.map((r, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(r.invested).toFixed(1)}`).join(' ')
   const area = valuePath ? `${valuePath} L${W},${H} L0,${H} Z` : ''
 
+  // Courbe, point et jauge sont écrits directement, à la même image et sans
+  // passer par React : le point reste exactement au bout du tracé, même en
+  // scroll rapide. Entre deux mois, il glisse le long du segment de la courbe.
+  const paint = (progress) => {
+    if (!rows.length || !clipRef.current || !tipRef.current || !barRef.current) return
+    const pos = progress * (rows.length - 1)
+    const a = rows[Math.floor(pos)]
+    const b = rows[Math.ceil(pos)]
+    const value = a.value + (b.value - a.value) * (pos - Math.floor(pos))
+    clipRef.current.style.transform = `scaleX(${Math.max(0.002, progress)})`
+    tipRef.current.style.left = `${progress * 100}%`
+    tipRef.current.style.top = `${(y(value) / H) * 100}%`
+    barRef.current.style.transform = `scaleX(${progress})`
+  }
+
+  // Sans animation : on garde le résultat final, déjà rendu côté serveur
+  useIsoLayoutEffect(() => {
+    if (prefersReducedMotion()) return
+    setIdx(0)
+    paint(0)
+  }, [rows.length])
+
   useScrollFx(ref, (root) => {
     if (!rows.length) return
-    ScrollTrigger.create({
+    const update = (self) => {
+      paint(self.progress)
+      setIdx(Math.round(self.progress * (rows.length - 1)))
+    }
+    const st = ScrollTrigger.create({
       trigger: root,
       start: 'top top',
       end: '+=220%',
       pin: root.querySelector('[data-pin]'),
       pinSpacing: true,
       scrub: true,
-      onUpdate: (self) => {
-        const i = Math.round(self.progress * (rows.length - 1))
-        setIdx(i)
-        if (clipRef.current) clipRef.current.style.transform = `scaleX(${Math.max(0.002, i / (rows.length - 1))})`
-      },
+      onUpdate: update,
     })
+    update(st) // Page rechargée au milieu de la section
   }, [rows.length])
 
   if (!rows.length) return null
 
   const r = rows[idx]
   const gain = r.value - r.invested
-  const tipX = (x(idx) / W) * 100
-  const tipY = (y(r.value) / H) * 100
+  // État final : ces styles ne changent jamais pour React, qui n'écrase donc pas paint()
+  const end = rows[rows.length - 1]
   const progress = idx / Math.max(1, rows.length - 1)
 
   return (
@@ -92,7 +114,7 @@ export default function DcaStory({ history }) {
               <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className={s.svg}>
                 <defs>
                   <clipPath id="story-clip">
-                    <rect ref={clipRef} x="0" y="0" width={W} height={H} style={{ transformOrigin: '0 0', transform: `scaleX(${Math.max(0.002, idx / (rows.length - 1))})` }} />
+                    <rect ref={clipRef} x="0" y="0" width={W} height={H} style={{ transformOrigin: '0 0' }} />
                   </clipPath>
                   <linearGradient id="story-grad" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#8C93FF" stopOpacity="0.35" />
@@ -105,7 +127,7 @@ export default function DcaStory({ history }) {
                   <path d={valuePath} fill="none" stroke="#8C93FF" strokeWidth="3.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
                 </g>
               </svg>
-              <span className={s.tip} style={{ left: `${tipX}%`, top: `${tipY}%` }} />
+              <span ref={tipRef} className={s.tip} style={{ left: '100%', top: `${(y(end.value) / H) * 100}%` }} />
               <div className={s.legend}>
                 <span><i className={s.legendValue} />Valeur du portefeuille</span>
                 <span><i className={s.legendInvested} />Total versé</span>
@@ -117,7 +139,7 @@ export default function DcaStory({ history }) {
                 <strong className="num">{Math.round(progress * 100)} %</strong>
                 <span>{monthLabel(rows[rows.length - 1].m)}</span>
               </p>
-              <span className={s.gaugeTrack}><span className={s.gaugeBar} style={{ transform: `scaleX(${progress})` }} /></span>
+              <span className={s.gaugeTrack}><span ref={barRef} className={s.gaugeBar} /></span>
             </div>
           </div>
         </div>
