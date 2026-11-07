@@ -5,7 +5,8 @@ Les deux reposent sur la même base : être indexé, avoir des pages qui répond
 
 ## 1. Ce qui est déjà en place dans le code
 
-- Sitemap dynamique : `/sitemap.xml` (toutes les pages, mis à jour automatiquement).
+- Sitemap dynamique : `/sitemap.xml` (toutes les pages, mis à jour automatiquement). Les dates `lastmod` sont celles de la dernière vraie modification (`lib/sitemap.js`), pas la date du jour : une date qui change tous les jours finit ignorée par Google et Bing. Quand le contenu d'une page fixe change, mettre sa date à jour dans `lib/sitemap.js` (articles : champ `updated`).
+- IndexNow (Bing, Yandex, Seznam, Naver ; pas Google) : clé dans `public/<clé>.txt`, envoi par `lib/indexnow.js`. Le contrôle quotidien de 8 h signale les pages dont la date du sitemap est d'hier ou d'aujourd'hui. Envoi complet ponctuel : `/api/cron/health?mode=indexnow-tout` avec l'en-tête `Authorization: Bearer <CRON_SECRET>`.
 - `robots.txt` : tout est ouvert sauf `/api/` et les pages légales. Les robots d’IA (GPTBot, ClaudeBot, PerplexityBot…) ne sont pas bloqués.
 - `/llms.txt` : résumé du site et liste commentée des pages, pour les moteurs de réponse.
 - Balises `title`, `description`, `canonical` et Open Graph sur chaque page, image de partage `/og.png`.

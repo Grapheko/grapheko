@@ -1,14 +1,17 @@
 // Contrôle quotidien du site (tâche planifiée Vercel, voir vercel.json).
 // Vérifie les données de marché et la newsletter, et envoie un e-mail s'il y a un problème.
 // Ne touche à aucune donnée : uniquement des lectures, plus l'e-mail d'alerte.
+// Signale aussi à IndexNow (Bing) les pages modifiées la veille ou le jour même (date du sitemap).
 //
 // Protégée par CRON_SECRET (Vercel l'envoie dans l'en-tête Authorization).
 // Sur une version d'essai Vercel, sans CRON_SECRET : contrôle à blanc, sans e-mail.
 //   ?mode=test-alerte       envoie un e-mail d'alerte d'essai, sans lancer les contrôles
+//   ?mode=indexnow-tout     envoie toutes les URL du sitemap à IndexNow, sans lancer les contrôles
 import { ASSETS } from '../../../lib/assets'
 import { getMonthlyHistory } from '../../../lib/history'
 import { NEWSLETTERS } from '../../../lib/content/newsletters'
 import { todayParis } from '../../../lib/content/calendar'
+import { allUrls, recentlyChanged, submitIndexNow } from '../../../lib/indexnow'
 
 export const config = { maxDuration: 60 }
 
@@ -125,6 +128,17 @@ async function checkNewsletter(today, problems) {
   return facts
 }
 
+// IndexNow : pages dont la date du sitemap est d'hier ou d'aujourd'hui
+async function pingIndexNow(today, problems) {
+  const urls = recentlyChanged(today, 1)
+  try {
+    return { urls, ...(await submitIndexNow(urls)) }
+  } catch (e) {
+    problems.push(`IndexNow : envoi refusé (${e.message}).`)
+    return { urls, sent: 0, error: e.message }
+  }
+}
+
 async function sendAlert(subject, lines) {
   const to = (process.env.ALERT_EMAIL || process.env.NEWSLETTER_TEST_EMAIL || process.env.CONTACT_TO || 'contact@grapheko.fr')
     .split(',').map((s) => s.trim()).filter(Boolean).map((email) => ({ email }))
@@ -161,10 +175,23 @@ export default async function handler(req, res) {
   }
 
   const today = todayParis()
+
+  if (req.query.mode === 'indexnow-tout') {
+    if (dryRun) return res.status(200).json({ ok: true, dryRun, wouldSend: allUrls(today).length })
+    try {
+      return res.status(200).json({ ok: true, ...(await submitIndexNow(allUrls(today))) })
+    } catch (e) {
+      console.error('[health] indexnow', e.message)
+      return res.status(502).json({ ok: false, error: e.message })
+    }
+  }
+
   const problems = []
   await checkHistories(today, problems)
   await checkTicker(problems)
   const newsletter = await checkNewsletter(today, problems)
+  // Production uniquement : une version d'essai ne doit pas annoncer d'URL aux moteurs
+  const indexnow = process.env.VERCEL_ENV === 'production' ? await pingIndexNow(today, problems) : { skipped: true }
 
   problems.forEach((p) => console.error('[health]', p))
   let alert = 'aucune'
@@ -181,5 +208,5 @@ export default async function handler(req, res) {
     alert = 'contrôle à blanc, non envoyée'
   }
 
-  return res.status(200).json({ ok: problems.length === 0, today, dryRun, problems, newsletter, alert })
+  return res.status(200).json({ ok: problems.length === 0, today, dryRun, problems, newsletter, indexnow, alert })
 }

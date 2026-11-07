@@ -35,7 +35,7 @@ components/home/         Sections animées de l’accueil
 pages/                   Routes
 ```
 
-Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les pages, le sitemap et les liens se mettent à jour seuls.
+Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les pages, le sitemap et les liens se mettent à jour seuls. Nouvelle page fixe, ou contenu d'une page fixe modifié : l'ajouter ou mettre sa date à jour dans `lib/sitemap.js`.
 
 ## Données de marché
 
@@ -54,7 +54,7 @@ Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les 
 
 ## Surveillance
 
-`/api/cron/health` tourne chaque matin (`vercel.json`) : historiques, bandeau de cours, accès Brevo, édition de la semaine et envoi du dimanche. En cas de problème, un e-mail part via Brevo. Si Brevo est en panne, l'alerte ne peut pas partir et seuls les journaux Vercel gardent la trace.
+`/api/cron/health` tourne chaque matin (`vercel.json`) : historiques, bandeau de cours, accès Brevo, édition de la semaine et envoi du dimanche. Il signale aussi à IndexNow (Bing) les pages modifiées la veille ou le jour même (dates de `lib/sitemap.js`). En cas de problème, un e-mail part via Brevo. Si Brevo est en panne, l'alerte ne peut pas partir et seuls les journaux Vercel gardent la trace.
 
 ## Accessibilité et animations
 
