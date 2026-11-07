@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import LineChart from '../../components/ui/LineChart'
 import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
@@ -114,7 +115,7 @@ export default function Per({ aiEnabled }) {
       <Seo
         title="Simulateur PER 2026 : combien d’impôt économiser avant le 31 décembre ?"
         description="Calcule l’économie d’impôt d’un versement sur un plan d’épargne retraite selon ton salaire, ta situation familiale et ton plafond. Barème officiel, quotient familial et décote inclus."
-        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ)]}
+        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ), toolJsonLd({ name: 'Simulateur d’économie d’impôt PER', description: 'Calcule l’impôt économisé par un versement sur un plan d’épargne retraite selon ton revenu, ta situation familiale et ton plafond.', path: '/simulateurs/per' })]}
       />
       <PageIntro
         crumbs={crumbs}

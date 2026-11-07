@@ -4,6 +4,7 @@ import { ASSETS } from '../lib/assets'
 import { TERMS } from '../lib/content/glossary'
 import { ARTICLES } from '../lib/content/articles'
 import { QUIZZES } from '../lib/content/quizzes'
+import { VERSUS } from '../lib/content/versus'
 
 const SITE = 'https://grapheko.fr'
 
@@ -16,6 +17,7 @@ Les chiffres des fiches et simulateurs sont recalculés automatiquement à parti
 
 ## Simulateurs
 - [Simulateur DCA rétroactif](${SITE}/simulateurs/dca/msci-world): rejoue un investissement mensuel sur de vrais cours historiques
+- [Et si j’avais investi 1 000 € ?](${SITE}/simulateurs/si-j-avais-investi/bitcoin): valeur actuelle, rendement annuel et pire baisse d’un investissement unique, actif par actif, avec un tableau à 1, 3, 5, 10, 15 et 20 ans
 - [Intérêts composés](${SITE}/simulateurs/interets-composes): capital futur avec versements mensuels
 - [Coût des frais](${SITE}/simulateurs/frais): écart en euros entre deux niveaux de frais annuels
 - [Rendement réel](${SITE}/simulateurs/rendement-reel): placement face à l’inflation
@@ -35,6 +37,9 @@ ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).joi
 ## Comparatifs
 - [Courtiers PEA : frais de courtage comparés](${SITE}/comparatifs/courtiers-pea): Bourse Direct, BoursoBank, Fortuneo, Trade Republic, grilles officielles vérifiées, calculateur du coût annuel
 - [Banques en ligne et néobanques](${SITE}/comparatifs/banques-en-ligne): BoursoBank, Fortuneo, Hello bank!, Monabanq, N26, Revolut, Nickel, Trade Republic, frais et conditions vérifiés
+
+## Face à face (deux notions comparées)
+${VERSUS.map((v) => `- [${v.title}](${SITE}/comparer/${v.slug}): ${v.description}`).join('\n')}
 
 ## Quiz
 ${QUIZZES.map((q) => `- [${q.title}](${SITE}/quiz/${q.slug}): ${q.teaser}`).join('\n')}

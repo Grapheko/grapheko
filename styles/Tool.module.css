@@ -53,3 +53,17 @@
   .kpis > :first-child { grid-column: 1 / -1; }
   .reading { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Tableau « 1 000 € investis il y a N ans » (simulateur d'investissement unique) */
+.histScroll { overflow-x: auto; margin-top: 8px; }
+.histTable { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.histTable th, .histTable td { padding: 12px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.histTable thead th { font-size: var(--fs-xs); font-weight: 600; color: var(--fg-muted); border-bottom: 1.5px solid var(--encre); vertical-align: bottom; }
+.histTable th:first-child { text-align: left; padding-left: 0; }
+.histTable tbody th { font-weight: 600; }
+.histTable tbody th span { font-weight: 400; color: var(--fg-muted); }
+.histValue { font-weight: 700; }
+@media (max-width: 640px) {
+  .histTable { font-size: var(--fs-xs); }
+  .histTable th, .histTable td { padding: 10px 6px; }
+}

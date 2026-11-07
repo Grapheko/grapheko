@@ -1,0 +1,36 @@
+.verdict { margin-top: 24px; max-width: 62ch; font-size: var(--fs-lg); line-height: 1.45; padding-left: 16px; border-left: 4px solid var(--outremer); }
+
+.compare { margin: 0 0 clamp(32px, 4vw, 56px); }
+.compareScroll { overflow-x: auto; }
+.compareTable { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); line-height: 1.45; }
+.compareTable th, .compareTable td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.compareTable thead th { font-family: var(--display); font-size: var(--fs-lg); letter-spacing: -0.02em; border-bottom: 1.5px solid var(--encre); }
+.compareTable thead th:first-child { font-family: inherit; font-size: var(--fs-xs); font-weight: 600; color: var(--fg-muted); vertical-align: bottom; }
+.compareTable tbody th { font-weight: 600; color: var(--fg-muted); width: 24%; padding-left: 0; }
+.compareTable td { width: 38%; }
+.compareNote { font-size: var(--fs-xs); color: var(--fg-muted); margin-top: 10px; }
+
+.choose { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: clamp(32px, 4vw, 56px); }
+.chooseCard { border-radius: var(--r-panel); padding: clamp(20px, 3vw, 32px); }
+.chooseCard:first-child { background: var(--lichen); color: var(--encre); }
+.chooseCard:last-child { background: #E4E0FF; color: var(--encre); }
+.chooseCard h2 { font-size: var(--fs-lg); margin-bottom: 14px; }
+.chooseCard ul { display: grid; gap: 10px; padding-left: 1.1em; }
+.chooseCard a { color: inherit; }
+
+.terms { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+.hubList { list-style: none; border-top: 1px solid var(--line); }
+.hubItem { display: grid; grid-template-columns: 110px minmax(0, 5fr) minmax(0, 5fr); gap: 8px 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.hubItem :global(.tag) { justify-self: start; }
+.hubTitle { font-family: var(--display); font-weight: 700; font-size: var(--fs-lg); letter-spacing: -0.02em; line-height: 1.15; transition: color .2s; }
+.hubItem:hover .hubTitle { color: var(--accent); }
+.hubText { font-size: var(--fs-sm); color: var(--fg-muted); }
+
+@media (max-width: 720px) {
+  .choose { grid-template-columns: minmax(0, 1fr); }
+  .hubItem { grid-template-columns: minmax(0, 1fr); }
+  .compareTable { font-size: var(--fs-xs); }
+  .compareTable th, .compareTable td { padding: 10px 8px; }
+  .compareTable thead th { font-size: var(--fs-md, 1rem); }
+}

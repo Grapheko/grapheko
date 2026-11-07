@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import LineChart from '../../components/ui/LineChart'
 import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
@@ -110,7 +111,7 @@ export default function FlatTaxOuBareme({ aiEnabled }) {
       <Seo
         title="Flat tax ou barème en 2026 : le simulateur pour dividendes et plus-values"
         description="PFU à 31,4 % ou option pour le barème progressif ? Compare l’impôt sur tes dividendes, intérêts et plus-values selon ton revenu et ta situation familiale, avec l’abattement de 40 % et la CSG déductible."
-        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ)]}
+        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ), toolJsonLd({ name: 'Simulateur flat tax ou barème', description: 'Compare l’impôt sur les dividendes, intérêts et plus-values au PFU de 31,4 % et avec l’option pour le barème progressif.', path: '/simulateurs/flat-tax-ou-bareme' })]}
       />
       <PageIntro
         crumbs={crumbs}

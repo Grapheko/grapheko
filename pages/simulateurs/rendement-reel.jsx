@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import LineChart from '../../components/ui/LineChart'
 import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
@@ -24,7 +25,7 @@ export default function RendementReel() {
       <Seo
         title="Rendement réel : ton épargne bat-elle l’inflation ?"
         description="Compare le taux de ton livret ou de ton placement à l’inflation et vois ce que vaut vraiment ton épargne en pouvoir d’achat."
-        jsonLd={crumbsJsonLd(crumbs)}
+        jsonLd={[crumbsJsonLd(crumbs), toolJsonLd({ name: 'Simulateur de rendement réel', description: 'Compare le taux d’un placement à l’inflation pour mesurer ce que vaut l’épargne en pouvoir d’achat.', path: '/simulateurs/rendement-reel' })]}
       />
       <PageIntro
         crumbs={crumbs}

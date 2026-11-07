@@ -22,6 +22,7 @@ const COLS = [
     links: [
       { href: '/glossaire', label: 'Glossaire' },
       { href: '/blog', label: 'Articles' },
+      { href: '/comparer', label: 'Face à face' },
       { href: '/quiz', label: 'Quiz' },
       { href: '/calendrier', label: 'Calendrier fiscal' },
       { href: '/comparatifs', label: 'Comparatifs' },

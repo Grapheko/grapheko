@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import RangeField from '../../components/ui/RangeField'
 import ShareButton from '../../components/ui/ShareButton'
 import Faq from '../../components/ui/Faq'
@@ -104,7 +105,7 @@ export default function EligibiliteLep() {
       <Seo
         title="Éligible au LEP en 2026 ? Le test avec les plafonds officiels"
         description={`Vérifie si tu peux ouvrir un livret d’épargne populaire : plafonds 2026 selon tes parts et ton lieu de vie (${eur(lepCeiling(1))} pour 1 part en métropole), et ce qu’il rapporte face au Livret A.`}
-        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ)]}
+        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(FAQ), toolJsonLd({ name: 'Test d’éligibilité au LEP', description: 'Vérifie si ton revenu fiscal de référence permet d’ouvrir un livret d’épargne populaire, avec les plafonds 2026 selon tes parts et ton lieu de vie.', path: '/simulateurs/eligibilite-lep' })]}
       />
       <PageIntro
         crumbs={crumbs}

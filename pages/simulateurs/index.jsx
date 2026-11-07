@@ -13,7 +13,7 @@ export default function Simulateurs() {
     <>
       <Seo
         title="Simulateurs d’investissement"
-        description="DCA rétroactif sur vrais historiques, intérêts composés, coût des frais, rendement réel, économie d’impôt PER, flat tax ou barème, test LEP : des simulateurs gratuits pour comprendre avant d’investir."
+        description="DCA rétroactif et investissement unique sur vrais historiques, intérêts composés, coût des frais, rendement réel, économie d’impôt PER, flat tax ou barème, test LEP : des simulateurs gratuits pour comprendre avant d’investir."
       />
       <PageIntro
         crumbs={[{ label: 'Simulateurs' }]}
@@ -24,7 +24,7 @@ export default function Simulateurs() {
       <div className="wrap" style={{ paddingBottom: 'var(--section)' }}>
         <div className={s.toolGrid}>
           {TOOLS.map((t, i) => (
-            <Link key={t.slug} href={t.href} className={`${s.tool} ${i === 0 ? s.toolWide : ''}`} style={{ background: t.tone }} onClick={() => trackClick(t.slug, 'hub_simulateurs', 'simulateur')}>
+            <Link key={t.slug} href={t.href} className={`${s.tool} ${i === 0 || (i === TOOLS.length - 1 && (TOOLS.length - 1) % 3 === 1) ? s.toolWide : ''}`} style={{ background: t.tone }} onClick={() => trackClick(t.slug, 'hub_simulateurs', 'simulateur')}>
               <span className={s.toolName}>{t.name}</span>
               <h2 className={s.toolQ}>{fr(t.title)}</h2>
               <div className={s.toolVisual}><ToolVisual kind={t.visual} /></div>
@@ -40,6 +40,20 @@ export default function Simulateurs() {
               <li key={a.slug}>
                 <Link href={`/simulateurs/dca/${a.slug}`} className={s.row}>
                   <span className={s.rowTitle}>DCA sur {a.name}</span>
+                  <span className={s.rowMeta}>{a.note}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="section" style={{ paddingBottom: 0 }} aria-labelledby="lump-assets">
+          <h2 id="lump-assets" className={s.subTitle}>1 000 € en une fois, actif par actif</h2>
+          <ul className={s.list}>
+            {ASSETS.map((a) => (
+              <li key={a.slug}>
+                <Link href={`/simulateurs/si-j-avais-investi/${a.slug}`} className={s.row}>
+                  <span className={s.rowTitle}>1 000 € sur {a.name}</span>
                   <span className={s.rowMeta}>{a.note}</span>
                 </Link>
               </li>

@@ -4,6 +4,7 @@ import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
 import NewsletterForm from '../../components/ui/NewsletterForm'
 import { TERMS, getTerm, CATEGORIES } from '../../lib/content/glossary'
 import { ARTICLES } from '../../lib/content/articles'
+import { versusForTerm } from '../../lib/content/versus'
 import { fr } from '../../lib/format'
 import s from '../../styles/Glossary.module.css'
 
@@ -28,7 +29,7 @@ const TOOL_FOR = {
   'prelevements-sociaux': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
 }
 
-export default function Terme({ term, related, articles }) {
+export default function Terme({ term, related, articles, versus }) {
   const crumbs = [{ href: '/glossaire', label: 'Glossaire' }, { label: term.term }]
   const tool = TOOL_FOR[term.slug]
   return (
@@ -69,6 +70,14 @@ export default function Terme({ term, related, articles }) {
                 </ul>
               </>
             )}
+            {versus.length > 0 && (
+              <>
+                <h2>Face à face</h2>
+                <ul>
+                  {versus.map((v) => <li key={v.slug}><Link href={`/comparer/${v.slug}`}><strong>{fr(v.title)}</strong></Link></li>)}
+                </ul>
+              </>
+            )}
             {articles.length > 0 && (
               <>
                 <h2>Pour aller plus loin</h2>
@@ -96,5 +105,6 @@ export async function getStaticProps({ params }) {
   const term = getTerm(params.terme)
   const related = term.related.map(getTerm).filter(Boolean).map(({ slug, term: name, short }) => ({ slug, term: name, short }))
   const articles = ARTICLES.filter((a) => a.terms.includes(term.slug)).map(({ slug, title }) => ({ slug, title }))
-  return { props: { term, related, articles, tracking: { glossary_term: term.slug } } }
+  const versus = versusForTerm(term.slug).map(({ slug, title }) => ({ slug, title }))
+  return { props: { term, related, articles, versus, tracking: { glossary_term: term.slug } } }
 }

@@ -11,6 +11,16 @@ export default function ToolVisual({ kind }) {
       </svg>
     )
   }
+  if (kind === 'lump') {
+    // Une seule mise (point de départ) puis la valeur qui fluctue
+    return (
+      <svg viewBox="0 0 240 120" aria-hidden="true">
+        <path d="M6 74 L234 74" stroke={stroke} strokeWidth="2.5" strokeDasharray="5 6" fill="none" opacity=".5" />
+        <path d="M14 74 L40 60 L62 86 L88 96 L112 70 L136 78 L160 48 L186 56 L210 30 L232 22" stroke={accent} strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="14" cy="74" r="8" fill={stroke} />
+      </svg>
+    )
+  }
   if (kind === 'compound') {
     return (
       <svg viewBox="0 0 240 120" aria-hidden="true">

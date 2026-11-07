@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Seo from '../../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../../components/ui/PageIntro'
+import { toolJsonLd } from '../../../lib/jsonld'
 import LineChart from '../../../components/ui/LineChart'
 import RangeField from '../../../components/ui/RangeField'
 import Counter from '../../../components/ui/Counter'
@@ -65,7 +66,7 @@ function DcaPage({ asset, initialHistory, faq }) {
       <Seo
         title={`Simulateur DCA ${asset.name} : et si tu avais investi chaque mois ?`}
         description={`Calcule ce qu’aurait rapporté un investissement régulier sur ${asset.name}, mois par mois, à partir des vrais cours historiques en euros.`}
-        jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(faq)].filter(Boolean)}
+        jsonLd={[crumbsJsonLd(crumbs), toolJsonLd({ name: `Simulateur DCA ${asset.name}`, description: `Rejoue un investissement régulier sur ${asset.name} à partir des vrais cours mensuels en euros.`, path: `/simulateurs/dca/${asset.slug}` }), faqJsonLd(faq)].filter(Boolean)}
       />
       <PageIntro
         crumbs={crumbs}
@@ -179,6 +180,7 @@ function DcaPage({ asset, initialHistory, faq }) {
 
                 <div className={s.actions}>
                   <ShareButton toolName={`dca_${asset.slug}`} />
+                  <Link href={`/simulateurs/si-j-avais-investi/${asset.slug}`} className="btn">Tout investir en une fois</Link>
                   <Link href={`/marches/${asset.slug}`} className="btn">Voir la fiche {asset.name}</Link>
                 </div>
 

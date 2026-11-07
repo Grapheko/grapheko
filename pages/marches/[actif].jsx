@@ -115,6 +115,9 @@ function MarketPage({ asset, history, stats, faq }) {
             <Link href={`/simulateurs/dca/${asset.slug}`} className="btn btn--plein" onClick={() => trackClick('simulateur_dca', 'fiche_actif', asset.slug)}>
               Simuler un DCA sur {asset.name}
             </Link>
+            <Link href={`/simulateurs/si-j-avais-investi/${asset.slug}`} className="btn" onClick={() => trackClick('simulateur_unique', 'fiche_actif', asset.slug)}>
+              Et 1 000 € en une fois ?
+            </Link>
           </aside>
         </div>
 

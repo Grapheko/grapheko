@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import LineChart from '../../components/ui/LineChart'
 import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
@@ -26,7 +27,7 @@ export default function Frais() {
       <Seo
         title="Simulateur du coût des frais de gestion"
         description="Compare deux niveaux de frais annuels (ETF, fonds, assurance-vie) et vois l’écart en euros sur 10, 20 ou 30 ans."
-        jsonLd={crumbsJsonLd(crumbs)}
+        jsonLd={[crumbsJsonLd(crumbs), toolJsonLd({ name: 'Simulateur du coût des frais de gestion', description: 'Compare deux niveaux de frais annuels et vois l’écart en euros sur 10, 20 ou 30 ans.', path: '/simulateurs/frais' })]}
       />
       <PageIntro
         crumbs={crumbs}

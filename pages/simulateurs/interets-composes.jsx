@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
+import { toolJsonLd } from '../../lib/jsonld'
 import LineChart from '../../components/ui/LineChart'
 import RangeField from '../../components/ui/RangeField'
 import Counter from '../../components/ui/Counter'
@@ -24,7 +25,7 @@ export default function InteretsComposes() {
       <Seo
         title="Simulateur d’intérêts composés"
         description="Calcule la valeur future de ton épargne avec un capital de départ, un versement mensuel et un taux annuel. Graphique année par année."
-        jsonLd={crumbsJsonLd(crumbs)}
+        jsonLd={[crumbsJsonLd(crumbs), toolJsonLd({ name: 'Simulateur d’intérêts composés', description: 'Calcule la valeur future d’une épargne avec un capital de départ, un versement mensuel et un taux annuel.', path: '/simulateurs/interets-composes' })]}
       />
       <PageIntro
         crumbs={crumbs}
