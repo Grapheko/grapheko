@@ -37,6 +37,7 @@ ${TERMS.map((t) => `- [${t.term}](${SITE}/glossaire/${t.slug}): ${t.short}`).joi
 ## Comparatifs
 - [Courtiers PEA : frais de courtage comparés](${SITE}/comparatifs/courtiers-pea): Bourse Direct, BoursoBank, Fortuneo, Trade Republic, grilles officielles vérifiées, calculateur du coût annuel
 - [Assurances-vie en ligne : frais et fonds en euros](${SITE}/comparatifs/assurance-vie): Linxea Spirit 2, Lucya Cardif, Placement-direct Vie, BoursoVie, Fortuneo Vie, frais, rendements 2025 des fonds en euros, calculateur du coût des frais
+- [Plateformes crypto agréées MiCA : frais comparés](${SITE}/comparatifs/plateformes-crypto): Bitvavo, Bitpanda, Kraken, Revolut, Coinhouse, Coinbase, agrément vérifié sur la liste blanche de l'AMF, frais d'achat simple et en carnet d'ordres
 - [Banques en ligne et néobanques](${SITE}/comparatifs/banques-en-ligne): BoursoBank, Fortuneo, Hello bank!, Monabanq, N26, Revolut, Nickel, Trade Republic, frais et conditions vérifiés
 
 ## Face à face (deux notions comparées)

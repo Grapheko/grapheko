@@ -20,6 +20,7 @@ const CATEGORIES = [
   },
   {
     title: 'Plateformes crypto',
+    href: '/comparatifs/plateformes-crypto',
     criteria: ['Agrément MiCA délivré ou reconnu par l’AMF', 'Frais d’achat, de vente et spread affiché', 'Possibilité de retirer vers son propre wallet', 'Achats programmés', 'Documents fiscaux fournis'],
   },
   {
