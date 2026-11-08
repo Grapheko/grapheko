@@ -4,16 +4,21 @@ Architecture : **Next.js → dataLayer → GTM (GTM-5BKPJLC8) → GA4 (G-9K1C83L
 Le code ne parle jamais directement à GA4 : tout passe par le dataLayer, GTM décide quoi envoyer.
 Toute la logique est dans `lib/gtm.js`.
 
-## 1. Consentement (Consent Mode v2)
+## 1. Consentement (Consent Mode v2, mode basique)
 
-- `pages/_document.jsx` déclare **avant GTM** : `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage` = `denied`, `wait_for_update: 500`.
-- Si un choix existe déjà (`localStorage.gk_consent`), il est réappliqué immédiatement (`consent update`).
+- `pages/_document.jsx` déclare **avant tout** : `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage` = `denied`, `wait_for_update: 500`.
+- **GTM n'est chargé qu'après accord pour la mesure d'audience** (`analytics`). Sans accord, aucune requête ne part vers Google (pas de ping `gcs=G100`). Pas de `<noscript>` GTM.
+- Si un choix valide existe (`localStorage.gk_consent`, moins de 6 mois), il est réappliqué (`consent update`) et GTM est chargé s'il inclut la mesure d'audience. Au-delà de 6 mois, le bandeau revient.
+- Au premier accord (`lib/consent.js`) : les events en attente dans le dataLayer sont retirés, `consent update` est poussé, GTM est chargé, puis `consent_update` et un nouveau `page.display` de la page en cours.
+- Retrait de l'accord : `consent update` à `denied` et suppression des cookies `_ga` / `_ga_*`. GTM n'est plus chargé à la page suivante.
+- Un accord « Publicité et affiliation » seul ne charge pas GTM : à revoir le jour où une balise publicitaire (Meta, Google Ads) sera ajoutée.
 - La bannière (`components/layout/ConsentBanner.jsx`) propose « Tout refuser » et « Tout accepter » au même niveau, plus « Personnaliser ».
 - Lien « Gérer les cookies » dans le pied de page et bouton sur `/confidentialite`.
 
 **À faire dans GTM**
 - Admin du conteneur > Paramètres du conteneur : activer **Afficher la vue d’ensemble du consentement**.
-- Balise Google (GA4) : consentement supplémentaire requis = aucun (la balise Google gère `analytics_storage` nativement en mode avancé). Vérifier en mode Aperçu que les hits partent en `gcs=G100` avant accord puis `G111` après.
+- Sécurité supplémentaire (recommandé) : sur la balise Google et les balises d'événement GA4, consentement supplémentaire requis = `analytics_storage`.
+- Vérifier en navigation privée : aucune requête vers `googletagmanager.com` ni `google-analytics.com` avant accord ; après « Tout accepter », hits en `gcs=G111`.
 
 ## 2. Events conservés (aucun changement de nom ni de clé)
 
@@ -79,7 +84,7 @@ Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env
 
 **GA4 – Événements clés** : `formulaire_inscription`, `formulaire_contact`, `quiz_complete` (à étoiler dès qu’il apparaît).
 
-**À savoir** : les events envoyés après un refus de cookies partent en ping anonyme (Consent Mode) et n’apparaissent pas dans les rapports ; `consent_update` y montrera surtout des acceptations.
+**À savoir** : après un refus, rien n'est envoyé ; `consent_update` n'apparaît dans GA4 que pour les accords (et pour un retrait si GTM était déjà chargé sur la page).
 
 **Quiz** : `quiz_name` (`profil_investisseur`, `crypto`, `bourse_debutant`), `quiz_answer` = lettre affichée (A à D), `quiz_correct` = `oui`/`non` (quiz de connaissances), `quiz_result` = profil ou score (`7/10`).
 

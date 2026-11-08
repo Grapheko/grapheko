@@ -7,6 +7,7 @@ import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import ConsentBanner from '../components/layout/ConsentBanner'
 import { pageView, initTimeOnPage } from '../lib/gtm'
+import { GRANTED_EVENT } from '../lib/consent'
 import { initSmoothScroll, initReveals, scrollToTop, ScrollTrigger } from '../lib/motion'
 
 export default function App({ Component, pageProps }) {
@@ -23,7 +24,10 @@ export default function App({ Component, pageProps }) {
     const t = setTimeout(() => pageView(pageKey, document.title, pageProps.tracking || {}), 60)
     const clearTimers = initTimeOnPage(document.title)
     const cleanReveals = initReveals(document.getElementById('contenu') || document)
-    return () => { clearTimeout(t); clearTimers(); cleanReveals() }
+    // Premier accord sur cette page : GTM vient d'être chargé, on compte la page en cours
+    const onGranted = () => pageView(pageKey, document.title, pageProps.tracking || {})
+    window.addEventListener(GRANTED_EVENT, onGranted)
+    return () => { clearTimeout(t); clearTimers(); cleanReveals(); window.removeEventListener(GRANTED_EVENT, onGranted) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageKey])
 

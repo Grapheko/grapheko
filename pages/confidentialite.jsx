@@ -19,15 +19,16 @@ export default function Confidentialite() {
             <tr><td>Nom, e-mail, message (contact)</td><td>Répondre à ta demande</td><td>Intérêt légitime</td><td>3 ans après le dernier échange</td></tr>
             <tr><td>Mesure d’audience (Google Analytics 4)</td><td>Savoir quels contenus et outils sont utiles</td><td>Consentement</td><td>Cookies : 13 mois maximum</td></tr>
             <tr><td>Chiffres d’une simulation fiscale (compte rendu par IA)</td><td>Rédiger le compte rendu que tu demandes, uniquement si tu cliques sur le bouton prévu</td><td>Exécution de ta demande</td><td>Non conservés par Grapheko : transmis à Anthropic le temps de la rédaction</td></tr>
-            <tr><td>Choix de cookies</td><td>Mémoriser ta décision</td><td>Obligation légale</td><td>Stocké dans ton navigateur, jusqu’à ce que tu le modifies</td></tr>
+            <tr><td>Choix de cookies</td><td>Mémoriser ta décision</td><td>Obligation légale</td><td>Stocké dans ton navigateur, 6 mois</td></tr>
           </tbody>
         </table>
 
         <h2>Cookies et traceurs</h2>
         <p>
-          Aucun cookie de mesure d’audience n’est déposé tant que tu n’as pas accepté. Grapheko utilise le mode consentement de Google :
-          sans accord, Google Analytics ne dépose pas de cookie. Tu peux modifier ton choix à tout moment avec le bouton ci-dessus
-          ou le lien « Gérer les cookies » en bas de chaque page.
+          Google Tag Manager et Google Analytics ne sont chargés qu’une fois la mesure d’audience acceptée : sans ton accord,
+          aucun cookie n’est déposé et aucune donnée n’est envoyée à Google. Ton choix est conservé 6 mois, puis la question t’est reposée.
+          Tu peux le modifier à tout moment avec le bouton ci-dessus ou le lien « Gérer les cookies » en bas de chaque page ;
+          si tu retires ton accord, les cookies de Google Analytics sont supprimés.
         </p>
 
         <h2>Simulateurs</h2>

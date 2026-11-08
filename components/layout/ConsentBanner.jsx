@@ -4,7 +4,8 @@ import { readConsent, saveConsent, OPEN_EVENT } from '../../lib/consent'
 import s from './ConsentBanner.module.css'
 
 // Bannière conforme aux recommandations CNIL : "Refuser" aussi visible
-// qu'"Accepter", aucun dépôt avant choix, choix modifiable à tout moment.
+// qu'"Accepter", rien n'est chargé avant accord (GTM compris), choix
+// modifiable à tout moment et redemandé au bout de 6 mois.
 export default function ConsentBanner() {
   const [open, setOpen] = useState(false)
   const [details, setDetails] = useState(false)
@@ -28,7 +29,7 @@ export default function ConsentBanner() {
     <div className={s.banner} role="dialog" aria-labelledby="consent-title" aria-live="polite">
       <h2 id="consent-title" className={s.title}>Des cookies pour mesurer l'audience</h2>
       <p className={s.text}>
-        Grapheko utilise Google Analytics pour savoir quels outils et articles sont utiles. Rien n'est déposé tant que tu n'as pas choisi.{' '}
+        Grapheko utilise Google Analytics pour savoir quels outils et articles sont utiles. Rien n'est envoyé à Google tant que tu n'as pas accepté.{' '}
         <Link href="/confidentialite">En savoir plus</Link>
       </p>
 
