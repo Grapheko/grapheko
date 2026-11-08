@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { prefersReducedMotion } from '../../lib/motion'
+import { prefersReducedMotion } from '../../lib/reducedMotion'
 
 // Nombre qui roule vers sa nouvelle valeur (réponse à une action de l'utilisateur)
 export default function Counter({ value, format = (v) => Math.round(v), duration = 700, className }) {

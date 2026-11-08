@@ -42,6 +42,9 @@ export default function Document() {
     <Html lang="fr">
       <Head>
         <script dangerouslySetInnerHTML={{ __html: CONSENT_AND_GTM }} />
+        {/* Polices du premier écran, chargées en parallèle de la feuille de style (styles/fonts.css) */}
+        <link rel="preload" href="/fonts/bricolage-latin-wdth-v530.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/geist-latin-wght-v530.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#FCEC9C" />

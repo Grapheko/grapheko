@@ -67,7 +67,7 @@ export default function Hero({ curve, curveLabel }) {
           <span className={`${s.line} ${s.lineSoft}`} data-hero-line><span>Apprends à la lire.</span></span>
         </h1>
         <div className={s.side}>
-          <p className={s.lede} data-hero-fade>
+          <p className={s.lede}>
             Des simulateurs branchés sur de vrais historiques de marché, des cours en direct et des explications sans jargon,
             pour comprendre la Bourse, la crypto et l’épargne avant d’y mettre un euro.
           </p>

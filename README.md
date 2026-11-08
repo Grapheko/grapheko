@@ -63,3 +63,9 @@ Ajouter un actif, un terme ou un article = ajouter une entrée dans `lib/`. Les 
 ## Accessibilité et animations
 
 Toutes les animations respectent `prefers-reduced-motion`. Le défilement fluide est désactivé sur écran tactile.
+
+## Vitesse
+
+- Polices auto-hébergées dans `public/fonts` (`styles/fonts.css`), préchargées dans `pages/_document.jsx` et mises en cache un an : le texte s'affiche directement dans la bonne police, sans décalage. Nouvelle version d'une police = nouveau suffixe de fichier.
+- GSAP, ScrollTrigger, SplitText et Lenis (`lib/motion.js`) ne sont plus dans le code commun à toutes les pages : `pages/_app.jsx` les charge à la première interaction (défilement, toucher, clic, clavier) ou au bout de 6 s. Les titres déjà visibles à ce moment restent affichés sans animation. Pour un utilitaire sans GSAP (`prefersReducedMotion`), importer `lib/reducedMotion.js`.
+- Mesure : Lighthouse mobile en ligne de commande, et PageSpeed Insights sur le site en production.
