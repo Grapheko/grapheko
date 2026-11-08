@@ -159,7 +159,7 @@ export default function CourtiersPea() {
           <h2 id="limits-title" className={s.h2}>Ce que ce comparatif ne mesure pas</h2>
           <div className={s.limits}>
             <div><h3>Les frais de l’ETF</h3><p>Un ETF à 0,4 % par an coûte bien plus, sur 20 ans, que quelques euros de courtage. <Link href="/simulateurs/frais">Calculer l’effet des frais</Link>.</p></div>
-            <div><h3>Le choix d’ETF</h3><p>Le nombre d’ETF éligibles au PEA varie fortement d’un courtier à l’autre. Vérifie que celui que tu vises est disponible avant d’ouvrir.</p></div>
+            <div><h3>Le choix d’ETF</h3><p>Le nombre d’ETF éligibles au PEA varie fortement d’un courtier à l’autre. Vérifie que celui que tu vises est disponible avant d’ouvrir. <Link href="/comparer/pea-ou-assurance-vie">PEA ou assurance-vie ?</Link></p></div>
             <div><h3>L’écart achat-vente</h3><p>Le prix payé peut s’écarter légèrement du cours affiché, en particulier hors des heures d’ouverture de la Bourse.</p></div>
             <div><h3>La sécurité</h3><p>Vérifie que le courtier est autorisé sur le <a href="https://www.regafi.fr" target="_blank" rel="noopener noreferrer" onClick={() => trackOutboundClick('https://www.regafi.fr', 'regafi')}>registre REGAFI</a>. Tes titres restent à ton nom, même en cas de difficulté du courtier.</p></div>
           </div>

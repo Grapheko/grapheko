@@ -177,7 +177,7 @@ export default function AssuranceVie() {
             <div><h3>Les frais des supports</h3><p>Un fonds actif peut coûter 2 % par an, un ETF 0,1 %. Ces frais s’ajoutent à ceux du contrat. <Link href="/comparer/etf-ou-fonds-actif">ETF ou fonds actif ?</Link></p></div>
             <div><h3>Le rendement futur</h3><p>Les taux 2025 des fonds en euros ne garantissent rien pour les années suivantes, et les bonus sont temporaires.</p></div>
             <div><h3>La garantie</h3><p>Certains fonds en euros garantissent 97 ou 98 % du capital, pas 100 %. Les unités de compte ne garantissent rien.</p></div>
-            <div><h3>Ta situation</h3><p>Le bon contrat dépend de ce que tu veux y mettre. <Link href="/comparer/assurance-vie-ou-per">Assurance-vie ou PER ?</Link></p></div>
+            <div><h3>Ta situation</h3><p>Le bon contrat dépend de ce que tu veux y mettre. <Link href="/comparer/assurance-vie-ou-per">Assurance-vie ou PER ?</Link> <Link href="/comparer/pea-ou-assurance-vie">PEA ou assurance-vie ?</Link></p></div>
           </div>
         </section>
 
