@@ -24,6 +24,7 @@ const CATEGORIES = [
   },
   {
     title: 'Assurances-vie en ligne',
+    href: '/comparatifs/assurance-vie',
     criteria: ['Frais sur versements et frais de gestion annuels', 'Nombre et frais des ETF disponibles', 'Rendement du fonds en euros et conditions d’accès', 'Gestion libre ou pilotée', 'Versement minimum'],
   },
 ]
