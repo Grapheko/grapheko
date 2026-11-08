@@ -26,7 +26,7 @@ const WIDGETS = [
 
 // Code à coller : l'iframe, le lien texte vers Grapheko (obligatoire) et un petit
 // script qui ajuste la hauteur de l'iframe à son contenu.
-const embedCode = (w) => `<iframe id="grapheko-${w.id}" src="${SITE}/integrer/${w.id}" title="${w.name}" width="100%" height="1000" style="border:0;max-width:760px;display:block" loading="lazy"></iframe>
+const embedCode = (w) => `<iframe id="grapheko-${w.id}" src="${SITE}/integrer/${w.id}" title="${w.name}" width="100%" height="1300" style="border:0;max-width:760px;display:block" loading="lazy"></iframe>
 <p style="font-size:13px;margin:6px 0 0"><a href="${SITE}${w.full}">${w.name}</a> par Grapheko</p>
 <script>window.addEventListener("message",function(e){if(e.origin!=="${SITE}"||!e.data||e.data.type!=="grapheko:height")return;var f=document.getElementById("grapheko-"+e.data.tool);if(f)f.style.height=e.data.height+"px"});</script>`
 
@@ -80,7 +80,7 @@ export default function Integrer() {
                 <div><CopyButton text={embedCode(w)} id={w.id} /></div>
                 <p className="xsmall faint">
                   Valeurs de départ réglables dans l’adresse de l’iframe, par exemple <code>/integrer/{w.id}?{w.params}</code>.
-                  La dernière ligne ajuste la hauteur toute seule ; si ton site refuse les scripts, garde les deux premières et règle <code>height</code> à la main (environ 1 000 sur ordinateur, 1 450 sur mobile).
+                  La dernière ligne ajuste la hauteur toute seule ; si ton site refuse les scripts, garde les deux premières et règle <code>height</code> à la main (environ 1 300 sur ordinateur, 2 000 sur mobile).
                 </p>
               </div>
             </section>
@@ -88,7 +88,7 @@ export default function Integrer() {
         </div>
 
         <div className={s.rules}>
-          <div><h3>Gratuit, sans compte</h3><p>Les simulateurs sont gratuits, sans publicité ni cookie. Les calculs sont les mêmes que sur Grapheko.</p></div>
+          <div><h3>Gratuit, sans compte</h3><p>Les simulateurs sont gratuits, sans publicité ni cookie. Les calculs sont les mêmes que sur Grapheko. Sous le résultat, un lien mène vers un comparatif Grapheko et un formulaire propose la newsletter.</p></div>
           <div><h3>Une condition</h3><p>Garder visible le lien « par Grapheko » placé sous le simulateur. Il fait partie du code à copier.</p></div>
           <div><h3>Une question ?</h3><p>Une couleur à adapter, un autre simulateur à intégrer ? <Link href="/contact">Écris-nous</Link>.</p></div>
         </div>

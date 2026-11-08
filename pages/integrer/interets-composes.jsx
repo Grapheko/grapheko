@@ -15,7 +15,12 @@ export default function InteretsComposesEmbed() {
   const r = useMemo(() => compound({ capital: st.capital, monthly: st.mensuel, ratePct: st.taux, years: st.duree }), [st])
 
   return (
-    <EmbedShell tool="interets-composes" title="Simulateur d’intérêts composés" fullPath="/simulateurs/interets-composes">
+    <EmbedShell
+      tool="interets-composes"
+      title="Simulateur d’intérêts composés"
+      fullPath="/simulateurs/interets-composes"
+      cta={{ question: 'Investir chaque mois, mais où ?', label: 'Comparer les frais des courtiers PEA', href: '/comparatifs/courtiers-pea' }}
+    >
       <div>
         <h1 className={s.title}>Combien vaudra ton épargne ?</h1>
         <p className={s.lede}>Les gains produisent eux-mêmes des gains : règle les curseurs pour voir l’effet du temps.</p>

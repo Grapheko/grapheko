@@ -39,3 +39,10 @@
   .item { grid-template-columns: minmax(0, 1fr); }
   .rules { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Suite du calcul et newsletter, dans les simulateurs intégrés */
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 14px 16px; border-radius: 16px; background: var(--jaune); color: var(--encre); font-weight: 600; font-size: var(--fs-sm); }
+.next :global(.btn) { white-space: normal; text-align: center; }
+.nl { display: grid; gap: 6px; padding: 16px; border-radius: 16px; background: var(--bg); }
+.nlTitle { font-family: var(--display); font-weight: 700; font-size: var(--fs-md); letter-spacing: -0.01em; }
+.nlText { font-size: var(--fs-xs); color: var(--fg-muted); margin-bottom: 6px; }

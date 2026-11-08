@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { trackNewsletterSignup } from '../../lib/gtm'
 import s from './NewsletterForm.module.css'
 
-export default function NewsletterForm({ location = 'inline', compact = false }) {
+// external : formulaire affiché dans un simulateur intégré sur un autre site (liens ouverts dans un nouvel onglet)
+export default function NewsletterForm({ location = 'inline', compact = false, external = false }) {
   const [email, setEmail] = useState('')
   const [prenom, setPrenom] = useState('')
   const [status, setStatus] = useState('idle')
@@ -79,7 +80,10 @@ export default function NewsletterForm({ location = 'inline', compact = false })
       </div>
       {error && <p id={`err-${location}`} className={s.error} role="alert">{error}</p>}
       <p className={s.legal}>
-        Une édition par semaine, désinscription en un clic. <Link href="/confidentialite">Données personnelles</Link>
+        Une édition par semaine, désinscription en un clic.{' '}
+        {external
+          ? <a href="https://grapheko.fr/confidentialite" target="_blank" rel="noopener">Données personnelles</a>
+          : <Link href="/confidentialite">Données personnelles</Link>}
       </p>
     </form>
   )

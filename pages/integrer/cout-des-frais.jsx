@@ -18,7 +18,12 @@ export default function CoutDesFraisEmbed() {
   )
 
   return (
-    <EmbedShell tool="cout-des-frais" title="Simulateur du coût des frais" fullPath="/simulateurs/frais">
+    <EmbedShell
+      tool="cout-des-frais"
+      title="Simulateur du coût des frais"
+      fullPath="/simulateurs/frais"
+      cta={{ question: 'Les frais de ton contrat sont-ils trop élevés ?', label: 'Comparer les assurances-vie en ligne', href: '/comparatifs/assurance-vie' }}
+    >
       <div>
         <h1 className={s.title}>Combien te coûtent les frais ?</h1>
         <p className={s.lede}>Les frais se composent comme les gains : compare deux niveaux de frais annuels sur la durée.</p>
