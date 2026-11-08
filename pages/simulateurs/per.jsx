@@ -240,6 +240,7 @@ export default function Per({ aiEnabled }) {
               <ShareButton toolName="economie_per" label="Partager ce simulateur" />
               <Link className="btn" href="/simulateurs/flat-tax-ou-bareme">Flat tax ou barème ?</Link>
               <Link className="btn" href="/blog/per-combien-verser-avant-31-decembre">Combien verser avant le 31 décembre ?</Link>
+              <Link className="btn" href="/comparer/assurance-vie-ou-per">Assurance-vie ou PER ?</Link>
               <Link className="btn" href="/calendrier">Les dates fiscales</Link>
             </div>
 

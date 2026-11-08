@@ -11,6 +11,10 @@ npm run dev                         # données réelles (nécessite un accès r�
 GRAPHEKO_DEMO_DATA=1 npm run dev    # données fictives signalées à l'écran, pour travailler hors ligne
 ```
 
+## Tests
+
+`npm test` vérifie les calculs des simulateurs (`tests/` : barème, décote, quotient familial, PER, flat tax ou barème, LEP, DCA, intérêts composés). Les tests tournent automatiquement avant chaque build (`prebuild`) : si un calcul casse, Vercel refuse la mise en ligne. Quand une règle fiscale change (barème, plafonds, taux), mettre à jour la constante dans `lib/` **et** les valeurs attendues dans `tests/`.
+
 ## Variables d’environnement (Vercel)
 
 | Variable | Usage | Obligatoire |

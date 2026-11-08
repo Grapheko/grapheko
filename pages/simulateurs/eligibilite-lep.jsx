@@ -328,6 +328,7 @@ export default function EligibiliteLep() {
               <ShareButton toolName="test_lep" label="Partager ce test" />
               <Link className="btn" href="/simulateurs/rendement-reel">Ton livret face à l’inflation</Link>
               <Link className="btn" href="/glossaire/lep">Le LEP expliqué</Link>
+              <Link className="btn" href="/comparer/livret-a-ou-lep">Livret A ou LEP ?</Link>
             </div>
 
             <p className={s.method}>

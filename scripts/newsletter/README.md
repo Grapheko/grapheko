@@ -9,7 +9,8 @@
 1. Historiques mensuels en euros : `curl -s https://grapheko.fr/api/history/<actif> -o out/<actif>.json`
    (actifs : bitcoin, ethereum, solana, xrp, bnb, tron, dogecoin, cardano, chainlink, avalanche, cac-40, sp-500, nasdaq, msci-world, or).
 2. Calculs avec les fonctions du site (`lib/finance.js`, `lib/tax.js`) : voir `compute_novembre_2026.mjs`, lancer avec `npx tsx`.
-3. Graphiques : écrire un SVG sur le modèle de `charts_novembre_2026.py`, puis `node render.js <noms>` pour le PNG.
+   Décembre 2026 : `compute_decembre_2026.mjs` (LEP, tranche et taux moyen, intérêts composés, flat tax ou barème), sans historique de cours : `NL_DIR=dossier node scripts/newsletter/compute_decembre_2026.mjs`.
+3. Graphiques : écrire un SVG sur le modèle de `charts_novembre_2026.py`, puis `node render.js <noms>` pour le PNG. Graphiques de décembre : `charts_decembre_2026.py`.
 
 ## Règles éditoriales
 **Lecteur visé : un débutant complet**, qui ne connaît ni le jargon ni les mécanismes. Il doit comprendre l'édition sans rien chercher ailleurs.

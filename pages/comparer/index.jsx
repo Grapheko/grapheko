@@ -12,7 +12,7 @@ export default function ComparerIndex({ items }) {
   return (
     <>
       <Seo
-        title="Comparer : PEA ou CTO, ETF capitalisant ou distribuant…"
+        title="Comparer : PEA ou CTO, Livret A ou LEP, assurance-vie ou PER…"
         description="Deux notions de la Bourse, de l’épargne ou de la crypto face à face : un tableau, les cas où choisir l’une ou l’autre, et des exemples chiffrés."
         jsonLd={crumbsJsonLd(crumbs)}
       />

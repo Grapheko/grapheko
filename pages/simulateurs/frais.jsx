@@ -95,6 +95,7 @@ export default function Frais() {
 
             <div className={s.actions}>
               <ShareButton toolName="cout_frais" />
+              <Link className="btn" href="/comparer/etf-ou-fonds-actif">ETF ou fonds actif ?</Link>
             </div>
 
             <p className={s.method}>
