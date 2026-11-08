@@ -89,6 +89,7 @@ export default function InteretsComposes() {
 
             <div className={s.actions}>
               <ShareButton toolName="interets_composes" />
+              <Link className="btn" href="/integrer">Intégrer ce simulateur à ton site</Link>
               <Link href="/simulateurs/frais" className="btn">Voir l’effet des frais</Link>
             </div>
 

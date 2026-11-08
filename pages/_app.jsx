@@ -32,10 +32,13 @@ export default function App({ Component, pageProps }) {
 
   // Défilement fluide (une seule fois)
   useEffect(() => {
+    // Pas de défilement fluide dans un simulateur intégré : il bloquerait le défilement de la page hôte
+    if (Component.bare) return undefined
     let alive = true
     let cleanup = () => {}
     loadMotion().then((m) => { if (alive) cleanup = m.initSmoothScroll() })
     return () => { alive = false; cleanup() }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Page vue + temps passé + révélations, à chaque page
@@ -49,7 +52,7 @@ export default function App({ Component, pageProps }) {
     let cleanReveals = () => {}
     // Module encore absent : il arrivera après l'affichage, on ne cache pas ce qui est déjà à l'écran
     const skipInView = !motion
-    loadMotion().then((m) => {
+    if (!Component.bare) loadMotion().then((m) => {
       if (alive) cleanReveals = m.initReveals(document.getElementById('contenu') || document, { skipInView })
     })
     // Premier accord sur cette page : GTM vient d'être chargé, on compte la page en cours
@@ -69,6 +72,9 @@ export default function App({ Component, pageProps }) {
     router.events.on('routeChangeComplete', onDone)
     return () => router.events.off('routeChangeComplete', onDone)
   }, [router])
+
+  // Simulateurs intégrables (/integrer/<outil>) : la page seule, sans en-tête ni bandeau
+  if (Component.bare) return <Component {...pageProps} />
 
   return (
     <>

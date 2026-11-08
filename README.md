@@ -69,3 +69,7 @@ Toutes les animations respectent `prefers-reduced-motion`. Le défilement fluide
 - Polices auto-hébergées dans `public/fonts` (`styles/fonts.css`), préchargées dans `pages/_document.jsx` et mises en cache un an : le texte s'affiche directement dans la bonne police, sans décalage. Nouvelle version d'une police = nouveau suffixe de fichier.
 - GSAP, ScrollTrigger, SplitText et Lenis (`lib/motion.js`) ne sont plus dans le code commun à toutes les pages : `pages/_app.jsx` les charge à la première interaction (défilement, toucher, clic, clavier) ou au bout de 6 s. Les titres déjà visibles à ce moment restent affichés sans animation. Pour un utilitaire sans GSAP (`prefersReducedMotion`), importer `lib/reducedMotion.js`.
 - Mesure : Lighthouse mobile en ligne de commande, et PageSpeed Insights sur le site en production.
+
+## Simulateurs intégrables
+
+`/integrer` donne le code pour intégrer un simulateur sur un autre site : une iframe vers `/integrer/<outil>` (`interets-composes`, `cout-des-frais`), un lien texte vers le simulateur complet (le backlink) et un script qui ajuste la hauteur (message `grapheko:height`). Les pages `/integrer/<outil>` sont sans en-tête, sans bandeau, sans GTM, sans défilement fluide (`Component.bare` dans `_app.jsx`), en `noindex`, et seules autorisées dans un cadre externe (`frame-ancestors *` dans `next.config.js`). Pour ajouter un outil : une page dans `pages/integrer/` avec `EmbedShell`, `bare = true`, puis une entrée dans `WIDGETS` de `pages/integrer/index.jsx`.

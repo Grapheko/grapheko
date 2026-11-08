@@ -24,10 +24,12 @@ const nextConfig = {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()' },
         ],
       },
+      // Interdit l'affichage dans un cadre externe, sauf pour les simulateurs intégrables
+      { source: '/((?!integrer/).*)', headers: [{ key: 'X-Frame-Options', value: 'SAMEORIGIN' }] },
+      { source: '/integrer/:outil', headers: [{ key: 'Content-Security-Policy', value: 'frame-ancestors *' }] },
     ]
   },
 }

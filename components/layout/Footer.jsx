@@ -34,6 +34,7 @@ const COLS = [
       { href: '/about', label: 'À propos' },
       { href: '/contact', label: 'Contact' },
       { href: '/newsletter', label: 'Newsletter' },
+      { href: '/integrer', label: 'Intégrer nos simulateurs' },
     ],
   },
 ]
