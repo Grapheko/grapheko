@@ -160,6 +160,7 @@ export default function PlateformesCrypto() {
                 {p.referral && (
                   <div className={s.referral}>
                     <p className={s.refLabel}>Lien de parrainage Grapheko</p>
+                    {p.referral.code && <p className={s.code}>Code : <strong>{p.referral.code}</strong></p>}
                     <a className="btn" href={p.referral.url} target="_blank" rel="sponsored noopener noreferrer" onClick={() => trackOutboundClick(p.referral.url, `parrainage_${p.id}`)}>
                       {p.referral.label}
                     </a>
