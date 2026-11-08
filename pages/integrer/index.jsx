@@ -24,10 +24,12 @@ const WIDGETS = [
   },
 ]
 
-// Code à coller : l'iframe, le lien texte vers Grapheko (obligatoire) et un petit
-// script qui ajuste la hauteur de l'iframe à son contenu.
+// Code à coller : l'iframe, la mention « proposé par Grapheko » et un petit script
+// qui ajuste la hauteur de l'iframe à son contenu. Le lien porte sur le nom de marque,
+// visible, jamais sur des mots-clés : les règles anti-spam de Google visent les liens
+// de widgets « riches en mots-clés, cachés ou de faible qualité ».
 const embedCode = (w) => `<iframe id="grapheko-${w.id}" src="${SITE}/integrer/${w.id}" title="${w.name}" width="100%" height="1300" style="border:0;max-width:760px;display:block" loading="lazy"></iframe>
-<p style="font-size:13px;margin:6px 0 0"><a href="${SITE}${w.full}">${w.name}</a> par Grapheko</p>
+<p style="font-size:13px;margin:6px 0 0">${w.name} proposé par <a href="${SITE}${w.full}">Grapheko</a></p>
 <script>window.addEventListener("message",function(e){if(e.origin!=="${SITE}"||!e.data||e.data.type!=="grapheko:height")return;var f=document.getElementById("grapheko-"+e.data.tool);if(f)f.style.height=e.data.height+"px"});</script>`
 
 function CopyButton({ text, id }) {
@@ -89,7 +91,7 @@ export default function Integrer() {
 
         <div className={s.rules}>
           <div><h3>Gratuit, sans compte</h3><p>Les simulateurs sont gratuits, sans publicité ni cookie. Les calculs sont les mêmes que sur Grapheko. Sous le résultat, un lien mène vers un comparatif Grapheko et un formulaire propose la newsletter.</p></div>
-          <div><h3>Une condition</h3><p>Garder visible le lien « par Grapheko » placé sous le simulateur. Il fait partie du code à copier.</p></div>
+          <div><h3>Une seule demande</h3><p>Garder visible la mention « proposé par Grapheko » placée sous le simulateur. Elle fait partie du code à copier.</p></div>
           <div><h3>Une question ?</h3><p>Une couleur à adapter, un autre simulateur à intégrer ? <Link href="/contact">Écris-nous</Link>.</p></div>
         </div>
       </div>
