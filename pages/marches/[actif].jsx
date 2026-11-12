@@ -6,11 +6,12 @@ import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
 import LineChart from '../../components/ui/LineChart'
 import { ASSETS, getAsset, KIND_LABEL } from '../../lib/assets'
 import { getMonthlyHistory, historyStats } from '../../lib/history'
+import { drawdownEpisodes } from '../../lib/drawdown'
 import { REVALIDATE } from '../../lib/marketData'
 import { marketFaq, faqJsonLd } from '../../lib/faq'
 import Faq from '../../components/ui/Faq'
 import { getTerm } from '../../lib/content/glossary'
-import { pct, priceFmt, monthLabel, dirClass } from '../../lib/format'
+import { pct, priceFmt, monthLabel, dirClass, durationFr } from '../../lib/format'
 import { trackClick } from '../../lib/gtm'
 import s from '../../styles/Tool.module.css'
 import m from '../../styles/Market.module.css'
@@ -38,7 +39,7 @@ function LiveQuote({ slug }) {
   )
 }
 
-function MarketPage({ asset, history, stats, faq }) {
+function MarketPage({ asset, history, stats, faq, drops }) {
   const [range, setRange] = useState('60')
   const points = history?.points || []
   const visible = useMemo(() => {
@@ -51,8 +52,10 @@ function MarketPage({ asset, history, stats, faq }) {
   return (
     <>
       <Seo
-        title={`${asset.name} : cours, performance et pire baisse en euros`}
-        description={`${asset.name} en euros : performance sur 1, 5 et 10 ans, pire baisse historique et graphique des clôtures mensuelles. ${asset.intro.slice(0, 90)}…`}
+        title={`${asset.name} : cours, performance et chutes historiques`}
+        description={stats
+          ? `${asset.name} en euros : ses plus fortes chutes depuis ${stats.first.slice(0, 4)} (jusqu’à ${pct(stats.maxDrawdown, 0)}), le temps pour s’en remettre, l’écart à son sommet et sa performance sur 1, 5 et 10\u00A0ans.`
+          : `${asset.name} en euros : performance sur 1, 5 et 10\u00A0ans, plus fortes chutes et graphique des clôtures mensuelles.`}
         jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(faq)].filter(Boolean)}
       />
       <PageIntro crumbs={crumbs} title={asset.name} lede={asset.intro}>
@@ -102,6 +105,37 @@ function MarketPage({ asset, history, stats, faq }) {
               {asset.note} Source : {history.source}.{history.demo && <strong> Données de démonstration, non réelles.</strong>} Les performances passées ne préjugent pas des performances futures.
             </p>
           </>
+        )}
+
+        {drops?.episodes?.length > 0 && (
+          <section className={m.drops} aria-labelledby="chutes">
+            <h2 id="chutes" className={m.dropsTitle}>Les plus fortes chutes de {asset.name} depuis {stats.first.slice(0, 4)}</h2>
+            <p className={m.dropsNow}>
+              {drops.fromPeak > -1
+                ? <>À fin {monthLabel(drops.lastMonth, true)}, {asset.name} est <strong>à son plus haut historique</strong> en clôture mensuelle.</>
+                : <>À fin {monthLabel(drops.lastMonth, true)}, {asset.name} est <strong className="down">{pct(drops.fromPeak, 0)}</strong> sous son sommet de {monthLabel(drops.peak, true)}.</>}
+            </p>
+            <div className={m.dropsScroll} tabIndex={0} role="region" aria-label={`Plus fortes chutes de ${asset.name}`}>
+              <table className={m.dropsTable}>
+                <thead>
+                  <tr><th scope="col">Sommet</th><th scope="col">Creux</th><th scope="col">Chute</th><th scope="col">Retour au sommet</th></tr>
+                </thead>
+                <tbody>
+                  {drops.episodes.map((e) => (
+                    <tr key={e.peak}>
+                      <th scope="row">{monthLabel(e.peak)}</th>
+                      <td>{monthLabel(e.trough)}</td>
+                      <td className="num down">{pct(e.drop, 0)}</td>
+                      <td>{e.recovered ? `${durationFr(e.monthsToRecover)} (${monthLabel(e.recovered)})` : 'Pas encore'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className={s.method} style={{ marginTop: 12 }}>
+              Baisses de plus de 10 % d’un plus haut historique à un creux, sur les clôtures mensuelles en euros{asset.kind === 'bourse' ? ', hors dividendes' : ''}. Une nouvelle baisse survenue avant le retour au sommet compte dans la même chute. En cours de mois, les creux ont pu être plus profonds. Le retour au sommet compte les mois entre le sommet et la première clôture qui le dépasse.
+            </p>
+          </section>
         )}
 
         <div className={m.split}>
@@ -154,7 +188,8 @@ export async function getStaticProps({ params }) {
   return {
     props: (() => {
       const stats = history ? historyStats(history.points) : null
-      return { asset, history, stats, faq: marketFaq(asset, history, stats), tracking: { asset: asset.slug } }
+      const drops = history ? drawdownEpisodes(history.points) : null
+      return { asset, history, stats, drops, faq: marketFaq(asset, history, stats), tracking: { asset: asset.slug } }
     })(),
     revalidate: history ? REVALIDATE : 300,
   }

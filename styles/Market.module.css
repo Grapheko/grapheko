@@ -19,3 +19,18 @@
 }
 
 @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+.drops { margin: clamp(40px, 4.5vw, 64px) 0 0; }
+.dropsTitle { font-size: var(--fs-xl); letter-spacing: -0.02em; margin: 0 0 10px; }
+.dropsNow { margin: 0 0 18px; font-size: var(--fs-md); }
+.dropsScroll { overflow-x: auto; }
+.dropsTable { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.dropsTable th, .dropsTable td { padding: 11px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+.dropsTable thead th { font-size: var(--fs-xs); font-weight: 600; color: var(--fg-muted); border-bottom: 1.5px solid var(--encre); }
+.dropsTable th:first-child { padding-left: 0; }
+.dropsTable tbody th { font-weight: 600; white-space: nowrap; }
+.dropsTable td:nth-child(3) { font-weight: 700; white-space: nowrap; }
+@media (max-width: 560px) {
+  .dropsTable { font-size: var(--fs-xs); }
+  .dropsTable th, .dropsTable td { padding: 9px 6px; }
+}
