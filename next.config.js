@@ -9,6 +9,8 @@ const nextConfig = {
       // Anciennes adresses de la V1 (conserve le référencement acquis)
       { source: '/calculateur-interets-composes', destination: '/simulateurs/interets-composes', permanent: true },
       { source: '/ressources', destination: '/simulateurs', permanent: true },
+      // L'accueil n'a qu'une adresse : /index renvoie vers /
+      { source: '/index', destination: '/', permanent: true },
     ]
   },
   async rewrites() {

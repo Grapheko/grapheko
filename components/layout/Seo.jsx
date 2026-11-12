@@ -5,7 +5,8 @@ const SITE = 'https://grapheko.fr'
 
 export default function Seo({ title, description, jsonLd, noindex = false, image }) {
   const { asPath } = useRouter()
-  const path = asPath.split('?')[0].split('#')[0]
+  // À la génération statique, l'accueil a pour chemin « /index » : on le ramène à « / »
+  const path = asPath.split('?')[0].split('#')[0].replace(/\/index$/, '') || '/'
   const fullTitle = title ? `${title} | Grapheko` : 'Grapheko · Comprendre l’argent par les données'
   const url = SITE + (path === '/' ? '' : path)
   return (
