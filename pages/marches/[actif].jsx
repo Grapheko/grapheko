@@ -134,6 +134,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
             </div>
             <p className={s.method} style={{ marginTop: 12 }}>
               Baisses de plus de 10 % d’un plus haut historique à un creux, sur les clôtures mensuelles en euros{asset.kind === 'bourse' ? ', hors dividendes' : ''}. Une nouvelle baisse survenue avant le retour au sommet compte dans la même chute. En cours de mois, les creux ont pu être plus profonds. Le retour au sommet compte les mois entre le sommet et la première clôture qui le dépasse.
+              {' '}Pour aller plus loin : le <Link href="/glossaire/drawdown">drawdown</Link> et le <Link href="/glossaire/krach">krach</Link>.
             </p>
           </section>
         )}

@@ -29,7 +29,22 @@ const TOOL_FOR = {
   'prelevements-sociaux': { href: '/simulateurs/flat-tax-ou-bareme', label: 'Comparer flat tax et barème' },
 }
 
+// Comparatif correspondant à une notion : relie le glossaire aux pages de comparaison
+const COMPARATIFS = {
+  pea: { href: '/comparatifs/courtiers-pea', label: 'Comparatif des courtiers PEA' },
+  cto: { href: '/comparatifs/courtiers-pea', label: 'Comparatif des courtiers PEA' },
+  courtier: { href: '/comparatifs/courtiers-pea', label: 'Comparatif des courtiers PEA' },
+  etf: { href: '/comparatifs/courtiers-pea', label: 'Comparatif des courtiers PEA' },
+  'frais-de-courtage': { href: '/comparatifs/courtiers-pea', label: 'Comparatif des courtiers PEA' },
+  'assurance-vie': { href: '/comparatifs/assurance-vie', label: 'Comparatif des assurances-vie en ligne' },
+  'livret-a': { href: '/comparatifs/banques-en-ligne', label: 'Comparatif des banques en ligne' },
+  cex: { href: '/comparatifs/plateformes-crypto', label: 'Comparatif des plateformes crypto' },
+  mica: { href: '/comparatifs/plateformes-crypto', label: 'Comparatif des plateformes crypto' },
+  wallet: { href: '/comparatifs/plateformes-crypto', label: 'Comparatif des plateformes crypto' },
+}
+
 export default function Terme({ term, related, articles, versus }) {
+  const comparatif = COMPARATIFS[term.slug]
   const crumbs = [{ href: '/glossaire', label: 'Glossaire' }, { label: term.term }]
   const tool = TOOL_FOR[term.slug]
   return (
@@ -75,6 +90,14 @@ export default function Terme({ term, related, articles, versus }) {
                 <h2>Face à face</h2>
                 <ul>
                   {versus.map((v) => <li key={v.slug}><Link href={`/comparer/${v.slug}`}><strong>{fr(v.title)}</strong></Link></li>)}
+                </ul>
+              </>
+            )}
+            {comparatif && (
+              <>
+                <h2>Comparer</h2>
+                <ul>
+                  <li><Link href={comparatif.href}><strong>{comparatif.label}</strong></Link></li>
                 </ul>
               </>
             )}
