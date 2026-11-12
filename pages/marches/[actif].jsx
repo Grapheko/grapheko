@@ -113,7 +113,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
             <p className={m.dropsNow}>
               {drops.fromPeak > -1
                 ? <>À fin {monthLabel(drops.lastMonth, true)}, {asset.name} est <strong>à son plus haut historique</strong> en clôture mensuelle.</>
-                : <>À fin {monthLabel(drops.lastMonth, true)}, {asset.name} est <strong className="down">{pct(drops.fromPeak, 0)}</strong> sous son sommet de {monthLabel(drops.peak, true)}.</>}
+                : <>À fin {monthLabel(drops.lastMonth, true)}, {asset.name} est <strong className="down">{pct(-drops.fromPeak, 0, false)}</strong> sous son sommet de {monthLabel(drops.peak, true)}.</>}
             </p>
             <div className={m.dropsScroll} tabIndex={0} role="region" aria-label={`Plus fortes chutes de ${asset.name}`}>
               <table className={m.dropsTable}>
