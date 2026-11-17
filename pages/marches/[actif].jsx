@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Seo from '../../components/layout/Seo'
 import PageIntro, { crumbsJsonLd } from '../../components/ui/PageIntro'
 import LineChart from '../../components/ui/LineChart'
-import { ASSETS, getAsset, KIND_LABEL } from '../../lib/assets'
+import { ASSETS, getAsset, kindLabel, closeText, seriesUnit } from '../../lib/assets'
 import { getMonthlyHistory, historyStats } from '../../lib/history'
 import { drawdownEpisodes } from '../../lib/drawdown'
 import { REVALIDATE } from '../../lib/marketData'
@@ -39,6 +39,11 @@ function LiveQuote({ slug }) {
   )
 }
 
+// Titre du graphique : un indice en dollars est affiché converti en euros, sans unité parlante
+const chartTitle = (asset) => (!asset.index
+  ? 'Clôtures mensuelles en euros'
+  : asset.currency === 'EUR' ? 'Clôtures mensuelles, en points' : 'Clôtures mensuelles, converties en euros')
+
 function MarketPage({ asset, history, stats, faq, drops }) {
   const [range, setRange] = useState('60')
   const points = history?.points || []
@@ -59,7 +64,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
         jsonLd={[crumbsJsonLd(crumbs), faqJsonLd(faq)].filter(Boolean)}
       />
       <PageIntro crumbs={crumbs} title={asset.name} lede={asset.intro}>
-        <p className={m.kind}>{KIND_LABEL[asset.kind]}</p>
+        <p className={m.kind}>{kindLabel(asset)}</p>
         <LiveQuote slug={asset.slug} />
       </PageIntro>
 
@@ -74,7 +79,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
         {stats && (
           <>
             <dl className={m.stats}>
-              <div><dt>Clôture de {monthLabel(stats.lastMonth, true)}</dt><dd className="figure num">{priceFmt(stats.last)} €</dd></div>
+              <div><dt>Clôture de {monthLabel(stats.lastMonth, true)}</dt><dd className="figure num">{closeText(asset, stats.last, history.nativeClose)}</dd></div>
               <div><dt>Sur 1 an</dt><dd className={`figure num ${dirClass(stats.perf1y)}`}>{pct(stats.perf1y, 1)}</dd></div>
               <div><dt>Sur 5 ans</dt><dd className={`figure num ${dirClass(stats.perf5y)}`}>{pct(stats.perf5y, 0)}</dd></div>
               <div><dt>Sur 10 ans</dt><dd className={`figure num ${dirClass(stats.perf10y)}`}>{pct(stats.perf10y, 0)}</dd></div>
@@ -83,7 +88,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
 
             <div className={s.chartPanel}>
               <div className={m.chartHead}>
-                <h2 className={s.chartTitle} style={{ margin: 0 }}>Clôtures mensuelles en euros</h2>
+                <h2 className={s.chartTitle} style={{ margin: 0 }}>{chartTitle(asset)}</h2>
                 <div className="segmented" role="group" aria-label="Période affichée">
                   {RANGES.map((r) => (
                     <button key={r.key} type="button" aria-pressed={range === r.key} onClick={() => { setRange(r.key); trackClick(`periode_${r.key}`, 'fiche_actif', asset.slug) }}>
@@ -97,7 +102,7 @@ function MarketPage({ asset, history, stats, faq, drops }) {
                 labels={visible.map((p) => p.m)}
                 series={[{ key: 'close', label: asset.name, color: 'var(--outremer)', values: visible.map((p) => p.close), area: true }]}
                 formatX={(mm) => monthLabel(mm)}
-                formatY={(v) => `${priceFmt(v)} €`}
+                formatY={(v) => `${priceFmt(v)}${seriesUnit(asset) ? `\u00A0${seriesUnit(asset)}` : ''}`}
                 ariaLabel={`Cours mensuel de ${asset.name} en euros`}
               />
             </div>

@@ -7,13 +7,13 @@ import LineChart from '../../../components/ui/LineChart'
 import RangeField from '../../../components/ui/RangeField'
 import Counter from '../../../components/ui/Counter'
 import ShareButton from '../../../components/ui/ShareButton'
-import { ASSETS, getAsset } from '../../../lib/assets'
+import { ASSETS, getAsset, seriesValueText } from '../../../lib/assets'
 import { getMonthlyHistory } from '../../../lib/history'
 import { REVALIDATE } from '../../../lib/marketData'
 import { dcaFaq, faqJsonLd } from '../../../lib/faq'
 import Faq from '../../../components/ui/Faq'
 import { backtestDca } from '../../../lib/finance'
-import { eur, pct, num, monthLabel, priceFmt } from '../../../lib/format'
+import { eur, pct, num, monthLabel } from '../../../lib/format'
 import { useToolState } from '../../../lib/useToolState'
 import { getTerm } from '../../../lib/content/glossary'
 import s from '../../../styles/Tool.module.css'
@@ -161,8 +161,8 @@ function DcaPage({ asset, initialHistory, faq }) {
 
                 <div className={s.reading}>
                   <div>
-                    <h3>Prix de revient moyen : {priceFmt(result.avgCost)} €</h3>
-                    <p>Dernier cours mensuel : {priceFmt(result.lastPrice)} €. En achetant à intervalles réguliers, tu as acheté plus de parts quand le prix était bas, et moins quand il était haut.</p>
+                    <h3>Prix de revient moyen : {seriesValueText(asset, result.avgCost)}</h3>
+                    <p>Dernier cours mensuel : {seriesValueText(asset, result.lastPrice)}. En achetant à intervalles réguliers, tu as acheté plus de parts quand le prix était bas, et moins quand il était haut.</p>
                   </div>
                   <div>
                     <h3>Pire baisse du portefeuille : {pct(result.worstDrawdown, 0)}</h3>

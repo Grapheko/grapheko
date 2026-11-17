@@ -8,12 +8,12 @@ import RangeField from '../../../components/ui/RangeField'
 import Counter from '../../../components/ui/Counter'
 import ShareButton from '../../../components/ui/ShareButton'
 import Faq from '../../../components/ui/Faq'
-import { ASSETS, getAsset } from '../../../lib/assets'
+import { ASSETS, getAsset, seriesValueText } from '../../../lib/assets'
 import { getMonthlyHistory } from '../../../lib/history'
 import { REVALIDATE } from '../../../lib/marketData'
 import { lumpTable, lumpFaq, faqJsonLd } from '../../../lib/faq'
 import { backtestLump } from '../../../lib/finance'
-import { eur, pct, num, monthLabel, priceFmt, dirClass } from '../../../lib/format'
+import { eur, pct, num, monthLabel, dirClass } from '../../../lib/format'
 import { useToolState } from '../../../lib/useToolState'
 import { getTerm } from '../../../lib/content/glossary'
 import s from '../../../styles/Tool.module.css'
@@ -172,8 +172,8 @@ function LumpPage({ asset, initialHistory, table, faq, defaultStart }) {
                     <p>Le nombre de clôtures mensuelles où l’investissement valait moins que la somme placée.</p>
                   </div>
                   <div>
-                    <h3>Cours d’achat : {priceFmt(result.buyPrice)} €</h3>
-                    <p>Dernier cours mensuel : {priceFmt(result.lastPrice)} €. Investir en une fois expose entièrement au prix du jour d’achat : c’est ce que le DCA cherche à lisser.</p>
+                    <h3>Cours d’achat : {seriesValueText(asset, result.buyPrice)}</h3>
+                    <p>Dernier cours mensuel : {seriesValueText(asset, result.lastPrice)}. Investir en une fois expose entièrement au prix du jour d’achat : c’est ce que le DCA cherche à lisser.</p>
                   </div>
                 </div>
 
