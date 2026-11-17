@@ -104,3 +104,10 @@ Chaque balise d’event envoie aussi `page_cat1`, `page_cat2`, `page_cat3`, `env
 - `click` = `compte_rendu_ia` (`demande` ou `mise_a_jour`) : demande de la version IA. Option en sommeil, visible seulement si `ANTHROPIC_API_KEY` est configurée dans Vercel.
 Le PDF est généré dans le navigateur ; le compte rendu passe par `/api/compte-rendu` (variable Vercel `ANTHROPIC_API_KEY`), sans aucune donnée d'identité.
 
+
+## Tableau des marchés (/marches)
+Événement `clicStandard`, `click_chapter1` = `hub_marches` :
+- `click` = `filtre_<famille>` (`tous`, `crypto`, `indices`, `actions`, `matieres`), `click_chapter2` = `filtre`, `click_chapter3` = la famille : choix d'un filtre (pas d'envoi si on reclique sur le filtre actif).
+- `click` = `tri_<colonne>` (`perf1y`, `perf5y`, `maxDrawdown`), `click_chapter2` = `tri`, `click_chapter3` = `desc`, `asc` ou `defaut` (troisième clic, retour à l'ordre du catalogue) : tri par colonne.
+- `click` = slug de l'actif, `click_chapter2` = `actif` : clic sur une ligne (toute la ligne est cliquable).
+Lecture : quelles familles et quels critères les visiteurs comparent, puis quelles fiches ils ouvrent ensuite.

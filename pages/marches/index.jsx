@@ -18,7 +18,7 @@ export default function Marches({ rows }) {
         wide
       />
       <div className="wrap" style={{ paddingBottom: 'var(--section)' }}>
-        <MarketsTable rows={rows} location="hub_marches" />
+        <MarketsTable rows={rows} location="hub_marches" controls />
         <section className="section prose" style={{ paddingBottom: 0 }}>
           <h2>Comment lire ce tableau</h2>
           <p>

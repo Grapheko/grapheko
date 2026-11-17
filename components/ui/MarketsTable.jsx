@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { pct, dirClass, monthLabel } from '../../lib/format'
 import { kindLabel, closeText } from '../../lib/assets'
@@ -6,6 +7,36 @@ import s from './MarketsTable.module.css'
 
 // ['a', 'b', 'c'] → « a, b et c »
 const listFr = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} et ${items[items.length - 1]}`)
+
+// Familles d'actifs pour les filtres
+const FILTERS = [
+  { key: 'tous', label: 'Tous' },
+  { key: 'crypto', label: 'Crypto' },
+  { key: 'indices', label: 'Indices' },
+  { key: 'actions', label: 'Actions' },
+  { key: 'matieres', label: 'Matières premières' },
+]
+const family = (r) => (r.kind === 'crypto' ? 'crypto' : r.kind === 'matiere' ? 'matieres' : r.index || r.proxy ? 'indices' : 'actions')
+
+// Colonnes triables. first = sens du premier clic : meilleure performance d'abord,
+// pire baisse la plus forte d'abord. Troisième clic : retour à l'ordre du catalogue.
+const SORTS = {
+  perf1y: { label: '1 an', first: 'desc' },
+  perf5y: { label: '5 ans', first: 'desc' },
+  maxDrawdown: { label: 'Pire baisse', first: 'asc' },
+}
+
+function sortRows(rows, sort) {
+  if (!sort) return rows
+  const val = (r) => r.stats?.[sort.key]
+  return [...rows].sort((a, b) => {
+    const va = val(a)
+    const vb = val(b)
+    if (!Number.isFinite(va)) return Number.isFinite(vb) ? 1 : 0
+    if (!Number.isFinite(vb)) return -1
+    return sort.dir === 'asc' ? va - vb : vb - va
+  })
+}
 
 function Sparkline({ values }) {
   if (!values?.length) return <span className="faint">—</span>
@@ -23,26 +54,84 @@ function Sparkline({ values }) {
 }
 
 // rows : [{ slug, name, kind, index, proxy, nativeClose, stats, spark }]
-export default function MarketsTable({ rows, location = 'marches' }) {
+// controls : affiche les filtres par famille et le tri par colonne (page /marches)
+export default function MarketsTable({ rows, location = 'marches', controls = false }) {
+  const [filter, setFilter] = useState('tous')
+  const [sort, setSort] = useState(null) // { key, dir }
+
+  const counts = useMemo(() => rows.reduce((acc, r) => ({ ...acc, [family(r)]: (acc[family(r)] || 0) + 1 }), { tous: rows.length }), [rows])
+  const visible = useMemo(
+    () => sortRows(filter === 'tous' ? rows : rows.filter((r) => family(r) === filter), sort),
+    [rows, filter, sort],
+  )
+
   const lastMonth = rows.find((r) => r.stats)?.stats.lastMonth
   // Actifs boursiers dont l'historique commence après la crise de 2008 : leur pire baisse l'ignore
-  const after2008 = rows.filter((r) => r.kind === 'bourse' && r.stats && Number(r.stats.first.slice(0, 4)) > 2008)
+  const after2008 = visible.filter((r) => r.kind === 'bourse' && r.stats && Number(r.stats.first.slice(0, 4)) > 2008)
+
+  const chooseFilter = (key) => {
+    if (key === filter) return
+    setFilter(key)
+    trackClick(`filtre_${key}`, location, 'filtre', key)
+  }
+
+  const toggleSort = (key) => {
+    const { first } = SORTS[key]
+    let next
+    if (sort?.key !== key) next = { key, dir: first }
+    else if (sort.dir === first) next = { key, dir: first === 'asc' ? 'desc' : 'asc' }
+    else next = null
+    setSort(next)
+    trackClick(`tri_${key}`, location, 'tri', next ? next.dir : 'defaut')
+  }
+
+  const sortHead = (key, className) => {
+    const label = SORTS[key].label
+    if (!controls) return <th scope="col" className={className}>{label}</th>
+    const dir = sort?.key === key ? sort.dir : null
+    return (
+      <th scope="col" className={className} aria-sort={dir === 'asc' ? 'ascending' : dir === 'desc' ? 'descending' : 'none'}>
+        <button type="button" className={`${s.sortBtn} ${dir ? s.sortActive : ''}`} onClick={() => toggleSort(key)}>
+          {label}
+          <span className={s.arrow} aria-hidden="true">{dir === 'asc' ? '↑' : dir === 'desc' ? '↓' : '↕'}</span>
+        </button>
+      </th>
+    )
+  }
+
   return (
     <div className={s.wrap}>
+      {controls && (
+        <div className={s.controls}>
+          <div className="segmented" role="group" aria-label="Filtrer par type d’actif">
+            {FILTERS.filter((f) => counts[f.key]).map((f) => (
+              <button key={f.key} type="button" aria-pressed={filter === f.key} onClick={() => chooseFilter(f.key)}>
+                {f.label} <span className={s.count}>{counts[f.key]}</span>
+              </button>
+            ))}
+          </div>
+          <p className={s.status} aria-live="polite">
+            {visible.length} actif{visible.length > 1 ? 's' : ''}
+            {sort ? `, triés par ${SORTS[sort.key].label.toLowerCase()} (${sort.key === 'maxDrawdown'
+              ? (sort.dir === 'asc' ? 'plus forte baisse d’abord' : 'plus faible baisse d’abord')
+              : (sort.dir === 'desc' ? 'meilleure performance d’abord' : 'moins bonne performance d’abord')})` : ''}
+          </p>
+        </div>
+      )}
       <table className={s.table}>
-        <caption className="sr-only">Performance des marchés suivis par Grapheko, en euros</caption>
+        <caption className="sr-only">Performance des marchés suivis par Grapheko, en euros{controls ? '. Les en-têtes 1 an, 5 ans et pire baisse permettent de trier le tableau.' : ''}</caption>
         <thead>
           <tr>
             <th scope="col">Actif</th>
-            <th scope="col" className={s.hideSm}>Courbe sur 5 ans</th>
+            <th scope="col" className={s.hideSm}>Courbe sur 5 ans</th>
             <th scope="col" className={s.right}>Clôture</th>
-            <th scope="col" className={s.right}>1 an</th>
-            <th scope="col" className={`${s.right} ${s.hideSm}`}>5 ans</th>
-            <th scope="col" className={`${s.right} ${s.hideMd}`}>Pire baisse</th>
+            {sortHead('perf1y', s.right)}
+            {sortHead('perf5y', `${s.right} ${s.hideSm}`)}
+            {sortHead('maxDrawdown', `${s.right} ${s.hideMd}`)}
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
+          {visible.map((r) => (
             <tr key={r.slug}>
               <th scope="row">
                 <Link href={`/marches/${r.slug}`} className={s.name} onClick={() => trackClick(r.slug, location, 'actif')}>
