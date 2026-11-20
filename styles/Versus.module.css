@@ -34,3 +34,8 @@
   .compareTable th, .compareTable td { padding: 10px 8px; }
   .compareTable thead th { font-size: var(--fs-md, 1rem); }
 }
+@media (max-width: 360px) {
+  .compareTable th, .compareTable td { padding: 10px 6px; }
+  .compareTable thead th { font-size: var(--fs-sm); }
+  .compareTable tbody th { hyphens: auto; }
+}
